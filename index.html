@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<title>長照所工作坊行前準備</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap">
+<style>
+/* 版面：跟第一部分頁同一套——米色紙面＋深綠橫幅分段、金色大字當段名；每一項是在家實際的步驟順序，所以用數字標。 */
+:root{
+  --paper:#F6EEDD; --card:#FFFBF2; --ink:#1B2420; --muted:#5B655F;
+  --green:#1F4A3A; --green-ink:#F6EEDD; --gold:#C99A2E; --gold-soft:#F2E3B8;
+  --navy:#1C2B3A; --navy-ink:#EEF1F4; --line:#E0D3B6;
+  --ok:#24704F; --ok-soft:#DCEFE3; --warn:#B23A2B; --warn-soft:#F7DDD7;
+  --font-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+  --base:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111A15; --card:#18241E; --ink:#ECE5D4; --muted:#A7B0A8;
+    --green:#0E2E22; --green-ink:#F1E9D6; --gold:#E2B85A; --gold-soft:#3A3120;
+    --navy:#0F1B27; --navy-ink:#E4E9EE; --line:#2C3D33;
+    --ok:#7FD0A6; --ok-soft:#1C3A2B; --warn:#F09A86; --warn-soft:#3D221D; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111A15; --card:#18241E; --ink:#ECE5D4; --muted:#A7B0A8;
+  --green:#0E2E22; --green-ink:#F1E9D6; --gold:#E2B85A; --gold-soft:#3A3120;
+  --navy:#0F1B27; --navy-ink:#E4E9EE; --line:#2C3D33;
+  --ok:#7FD0A6; --ok-soft:#1C3A2B; --warn:#F09A86; --warn-soft:#3D221D; color-scheme:dark;
+}
+:root[data-proj="on"]{ --base:20px; }
+*{box-sizing:border-box}
+html{font-size:var(--base)}
+body{
+  background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:1rem; line-height:1.75; margin:0;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+a{color:var(--ok)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:46rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{padding-block:2.5rem 1.5rem}
+.eyebrow{font-size:.8rem;letter-spacing:.12em;color:var(--ok);font-weight:700}
+h1{font-size:2.15rem;line-height:1.3;margin:.35rem 0 .7rem;text-wrap:balance;font-weight:900}
+h2{font-size:1.45rem;line-height:1.4;margin:0 0 .8rem;text-wrap:balance;font-weight:900}
+h3{font-size:1.05rem;margin:1.4rem 0 .4rem}
+p{margin:0 0 .9rem}
+.lede{font-size:1.08rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;font-size:.88rem;color:var(--muted);margin-top:.8rem}
+.tools{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.1rem;align-items:center}
+button{font:inherit;cursor:pointer}
+.chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:.3rem .9rem;font-size:.9rem}
+.chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--green-ink)}
+section{padding-block:1.8rem 1rem}
+.band{background:var(--green);color:var(--green-ink);margin-top:2.2rem}
+.band .wrap{padding-block:1.6rem 1.4rem}
+.band .big{font-size:3.4rem;line-height:1.1;font-weight:900;color:var(--gold);letter-spacing:.04em;margin:0}
+.band .sub{font-size:1.25rem;font-weight:700;margin:.4rem 0 0}
+.band .tag{font-family:var(--font-mono);font-size:.8rem;color:var(--gold);opacity:.9;letter-spacing:.12em}
+.mine{display:inline-flex;align-items:center;gap:.6rem;background:var(--navy);color:var(--navy-ink);border:2px solid var(--gold);border-radius:999px;padding:.4rem 1.1rem;font-weight:700;text-decoration:none}
+.mine .cnt{background:var(--gold);color:var(--navy);border-radius:999px;padding:0 .55rem;font-size:.85rem;font-variant-numeric:tabular-nums}
+.secno{font-family:var(--font-mono);color:var(--gold);font-weight:500;font-size:.95rem;display:block;margin-bottom:.2rem}
+.ask{background:var(--ok-soft);border-radius:10px;padding:1rem 1.1rem;margin:1rem 0}
+.ask b{color:var(--ok)}
+/* 三扇門 */
+.doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:1.2rem 0 .6rem}
+.door{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--ok);border-radius:8px;padding:.8rem .9rem;min-width:0}
+.door .k{font-weight:700}
+.door .v{font-size:.85rem;color:var(--muted);word-break:break-all}
+.account{text-align:center;font-size:.92rem;color:var(--muted);margin-top:.3rem}
+.account b{color:var(--ink)}
+.tabs{display:flex;gap:.4rem;margin:1.4rem 0 .6rem;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:.35rem 1rem}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;vertical-align:top;padding:.55rem .6rem;border-bottom:1px solid var(--line)}
+th{font-size:.82rem;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.pill{display:inline-block;font-size:.78rem;padding:.05rem .55rem;border-radius:999px;font-weight:700;white-space:nowrap}
+.pill.go{background:var(--ok-soft);color:var(--ok)}
+.pill.stay{background:var(--gold-soft);color:var(--ink)}
+.pill.sep{background:var(--warn-soft);color:var(--warn)}
+/* 步驟 */
+.steps{list-style:none;margin:1rem 0 0;padding:0;display:grid;gap:.8rem}
+.step{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:1rem 1.1rem;min-width:0}
+.step h3{margin:0 0 .35rem;display:flex;flex-wrap:wrap;gap:.3rem .5rem;align-items:baseline}
+.lane{display:inline-block;font-size:.75rem;font-weight:700;border-radius:999px;padding:.05rem .65rem;margin-left:auto;white-space:nowrap}
+.lane.ln-web{background:var(--gold-soft);color:var(--ink);border:1.5px solid var(--gold)}
+.lane.ln-ag{background:var(--navy);color:var(--navy-ink);border:1.5px solid var(--navy)}
+.lanes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem;margin:.8rem 0}
+.lanes > div{border-radius:10px;padding:.7rem .9rem;min-width:0;font-size:.92rem}
+.lanes .ln-web{background:var(--gold-soft);border:1.5px solid var(--gold)}
+.lanes .ln-ag{background:var(--navy);color:var(--navy-ink);border:1.5px solid var(--navy)}
+.lanes .hd{font-weight:900;margin-bottom:.2rem}
+.step h3 .sn{font-family:var(--font-mono);color:var(--gold);font-size:.95rem;font-weight:700}
+.step > p:last-child{margin-bottom:0}
+.path{font-family:var(--font-mono);font-size:.85rem;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:.1rem .45rem;display:inline-block;margin:.1rem 0;word-break:break-word}
+.why{font-size:.9rem;color:var(--muted)}
+.done{font-size:.88rem;border-left:4px solid var(--ok);padding-left:.6rem;margin-top:.5rem}
+.note{font-size:.85rem;color:var(--muted)}
+.os-win,.os-mac{display:none}
+:root[data-os="win"] .os-win{display:block}
+:root[data-os="mac"] .os-mac{display:block}
+.osbar{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:.9rem;margin:.6rem 0}
+/* 可複製的文字 */
+.copybox{position:relative;background:var(--paper);border:1.5px dashed var(--ok);border-radius:10px;margin:.6rem 0;min-width:0}
+.copybox pre{margin:0;padding:.8rem .9rem 2.4rem;white-space:pre-wrap;word-break:break-word;font-family:var(--font-body);font-size:.93rem;line-height:1.7}
+.copybtn{position:absolute;right:.5rem;bottom:.5rem;border:0;background:var(--ok);color:var(--card);border-radius:8px;padding:.2rem .8rem;font-size:.85rem;max-width:calc(100% - 1rem)}
+.copybtn.ok{background:var(--gold);color:var(--navy)}
+/* 三條線 */
+.lines{display:grid;gap:.8rem;margin-top:1rem}
+.line{display:grid;grid-template-columns:2.2rem minmax(0,1fr);gap:.6rem;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem}
+.line .num{font-size:1.8rem;font-weight:900;color:var(--warn);line-height:1}
+.line h3{margin:0 0 .3rem}
+/* 練習卡 */
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin-top:1rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem;min-width:0;display:flex;flex-direction:column}
+.card h3{margin:0 0 .3rem}
+.card .use{font-size:.85rem;color:var(--muted);margin-bottom:.3rem}
+.card .copybox{margin-top:auto}
+/* 檢查清單 */
+.check{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem}
+.check fieldset{border:1px solid var(--line);border-radius:10px;background:var(--card);padding:.8rem 1rem;margin:0;min-width:0}
+.check legend{font-weight:700;padding:0 .3rem}
+.check label{display:flex;gap:.5rem;align-items:flex-start;padding:.3rem 0;font-size:.95rem}
+.check input{margin-top:.45rem;accent-color:var(--ok);width:1.05rem;height:1.05rem;flex:none}
+.progress{display:flex;align-items:center;gap:.8rem;margin-top:1rem;font-size:.9rem}
+.bar{flex:1;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+/* 共用資料夾示意 */
+.share{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1fr);gap:.7rem;align-items:center;margin:1.2rem 0 .4rem}
+.agent{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.8rem;text-align:center;min-width:0}
+.agent .k{font-weight:700}
+.agent .v{font-size:.82rem;color:var(--muted)}
+.folder{background:var(--gold-soft);border:2px solid var(--gold);border-radius:4px 12px 12px 12px;padding:.8rem 1rem;min-width:0}
+.folder .k{font-weight:700;margin-bottom:.3rem}
+.folder ul{margin:0;padding-left:1.1rem;font-size:.88rem}
+.folder code{font-family:var(--font-mono);font-size:.85rem}
+.arrow{font-size:.82rem;color:var(--ok);text-align:center;display:block}
+.sync{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.4rem .6rem;margin:.8rem 0 1rem;font-size:.9rem}
+.sync .m{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:.15rem .8rem}
+.sync .gh{background:var(--ink);color:var(--paper);border-radius:999px;padding:.15rem .9rem;font-weight:700}
+.sync .x{color:var(--ok)}
+@media (max-width:640px){.share{grid-template-columns:minmax(0,1fr)}}
+footer{padding-block:2rem 3rem;font-size:.85rem;color:var(--muted)}
+footer ul{padding-left:1.1rem;margin:.4rem 0}
+@media (max-width:640px){
+  h1{font-size:1.7rem}
+  .band .big{font-size:2.6rem}
+  .doors{grid-template-columns:minmax(0,1fr)}
+  .cards,.check,.lanes{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* 行前頁追加 */
+ul.plain{margin:.4rem 0 1rem;padding-left:1.2rem;display:grid;gap:.35rem}
+ol.sub{margin:.4rem 0 .6rem;padding-left:1.3rem;font-size:.95rem}
+.tick{display:flex;gap:.5rem;align-items:flex-start;margin-top:.7rem;padding-top:.6rem;border-top:1px dashed var(--line);font-weight:500}
+.tick input{margin-top:.45rem;accent-color:var(--ok);width:1.1rem;height:1.1rem;flex:none}
+details.stuck{margin-top:.5rem}
+details.stuck summary{cursor:pointer;color:var(--ok);font-size:.92rem}
+.step.is-done{border-color:var(--ok);box-shadow:inset 4px 0 0 var(--ok)}
+#items .progress{margin:0 0 .4rem}
+.shot{margin:.7rem 0 .5rem}
+.shot a{display:block;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#eef1f4}
+.shot img{display:block;width:100%;height:auto}
+.shot figcaption{font-size:.82rem;color:var(--muted);margin-top:.3rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">慈濟大學長期照護研究所・研究團隊工作坊・行前準備</div>
+  <h1>上課前，先把電腦準備好</h1>
+  <p class="lede">工作坊當天大家會在自己的筆電上動手做。下面 12 項請上課前在家做完，有幾項要下載安裝，建議留兩個晚上，別排在前一天。每一項都有「完成判準」，打勾前照著看一眼。</p>
+  <div class="meta"><span>2026-10-28（三）・電腦教室（一）</span><span>講師：陳文盛老師（國立東華大學通識教育中心）</span><span>查核：2026-10-21</span></div>
+  <div class="tools">
+    <a class="mine" href="#items">我的準備進度 <span class="cnt" id="prepCount">0 / 12</span></a>
+    <button class="chip" id="projBtn" aria-pressed="false" type="button">投影大字</button>
+  </div>
+</header>
+</div>
+
+<main>
+<div class="band"><div class="wrap"><div class="tag">00・開始之前</div><h2 class="big">先知道</h2><p class="sub">不用會寫程式，帶自己的筆電來</p></div></div>
+<section id="first" class="wrap">
+  <ul class="plain">
+    <li><b>不用會寫程式。</b>原本要打給電腦的指令，都由 AI 助手代打。你的工作是看它要做什麼、看它做完的結果，再點頭。</li>
+    <li><b>請帶自己能裝軟體的筆電。</b>學校統一控管的電腦常常裝不了東西。怎麼分辨：平常裝軟體要請電算中心或助理來輸入帳號密碼的那台，當天多半用不了，請換一台。</li>
+    <li><b>這一頁的勾選只存在你這台電腦的這個瀏覽器裡</b>，不會傳給任何人。換瀏覽器、用無痕視窗、清掉網站資料或改用手機，勾選都不會跟著走。</li>
+  </ul>
+  <div class="osbar" role="group" aria-label="選擇作業系統">你的筆電是：
+    <button class="chip" data-os="win" aria-pressed="true" type="button">Windows</button>
+    <button class="chip" data-os="mac" aria-pressed="false" type="button">Mac</button>
+  </div>
+</section>
+
+<div class="band"><div class="wrap"><div class="tag">01・行前 12 項</div><h2 class="big">裝得好</h2><p class="sub">在家照順序做完，建議留兩個晚上</p></div></div>
+<section id="items" class="wrap">
+  <div class="progress" aria-live="polite"><span id="progText">已完成 0 / 12</span><div class="bar"><span id="progBar"></span></div><button class="chip" id="resetBtn" type="button">清除勾選</button></div>
+  <ol class="steps">
+
+    <li class="step" id="s1">
+      <h3><span class="sn">1</span>先學一招：截圖問 AI<span class="lane ln-web">卡住問網頁版</span></h3>
+      <p>後面每一項卡住，都靠「把畫面拿給 AI 看」解決。這一項先學會怎麼截、怎麼貼就好，不用真的送出；第 2 項註冊好帳號，就隨時能問。</p>
+      <div class="os-win"><p>同時按住 <span class="path">Win</span> 鍵（鍵盤左下角有四個小方塊圖案的那顆）和 <span class="path">Shift</span>，再按一下 <span class="path">S</span>。螢幕變暗後，按住滑鼠左鍵拉一個框，把卡住的地方框起來，放開就複製好了。再到 AI 打字的框裡按 <span class="path">Ctrl＋V</span> 貼上。</p><figure class="shot"><a href="img/s01-snip.png" target="_blank" rel="noopener"><img src="img/s01-snip.png" alt="示意圖：按 Win＋Shift＋S 後螢幕變暗、上方出現截圖工具列，用虛線只框出一個錯誤訊息小方塊；紅框提醒不要框整個螢幕" width="1200" height="890" loading="lazy"></a><figcaption>示意圖，實際畫面以你的電腦為準。點圖可以放大。</figcaption></figure></div>
+      <div class="os-mac"><p>按 <span class="path">Control＋Command＋Shift＋4</span>，游標變成十字後拉一個框，把卡住的地方框起來，放開就複製好了。再到 AI 打字的框裡按 <span class="path">Command＋V</span> 貼上。</p></div>
+      <p class="why"><b>只框出錯的那一小塊，不要框整個螢幕。</b>截圖會整張送到 AI 的雲端。送出前看一眼圖裡有沒有姓名、病歷號、email、登入碼、QR code 或 LINE 通知；有就重截。有密碼、備援碼、學生或受試者資料的視窗，截圖前先關掉。</p>
+      <p>截好圖，先把圖貼進 AI 的打字框，再複製下面這句貼在後面：</p>
+      <div class="copybox"><pre id="help">我在做 10/28 工作坊的行前準備，第＿項「＿＿」卡住了，畫面如附圖。請先只看、不要動：告訴我畫面上發生什麼事、哪裡不對勁；再一步一步帶我做，每次只說一步。如果需要我輸入這台電腦的管理員密碼，先停下來告訴我，我自己輸入。</pre><button class="copybtn" data-copy="help" type="button">複製</button></div>
+      <p class="why">貼上之後，把「＿＿」換成你的情況再送出。</p>
+      <p><b>貼到哪一個 AI？</b>看你做到第幾項：</p>
+      <div class="lanes">
+        <div class="ln-web"><div class="hd">第 1～7 項、第 11 項：問網頁版</div>瀏覽器打開 <span class="path">chatgpt.com</span> 或 <span class="path">claude.ai</span>，免費帳號就能貼截圖問。網頁版看得到你貼的圖、會一步一步教你，但它碰不到你的電腦，按鈕要你自己按。還沒有帳號的人，第 2 項第一步就是註冊，註冊完就能問。</div>
+        <div class="ln-ag"><div class="hd">第 8、9、10、12 項：交給 AI 助手做</div>第 6 項在 Codex 或 Claude 的 Code 打開練習資料夾之後，它就能直接替你裝、替你做。AI 助手自己卡住（不回應、一直出錯），就截圖回網頁版問。</div>
+      </div>
+      <label class="tick"><input type="checkbox" id="k1">我會截圖，也把求救句存起來了</label>
+    </li>
+
+    <li class="step" id="s2">
+      <h3><span class="sn">2</span>ChatGPT：帳號＋桌面版＋找到 Codex<span class="lane ln-web">卡住問網頁版</span></h3>
+      <p>先到 chatgpt.com 登入或註冊，記住用的是哪個帳號、用哪種方式登入（Google、Apple 或 email）。再到官方下載頁 <span class="path">chatgpt.com/download</span> 下載桌面版，照畫面裝好，<b>用同一個帳號、同一種方式登入</b>，不然可能變成兩個帳號；登入後核對 email 一樣就對了。</p>
+      <p class="why">下載完找不到安裝檔：看瀏覽器右上角的下載清單（向下箭頭圖示），從那裡打開。</p>
+      <div class="os-mac"><p class="why">Mac 需要 macOS 14 以上（蘋果選單 → 關於這台 Mac，可以看版本）。</p></div>
+      <p class="why">電腦裡原本就有舊版 ChatGPT 的話，新版可能會另外裝一個，舊版改名叫 ChatGPT Classic。兩個並存是正常的，開新的那個。</p>
+      <p>打開桌面版，左上角的選單可以切換 ChatGPT 和 Codex。<b>Codex 是 ChatGPT 裡會打開資料夾、動手做事的那一面</b>。切到 Codex，看到可以打字的輸入框就好，先不用叫它做事。</p>
+      <div class="done">完成判準：在桌面版的 ChatGPT 隨便打一句話，再到網頁版重新整理，看得到那段對話；兩邊左下角頭像的 email 一樣；而且切得到 Codex。</div>
+      <details class="stuck"><summary>卡住怎麼問網頁版 AI</summary><div class="copybox"><pre id="h2">我在裝 ChatGPT 桌面版，卡在＿＿（例如：登入被擋／裝好打不開／找不到 Codex），畫面如附圖。請告訴我畫面上發生什麼事，再一步一步帶我。我用的是＿＿（Windows／Mac）。</pre><button class="copybtn" data-copy="h2" type="button">複製</button></div><p class="why">貼上之後，把「＿＿」換成你的情況再送出。</p></details>
+      <label class="tick"><input type="checkbox" id="k2">ChatGPT 桌面版裝好，同步實測通過，切得到 Codex</label>
+    </li>
+
+    <li class="step" id="s3">
+      <h3><span class="sn">3</span>Claude：帳號＋桌面版<span class="lane ln-web">卡住問網頁版</span></h3>
+      <p>先到 claude.ai 登入或註冊，一樣記住登入方式。再到官方下載頁 <span class="path">claude.com/download</span> 下載桌面版，照畫面裝好，<b>用同一個帳號、同一種方式登入</b>。</p>
+      <p>桌面版裡有「Code」（通常在畫面上方中間，和 Chat、Cowork 並排；舊版畫面可能在側邊欄），這是會打開電腦資料夾、動手做事的那一面。<b>Code 要 Pro 以上的付費方案才能用</b>，免費帳號點了會請你升級。這是正常的，先關掉，下一項再決定要不要付費。</p>
+      <div class="done">完成判準：在桌面版隨便打一句話，再到網頁版重新整理，看得到那段對話；兩邊左下角名字縮寫的 email 一樣。有付費的人，再確認點得開 Code。</div>
+      <details class="stuck"><summary>卡住怎麼問網頁版 AI</summary><div class="copybox"><pre id="h3">我在裝 Claude 桌面版，卡在＿＿（例如：登入被擋／裝好打不開／點 Code 要我升級），畫面如附圖。請告訴我畫面上發生什麼事，再一步一步帶我。我用的是＿＿（Windows／Mac）。</pre><button class="copybtn" data-copy="h3" type="button">複製</button></div><p class="why">貼上之後，把「＿＿」換成你的情況再送出。</p></details>
+      <label class="tick"><input type="checkbox" id="k3">Claude 桌面版裝好，同步實測通過</label>
+    </li>
+
+    <li class="step" id="s4">
+      <h3><span class="sn">4</span>決定要不要付費<span class="lane ln-web">卡住問網頁版</span></h3>
+      <p>不付費也可以來上課。第一部分（兩家的設定）大部分免費也能做，少數功能要付費，當天的頁面會標出來；差別主要在第二部分：</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>你的方案</th><th>第二部分：AI 怎麼幫你做事</th></tr></thead>
+        <tbody>
+          <tr><td>兩家都免費</td><td>只用 ChatGPT 的 Codex 從頭做到尾；免費的使用量（額度）較少，可能做到一半要停下來等</td></tr>
+          <tr><td>只付 ChatGPT</td><td>只用 Codex 從頭做到尾；額度比較多，比較不會做到一半停下來</td></tr>
+          <tr><td>只付 Claude</td><td>只用 Claude 的 Code 從頭做到尾</td></tr>
+          <tr><td>兩家都付</td><td>兩個 AI 接力，一個做、一個檢查</td></tr>
+        </tbody>
+      </table></div>
+      <p class="why">價格以官方定價頁為準：ChatGPT 看 chatgpt.com/pricing，Claude 看 claude.com/pricing。只為這場訂的話，用完記得取消自動續訂。</p>
+      <label class="tick"><input type="checkbox" id="k4">我決定好了，也知道自己第二部分走哪一種</label>
+    </li>
+
+    <li class="step" id="s5">
+      <h3><span class="sn">5</span>GitHub 帳號<span class="lane ln-web">卡住問網頁版</span></h3>
+      <p>到 github.com 註冊一個帳號，記得回信箱按驗證信。註冊後如果跳出一整頁英文問卷，可以略過不填。已經有帳號的人，確認還登得進去就好。GitHub 是放資料夾備份、讓不同電腦拿到同一份的網站；記錄每一次修改的，是第 8 項的 git。</p>
+      <p class="why">登入時如果畫面要你設定兩步驟驗證，就照做：手機裝一個驗證 App（例如 Google Authenticator），掃網頁上的 QR code，再把備援碼存好。備援碼是手機不能用時的救援鑰匙，自己收好，不傳給 AI，也不傳給老師。沒被要求的人不用特地開。</p>
+      <div class="done">完成判準：登入後看得到自己的個人頁，網址是 github.com/你的帳號名。</div>
+      <figure class="shot"><a href="img/s05-github-avatar.png" target="_blank" rel="noopener"><img src="img/s05-github-avatar.png" alt="示意圖：Edge 視窗右上角的瀏覽器帳號鈕打紅色叉，GitHub 網頁裡搜尋框同一排最右邊的圓形頭像畫綠色圈" width="1280" height="800" loading="lazy"></a><figcaption>GitHub 的頭像在網頁右上角（搜尋框那一排的最右邊）；點它就看得到你的帳號名。不要點到瀏覽器自己的帳號鈕。（沿用 Git×AI 工作坊的示意圖）</figcaption></figure>
+      <label class="tick"><input type="checkbox" id="k5">GitHub 帳號登得進去</label>
+    </li>
+
+    <li class="step" id="s6">
+      <h3><span class="sn">6</span>建一個練習資料夾，在 AI 助手裡打開<span class="lane ln-web">卡住問網頁版</span></h3>
+      <p>後面幾項都要在 AI 助手裡做。它主要在你打開給它的那個資料夾裡工作；哪些動作會先問你，看第 7 項。選了資料夾，不代表其他檔案它都讀不到。所以先建一個空的練習資料夾：</p>
+      <div class="os-win"><ol class="sub">
+        <li>打開檔案總管（工作列上黃色資料夾的圖示）。</li>
+        <li>左邊點「本機」，右邊連按兩下「D 槽」進去；沒有 D 槽就連按兩下「本機磁碟 (C:)」。</li>
+        <li>在空白處按滑鼠右鍵 →「新增」→「資料夾」，名字打 <span class="path">AI-workshop</span>，按 Enter。</li>
+      </ol><p class="why">建好的位置是 <span class="path">D:\AI-workshop</span> 或 <span class="path">C:\AI-workshop</span>。不要放桌面或「文件」，那裡常被 OneDrive 同步。建不了（跳出權限不足），就停在這一項求救。</p><figure class="shot"><a href="img/s06-folder.png" target="_blank" rel="noopener"><img src="img/s06-folder.png" alt="示意圖：檔案總管左邊點本機、右邊進 Data (D:)，空白處右鍵選新增再選資料夾，新資料夾命名為 AI-workshop" width="1200" height="955" loading="lazy"></a><figcaption>示意圖，實際畫面以你的電腦為準。點圖可以放大。</figcaption></figure></div>
+      <div class="os-mac"><ol class="sub">
+        <li>打開 Finder，上方選單點「前往」→「個人專屬」（你的使用者資料夾，圖示是一棟小房子）。</li>
+        <li>上方選單點「檔案」→「新增檔案夾」，名字打 <span class="path">AI-workshop</span>，按 Return。</li>
+      </ol><p class="why">不要放桌面或「文件」，那裡常被 iCloud 同步。</p></div>
+      <p>然後在 Codex 輸入框上方點「選擇專案」→「新專案」；來源資料夾按「新增」，選 AI-workshop、按「選擇資料夾」；專案名稱也打 AI-workshop，再按「建立專案」（英文介面字樣不同，位置一樣）。用 Claude 的 Code 時，先在環境選單選「本機（Local）」，再選這個資料夾。畫面要顯示這個資料夾的名字。</p>
+      <p class="why"><b>不要選放有研究資料、受試者或學生資料的資料夾</b>，AI 打得開的資料夾它就讀得到。這個練習資料夾只放假資料或公開資料。</p>
+      <div class="done">完成判準：AI 助手的畫面上顯示 AI-workshop。</div>
+      <label class="tick"><input type="checkbox" id="k6">AI 助手打開的是空的 AI-workshop</label>
+    </li>
+
+    <li class="step" id="s7">
+      <h3><span class="sn">7</span>調一下 AI 助手的授權<span class="lane ln-web">卡住問網頁版</span></h3>
+      <p>這一項決定 AI 動手前要不要先問你。後面幾項它會開始替你裝東西，所以先調好。</p>
+      <ul class="plain">
+        <li><b>Codex：</b>輸入框下方有一個手掌圖示的權限選單，選 <b>要求核准</b>（英文介面叫 Ask for approval）。在練習資料夾裡，它會直接建檔、改檔；要修改資料夾以外的檔案或上網，會先問你。不要選「完整存取權」（Full access），也先別選「代我核准」（Approve for me，由系統判斷要不要問）。</li>
+        <li><b>Claude 的 Code：</b>輸入框下方的模式選單，選 <b>Manual</b>（手動）。新版可能一開始是「自動」（Auto）；不管現在顯示什麼，都改成 Manual。選 Manual 之後，改檔、跑指令前都會先問你；只是讀檔案不會問。不要選「自動」（由系統判斷要不要問）、「接受編輯」（Accept edits，改檔不問）和「略過權限確認」（Bypass permissions）。</li>
+      </ul>
+      <figure class="shot"><a href="img/s07-permissions.png" target="_blank" rel="noopener"><img src="img/s07-permissions.png" alt="左邊是 Codex 權限選單的實際畫面（繁中介面）：要求核准畫綠框「選這個」、代我核准先別選、完整存取權畫紅框不要選；右邊是 Claude 的 Code 模式選單示意圖，Manual 綠框「選這個」，自動、接受編輯、略過權限確認紅框不要選，計畫今天用不到" width="1200" height="1005" loading="lazy"></a><figcaption>左邊 Codex 是 2026-10-21 的實際畫面（繁中介面）；右邊 Claude 是示意圖，中文字樣照實際介面。點圖可以放大。</figcaption></figure>
+      <p class="why">選單字樣以你電腦上看到的為準。凡是說明寫著「不問、不限制、整台電腦都能讀寫」的都不要選。</p>
+      <div class="done">完成判準：Codex 的權限選單顯示 <b>要求核准</b>（或 Ask for approval）；Claude 的模式選單顯示 <b>Manual</b>（或它的中文名稱）。找不到，先別往下做，截圖問網頁版，或回信問陳老師。</div>
+      <label class="tick"><input type="checkbox" id="k7">Codex 顯示「要求核准」，或 Claude 顯示 Manual</label>
+    </li>
+
+    <li class="step" id="s8">
+      <h3><span class="sn">8</span>裝 git<span class="lane ln-ag">交給 AI 助手做</span></h3>
+      <p>git 是替資料夾記住每一次修改的工具。在第 6 項打開的 AI 助手裡貼這句：</p>
+      <div class="copybox"><pre id="git">請幫我確認這台電腦有沒有裝 git；沒有的話幫我裝好，Windows 用 winget 或 git-scm.com 官方網站，不要從其他網站下載。過程中要我做什麼，請一步一步告訴我。裝完如果找不到 git，先檢查安裝位置，不要反覆重裝。最後把版本號給我看。</pre><button class="copybtn" data-copy="git" type="button">複製</button></div>
+      <p class="why">AI 要上網下載或執行安裝程式之前，會先在對話裡請你核准（第 7 項設的就是這個）。看得出是在裝 git 就同意；看不懂就先拒絕，截圖問網頁版。</p>
+      <div class="os-win"><p class="why">接著螢幕可能變暗，跳出「是否允許這個 App 變更你的裝置」。這是安裝的正常步驟：是你剛請 AI 裝東西時跳出來的、視窗上的名稱或發行者對得上，再按「是」（這一項是 Git；第 9、10 項也可能跳，名稱跟 PowerShell、GitHub 有關）。沒跳出來也正常。沒在裝東西卻跳出來，或名稱看不懂、對不上，就按「否」，再把剛才在做哪一步告訴網頁版 AI 或陳老師（這個視窗通常截不到圖）。</p><figure class="shot"><a href="img/s08-uac.png" target="_blank" rel="noopener"><img src="img/s08-uac.png" alt="示意圖：使用者帳戶控制視窗「您要允許此 App 變更您的裝置嗎？」，程式名稱那一行畫綠框，旁邊註明是你剛請 AI 裝的（Git、PowerShell、GitHub）、名稱對得上再按是，看不懂就按否" width="1200" height="916" loading="lazy"></a><figcaption>示意圖，實際畫面以你的電腦為準。點圖可以放大。</figcaption></figure></div>
+      <div class="os-mac"><p class="why">可能跳出要你安裝「命令列開發者工具」的視窗，git 就在裡面，按「安裝」，等幾分鐘。</p></div>
+      <div class="done">完成判準：它回你一個 git 的版本號。安裝視窗如果要你輸入密碼或管理員帳號，自己在那個視窗輸入，不要貼給 AI；不知道是哪一組，就停下來求救。</div>
+      <label class="tick"><input type="checkbox" id="k8">看到 git 的版本號了</label>
+    </li>
+
+    <li class="step" id="s9">
+      <h3><span class="sn">9</span>Windows 才要做：裝 PowerShell 7<span class="lane ln-ag">交給 AI 助手做</span></h3>
+      <div class="os-mac"><p><b>Mac 不用做，直接打勾。</b></p></div>
+      <div class="os-win">
+        <p>Windows 內建的舊版 PowerShell 請 AI 寫入中文內容的檔案時，有時會存成 git 認不出的格式，之後就看不到改了哪一行。PowerShell 7 是新版的指令工具，裝了可以避開大部分這類問題。貼這句：</p>
+        <div class="copybox"><pre id="ps7">我用的是 Windows。請幫我確認有沒有 PowerShell 7（程式名叫 pwsh）；沒有的話用 winget 或微軟官方網站幫我裝好，跟內建的舊版並存，不要移除舊的。要我做什麼請一步一步說。裝完如果找不到 pwsh，先檢查安裝位置，不要反覆重裝。最後實際用 pwsh 跑一次，把版本號給我看；之後這個對話要用 PowerShell 時，都用 pwsh。</pre><button class="copybtn" data-copy="ps7" type="button">複製</button></div>
+        <p class="why">一樣可能跳出「是否允許這個 App 變更你的裝置」，名稱跟 PowerShell 有關、是你剛請 AI 裝的，再按「是」（判斷方式同第 8 項）。</p>
+        <div class="done">完成判準：AI 實際用 pwsh 跑過，回報一個 7 開頭的版本號（像 7.6.x 這樣）。</div>
+      </div>
+      <label class="tick"><input type="checkbox" id="k9">PowerShell 7 裝好了，或我用的是 Mac</label>
+    </li>
+
+    <li class="step" id="s10">
+      <h3><span class="sn">10</span>GitHub 登入<span class="lane ln-ag">交給 AI 助手做</span></h3>
+      <p>它會裝一個叫 gh 的小程式，讓電腦記住你的 GitHub 登入。貼這句：</p>
+      <div class="copybox"><pre id="gh">請幫我裝 GitHub 的命令列工具 gh，然後登入我的 GitHub 帳號。請一步一步告訴我要做什麼。要我輸入的八碼和網址，請單獨貼在對話裡給我。最後告訴我登入的帳號名是什麼。</pre><button class="copybtn" data-copy="gh" type="button">複製</button></div>
+      <div class="os-win"><p class="why">安裝時一樣可能跳出「是否允許這個 App 變更你的裝置」，名稱跟 GitHub 有關、是你剛請 AI 裝的，再按「是」（判斷方式同第 8 項）。</p></div>
+      <ol class="sub">
+        <li>它會給你一組八碼：八個英文字母和數字，中間一條短橫線，長得像 A1B2-C3D4（不是密碼）。先複製起來，大約 15 分鐘內有效。</li>
+        <li>瀏覽器打開 github.com/login/device。畫面如果先要你登入，用第 5 項的 GitHub 帳號登入；看到輸入框後，把八碼貼進去，按 Continue。</li>
+        <li>確認畫面上寫的是 GitHub CLI、右上角是你自己的帳號，再按 Authorize 授權。回到 AI 助手，它會說已登入。<b>只輸入你自己電腦上剛出現的八碼；別人傳給你的不要輸入，你的也不要傳給別人。</b></li>
+      </ol>
+      <figure class="shot"><a href="img/s10-github-device.png" target="_blank" rel="noopener"><img src="img/s10-github-device.png" alt="示意圖：左邊 github.com/login/device 的 Device Activation 頁，輸入八碼 A1B2-C3D4 後按 Continue；右邊授權頁寫 GitHub CLI，右上角是自己的頭像，按 Authorize github" width="1200" height="781" loading="lazy"></a><figcaption>示意圖，實際畫面以你的電腦為準。點圖可以放大。</figcaption></figure>
+      <div class="os-mac"><p class="why">Mac 上它可能先裝另一個安裝工具（Homebrew），過程中會要你輸入電腦密碼，自己輸入就好。</p></div>
+      <div class="done">完成判準：它回報的帳號名就是你的 GitHub 帳號。</div>
+      <label class="tick"><input type="checkbox" id="k10">gh 登入的是我的 GitHub 帳號</label>
+    </li>
+
+    <li class="step" id="s11">
+      <h3><span class="sn">11</span>Zotero：要寫論文的人再裝（選做）<span class="lane ln-web">卡住問網頁版</span></h3>
+      <p>Zotero 是管理參考文獻的免費程式。到官方下載頁 <span class="path">zotero.org/download</span>，下載程式並照畫面裝好；同一頁也有瀏覽器的 Zotero Connector，裝到你常用的瀏覽器。</p>
+      <p class="why">Connector 就是瀏覽器上的「存進 Zotero」按鈕。裝好後如果看不到 Zotero 圖示：Chrome 點右上角的拼圖圖示，按 Zotero 旁邊的圖釘；Edge 點右上角的拼圖圖示，選 Zotero 旁邊的「在工具列中顯示」（圖示可能是一隻眼睛）。</p>
+      <figure class="shot"><a href="img/s11-zotero-pin.png" target="_blank" rel="noopener"><img src="img/s11-zotero-pin.png" alt="示意圖：Chrome 右上角拼圖圖示畫綠圈，展開的擴充功能清單裡 Zotero Connector 旁的圖釘畫綠框" width="1200" height="736" loading="lazy"></a><figcaption>示意圖是 Chrome；Edge 是選「在工具列中顯示」。點圖可以放大。</figcaption></figure>
+      <div class="os-mac"><p class="why">用 Safari 的人不用另外裝 Connector，它已經包在 Zotero 裡：先打開 Zotero 一次，再到 Safari 的設定「延伸功能」打開就好。</p></div>
+      <div class="done">完成判準：Zotero 打得開；在期刊網頁按瀏覽器上的 Zotero 圖示，文獻會出現在 Zotero 裡（Zotero 要開著）。</div>
+      <label class="tick"><input type="checkbox" id="k11">Zotero 裝好了，或我這次不需要</label>
+    </li>
+
+    <li class="step" id="s12">
+      <h3><span class="sn">12</span>小試身手：讓它真的動手一次<span class="lane ln-ag">交給 AI 助手做</span></h3>
+      <p class="why">第 8–10 項有新裝東西的話，先把 AI 助手的程式關掉、重新打開，再做這一項。新裝的工具，要重開後它才找得到。</p>
+      <p>在第 6 項打開的 AI-workshop 裡，貼這句：</p>
+      <div class="copybox"><pre id="warm">請在這個資料夾裡建一個資料夾 warmup-check，裡面建一個 hello.txt，內容寫今天的日期和我的 GitHub 帳號名。然後把這個資料夾交給 git 存一版，版本說明寫「行前測試」；如果 git 要名字和信箱，名字用我的 GitHub 帳號名；信箱用 GitHub 提供的 noreply 信箱，請用 gh 查我的帳號數字 ID，組成「數字ID+帳號名@users.noreply.github.com」，不要用我的真實信箱，也不要用猜的。這一版只存在這台電腦，不要上傳到 GitHub。做完告訴我：warmup-check 的完整路徑、git 的版本、gh 登入的是哪個帳號，並把 git 最新一筆紀錄（git log -1）原樣貼給我看。除了這個新資料夾，其他都不要碰。</pre><button class="copybtn" data-copy="warm" type="button">複製</button></div>
+      <p class="why">舊帳號的 noreply 信箱格式可能不同，以 GitHub 網站「Settings → Emails」顯示的為準。</p>
+      <p>然後照它說的位置，<b>自己打開 hello.txt 看</b>（按兩下會用記事本或文字編輯開）。AI 說做完，不等於做完；這也是當天要練的第一件事。</p>
+      <div class="done">完成判準四樣：hello.txt 真的在、內容對；它回報了 git 版本；回報的 gh 帳號是你的；它貼出的 git 紀錄裡看得到「行前測試」。</div>
+      <label class="tick"><input type="checkbox" id="k12">四樣都對</label>
+    </li>
+  </ol>
+</section>
+
+<div class="band"><div class="wrap"><div class="tag">02・當天</div><h2 class="big">帶得來</h2><p class="sub">筆電、充電器、一個研究題目</p></div></div>
+<section id="bring" class="wrap">
+  <ul class="plain">
+    <li>筆電和充電器。</li>
+    <li>手機：登入時可能要手機驗證。</li>
+    <li>確認自己登得進 ChatGPT、Claude、GitHub。密碼自己記好、自己輸入，不交給老師，也不貼給 AI。</li>
+    <li>一個你手上正在做的研究問題或題目。只帶題目，不帶任何受試者資料。</li>
+    <li>到教室打開筆電，第一件事先開瀏覽器連一個網站，確認連得上網。</li>
+  </ul>
+  <p>當天第一部分用這一頁：<a href="setup.html">ChatGPT 與 Claude，設定成你的研究助理</a>。</p>
+  <h3>在家卡住怎麼辦</h3>
+  <p>先用第 1 項的截圖求救句問網頁版 AI（chatgpt.com 或 claude.ai），AI 助手還沒裝好也能問。還是不行，就停在那一項，截圖回信告訴陳老師，當天早一點到電腦教室一起處理。別反覆重裝。</p>
+</section>
+
+</main>
+
+<footer class="wrap">
+  <p><b>選單名稱會隨改版變動，以你畫面上看到的為準。</b>這一頁依 2026-10-21 查到的官方說明寫成。</p>
+  <p>出處：<a href="https://claude.com/pricing" target="_blank" rel="noopener">Claude 方案與定價</a>、<a href="https://code.claude.com/docs/en/permission-modes" target="_blank" rel="noopener">Claude Code 權限模式</a>、<a href="https://learn.chatgpt.com/docs/sandboxing" target="_blank" rel="noopener">Codex 權限選單</a>、<a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#device-flow" target="_blank" rel="noopener">GitHub 裝置登入</a>、<a href="https://docs.github.com/en/account-and-profile/how-tos/email-preferences/setting-your-commit-email-address" target="_blank" rel="noopener">GitHub noreply 信箱</a>、<a href="https://code.claude.com/docs/en/desktop-quickstart" target="_blank" rel="noopener">Claude 桌面版入門</a>、<a href="https://help.openai.com/en/articles/20001276-moving-to-the-new-chatgpt-desktop-app" target="_blank" rel="noopener">新版 ChatGPT 桌面版</a>、<a href="https://www.zotero.org/download/" target="_blank" rel="noopener">Zotero 下載</a>。</p>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function set(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  var os=get('ltc-os')||(/Mac/i.test(navigator.platform||'')?'mac':'win');
+  function setOS(v){root.dataset.os=v;document.querySelectorAll('button[data-os]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.os===v))});set('ltc-os',v)}
+  document.querySelectorAll('button[data-os]').forEach(function(b){b.addEventListener('click',function(){setOS(b.dataset.os)})});
+  setOS(os);
+  var pb=document.getElementById('projBtn');
+  function setProj(on){if(on){root.dataset.proj='on'}else{delete root.dataset.proj}pb.setAttribute('aria-pressed',String(on));set('ltc-proj',on?'1':'0')}
+  pb.addEventListener('click',function(){setProj(root.dataset.proj!=='on')});
+  setProj(get('ltc-proj')==='1');
+  document.querySelectorAll('.copybtn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var el=document.getElementById(btn.dataset.copy);var text=el.textContent;
+      function ok(){btn.textContent='已複製';btn.classList.add('ok');setTimeout(function(){btn.textContent='複製';btn.classList.remove('ok')},1600)}
+      function fallback(){var ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var done=false;try{done=document.execCommand('copy')}catch(e){}document.body.removeChild(ta);if(done){ok();return}var r=document.createRange();r.selectNodeContents(el);var s=window.getSelection();s.removeAllRanges();s.addRange(r);btn.textContent=/Mac/i.test(navigator.platform||'')?'已選取，請按 Command＋C':'已選取，請按 Ctrl＋C';setTimeout(function(){btn.textContent='複製'},4000)}
+      try{navigator.clipboard.writeText(text).then(ok,fallback)}catch(e){fallback()}
+    });
+  });
+  var boxes=[].slice.call(document.querySelectorAll('.tick input'));
+  var saved={};try{saved=JSON.parse(get('ltc-prep')||'{}')||{}}catch(e){saved={}}
+  function update(){var n=0;boxes.forEach(function(b){var li=b.closest('.step');if(li)li.classList.toggle('is-done',b.checked);if(b.checked)n++});document.getElementById('progText').textContent='已完成 '+n+' / '+boxes.length;document.getElementById('prepCount').textContent=n+' / '+boxes.length;document.getElementById('progBar').style.width=(n/boxes.length*100)+'%'}
+  boxes.forEach(function(b){b.checked=!!saved[b.id];b.addEventListener('change',function(){saved[b.id]=b.checked;set('ltc-prep',JSON.stringify(saved));update()})});
+  document.getElementById('resetBtn').addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});saved={};set('ltc-prep','{}');update()});
+  update();
+})();
+</script>
+</body>
+</html>

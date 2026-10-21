@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<title>長照所 AI 設定課</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap">
+<style>
+/* 版面：米色紙面＋深綠橫幅分段（看得懂／設得好／守得住／用得上／接得上／帶得走），金色大字當段名；技能卡用深藍。依 Ted 10/21 給的範例方向。 */
+:root{
+  --paper:#F6EEDD; --card:#FFFBF2; --ink:#1B2420; --muted:#5B655F;
+  --green:#1F4A3A; --green-ink:#F6EEDD; --gold:#C99A2E; --gold-soft:#F2E3B8;
+  --navy:#1C2B3A; --navy-ink:#EEF1F4; --line:#E0D3B6;
+  --ok:#24704F; --ok-soft:#DCEFE3; --warn:#B23A2B; --warn-soft:#F7DDD7;
+  --font-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+  --base:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111A15; --card:#18241E; --ink:#ECE5D4; --muted:#A7B0A8;
+    --green:#0E2E22; --green-ink:#F1E9D6; --gold:#E2B85A; --gold-soft:#3A3120;
+    --navy:#0F1B27; --navy-ink:#E4E9EE; --line:#2C3D33;
+    --ok:#7FD0A6; --ok-soft:#1C3A2B; --warn:#F09A86; --warn-soft:#3D221D; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111A15; --card:#18241E; --ink:#ECE5D4; --muted:#A7B0A8;
+  --green:#0E2E22; --green-ink:#F1E9D6; --gold:#E2B85A; --gold-soft:#3A3120;
+  --navy:#0F1B27; --navy-ink:#E4E9EE; --line:#2C3D33;
+  --ok:#7FD0A6; --ok-soft:#1C3A2B; --warn:#F09A86; --warn-soft:#3D221D; color-scheme:dark;
+}
+:root[data-proj="on"]{--base:20px}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:1rem;line-height:1.75;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+a{color:var(--ok)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:48rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance}
+p{margin:0 0 .9rem}
+header.top{padding-block:2.4rem 1.6rem}
+.eyebrow{font-size:.82rem;letter-spacing:.1em;color:var(--ok);font-weight:700}
+h1{font-size:2.15rem;line-height:1.3;margin:.35rem 0 .7rem;font-weight:900}
+.lede{font-size:1.06rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.3rem 1.2rem;font-size:.88rem;color:var(--muted)}
+.tools{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.1rem;align-items:center}
+.chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:.3rem 1rem;font-size:.92rem}
+.chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--green-ink)}
+.mycards{display:inline-flex;align-items:center;gap:.6rem;background:var(--navy);color:var(--navy-ink);border:2px solid var(--gold);border-radius:999px;padding:.4rem 1.1rem;font-weight:700;text-decoration:none}
+.mycards .cnt{background:var(--gold);color:var(--navy);border-radius:999px;padding:0 .55rem;font-size:.85rem;font-variant-numeric:tabular-nums}
+.band{background:var(--green);color:var(--green-ink);margin-top:2.2rem;scroll-margin-top:0}
+.band .wrap{padding-block:1.6rem 1.4rem}
+.band .big{font-size:3.4rem;line-height:1.1;font-weight:900;color:var(--gold);letter-spacing:.04em;margin:0}
+.band .sub{font-size:1.25rem;font-weight:700;margin:.4rem 0 0}
+.band .tag{font-family:var(--font-mono);font-size:.8rem;color:var(--gold);opacity:.9;letter-spacing:.12em}
+section.blk{padding-block:1.8rem 1rem}
+.ask{background:var(--ok-soft);border-radius:12px;padding:1rem 1.1rem;margin:.6rem 0 1rem}
+.ask b{color:var(--ok)}
+.doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:1rem 0 .4rem}
+.door{background:var(--card);border:1.5px solid var(--line);border-top:5px solid var(--gold);border-radius:10px;padding:.8rem .9rem;min-width:0}
+.door .k{font-weight:700}
+.door .v{font-size:.85rem;color:var(--muted);word-break:break-all}
+.account{text-align:center;font-size:.92rem;color:var(--muted);margin:.2rem 0 1rem}
+.account b{color:var(--ink)}
+.tabs{display:flex;gap:.4rem;margin:.6rem 0;flex-wrap:wrap}
+.tab{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:.35rem 1rem}
+.tab[aria-selected="true"]{background:var(--navy);color:var(--navy-ink);border-color:var(--navy)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;vertical-align:top;padding:.55rem .6rem;border-bottom:1px solid var(--line)}
+th{font-size:.82rem;letter-spacing:.06em;color:var(--muted)}
+.pill{display:inline-block;font-size:.78rem;padding:.05rem .55rem;border-radius:999px;font-weight:700;white-space:nowrap}
+.pill.go{background:var(--ok-soft);color:var(--ok)}
+.pill.stay{background:var(--gold-soft);color:var(--ink)}
+.pill.sep{background:var(--warn-soft);color:var(--warn)}
+.note{font-size:.85rem;color:var(--muted)}
+.claim{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin:1rem 0 .4rem;padding:.8rem 1rem;border:2px dashed var(--gold);border-radius:12px}
+.claim button{background:var(--navy);color:var(--navy-ink);border:0;border-radius:999px;padding:.35rem 1.1rem;font-weight:700}
+.claim button[aria-pressed="true"]{background:var(--gold);color:var(--navy)}
+.claim span{font-size:.9rem;color:var(--muted)}
+.app{font-size:1.3rem;font-weight:900;margin:1.4rem 0 .4rem;display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+.app small{font-size:.85rem;font-weight:500;color:var(--muted)}
+.steps{list-style:none;margin:.6rem 0 0;padding:0;display:grid;gap:.8rem}
+.step{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:1rem 1.1rem;min-width:0}
+.step h3{margin:0 0 .35rem;font-size:1.05rem;display:flex;gap:.5rem;align-items:baseline}
+.sn{font-family:var(--font-mono);color:var(--gold);font-weight:700}
+.step > p:last-child{margin-bottom:0}
+.path{font-family:var(--font-mono);font-size:.84rem;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:.08rem .45rem;display:inline-block;margin:.1rem 0;word-break:break-word}
+.why{font-size:.9rem;color:var(--muted)}
+.done{font-size:.88rem;border-left:4px solid var(--ok);padding-left:.6rem;margin-top:.5rem}
+.os-win,.os-mac{display:none}
+:root[data-os="win"] .os-win{display:block}
+:root[data-os="mac"] .os-mac{display:block}
+.osbar{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:.9rem;margin:.4rem 0}
+.copybox{position:relative;background:var(--paper);border:1.5px dashed var(--ok);border-radius:10px;margin:.6rem 0;min-width:0}
+.copybox pre{margin:0;padding:.8rem .9rem 2.5rem;white-space:pre-wrap;word-break:break-word;font-family:var(--font-body);font-size:.93rem;line-height:1.7}
+.copybtn{position:absolute;right:.5rem;bottom:.5rem;border:0;background:var(--ok);color:var(--card);border-radius:8px;padding:.2rem .8rem;font-size:.85rem;max-width:calc(100% - 1rem)}
+.copybtn.ok{background:var(--gold);color:var(--navy)}
+.minichk{margin-top:1rem;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.8rem 1rem}
+.minichk .hd{font-weight:700;margin-bottom:.2rem}
+.minichk label{display:flex;gap:.5rem;align-items:flex-start;padding:.25rem 0;font-size:.95rem}
+.minichk input{margin-top:.45rem;accent-color:var(--ok);width:1.05rem;height:1.05rem;flex:none}
+.lines{display:grid;gap:.8rem}
+.line{display:grid;grid-template-columns:2.6rem minmax(0,1fr);gap:.7rem;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:1rem}
+.line .num{font-size:2rem;font-weight:900;color:var(--warn);line-height:1}
+.line h3{margin:0 0 .3rem;font-size:1.1rem}
+.builder{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:1rem 1.1rem;margin-top:.6rem}
+.bstep{display:grid;grid-template-columns:2rem minmax(0,1fr);gap:.6rem;align-items:start;padding:.7rem 0;border-bottom:1px dashed var(--line)}
+.bstep:last-child{border-bottom:0}
+.circ{width:1.8rem;height:1.8rem;border-radius:50%;background:var(--gold);color:var(--navy);display:grid;place-items:center;font-weight:900;font-size:.95rem}
+.bstep .lbl{font-weight:700;margin-bottom:.4rem}
+.taskchips{display:flex;flex-wrap:wrap;gap:.45rem}
+.taskchips .chip[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--card)}
+.fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem}
+.fields label{display:flex;flex-direction:column;gap:.25rem;font-size:.85rem;color:var(--muted);min-width:0}
+.fields input{font:inherit;font-size:.95rem;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:.45rem .6rem;min-width:0;width:100%}
+.fields input:focus{border-color:var(--ok);outline:none}
+.ptcf{border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--paper)}
+.prow{display:grid;grid-template-columns:5.5rem minmax(0,1fr);gap:.6rem;padding:.6rem .8rem;border-bottom:1px solid var(--line)}
+.prow:last-child{border-bottom:0}
+.prow .k{font-weight:700;display:flex;gap:.4rem;align-items:baseline}
+.prow .k b{display:inline-grid;place-items:center;width:1.4rem;height:1.4rem;border-radius:4px;background:var(--navy);color:var(--navy-ink);font-size:.8rem;font-family:var(--font-mono)}
+.prow .v{font-size:.93rem;min-width:0;word-break:break-word}
+.fill{background:var(--ok-soft);color:var(--ok);font-weight:700;border-radius:4px;padding:0 .2rem}
+.miss{color:var(--warn);font-weight:700}
+.legend{font-size:.82rem;color:var(--muted);margin:.4rem 0 0}
+.actions{display:flex;flex-wrap:wrap;gap:.5rem}
+.btn{display:inline-flex;align-items:center;gap:.3rem;border-radius:8px;padding:.45rem 1rem;font-weight:700;text-decoration:none;border:1.5px solid var(--ok)}
+.btn.primary{background:var(--ok);color:var(--card)}
+.btn.ghost{background:transparent;color:var(--ok)}
+.status{font-size:.88rem;color:var(--ok);min-height:1.4em;margin-top:.4rem}
+.share{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1fr);gap:.7rem;align-items:center;margin:1rem 0 .4rem}
+.agent{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.8rem;text-align:center;min-width:0}
+.agent .k{font-weight:700}
+.agent .v{font-size:.82rem;color:var(--muted)}
+.arrow{font-size:.82rem;color:var(--ok);display:block}
+.folder{background:var(--gold-soft);border:2px solid var(--gold);border-radius:4px 14px 14px 14px;padding:.8rem 1rem;min-width:0}
+.folder .k{font-weight:700;margin-bottom:.3rem}
+.folder ul{margin:0;padding-left:1.1rem;font-size:.88rem}
+code{font-family:var(--font-mono);font-size:.86rem}
+.sync{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.4rem .6rem;margin:.8rem 0 1rem;font-size:.9rem}
+.sync .m{background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:.15rem .8rem}
+.sync .gh{background:var(--navy);color:var(--navy-ink);border-radius:999px;padding:.15rem .9rem;font-weight:700}
+.skills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;margin-top:1rem}
+.skill{perspective:900px;border:0;background:none;padding:0;text-align:left;color:inherit;min-width:0;display:grid}
+.skill .inner{position:relative;display:grid;min-height:13rem;transition:transform .5s;transform-style:preserve-3d}
+.skill[aria-pressed="true"] .inner{transform:rotateY(180deg)}
+.face{grid-area:1/1;position:relative;border-radius:14px;padding:1rem;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;background:var(--navy);color:var(--navy-ink);border:2px solid var(--gold)}
+.face.back{transform:rotateY(180deg);background:var(--card);color:var(--ink)}
+.face .no{font-size:2.2rem;font-weight:900;color:var(--gold);line-height:1;font-family:var(--font-mono)}
+.face .ttl{font-weight:900;font-size:1.05rem;margin:.5rem 0 .3rem}
+.face .one{font-size:.88rem;opacity:.9}
+.face .hint{margin-top:auto;font-size:.78rem;opacity:.75;text-align:right}
+.badge{position:absolute;top:.8rem;right:.8rem;font-size:.75rem;font-weight:700;border-radius:999px;padding:.05rem .6rem;background:var(--line);color:var(--ink)}
+.skill.on .badge{background:var(--gold);color:var(--navy)}
+.face.back .pts{display:block;margin-top:.2rem;font-size:.88rem;line-height:1.6}
+.face.back .pt{display:block;padding-left:1rem;position:relative}
+.face.back .pt::before{content:"・";position:absolute;left:0;color:var(--gold)}
+.skill:not(.on) .face.front{filter:saturate(.35);opacity:.85}
+.tip{font-size:1rem;font-weight:700;border-left:5px solid var(--gold);padding-left:.8rem;margin:1.2rem 0}
+.progress{display:flex;align-items:center;gap:.8rem;margin-top:1rem;font-size:.9rem;flex-wrap:wrap}
+.bar{flex:1;min-width:8rem;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+footer{padding-block:2rem 3rem;font-size:.85rem;color:var(--muted)}
+footer ul{padding-left:1.1rem;margin:.4rem 0}
+@media (max-width:720px){
+  h1{font-size:1.7rem}
+  .band .big{font-size:2.6rem}
+  .doors,.fields,.skills,.share{grid-template-columns:minmax(0,1fr)}
+  .prow{grid-template-columns:minmax(0,1fr);gap:.2rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">慈濟大學長期照護研究所・研究團隊工作坊・第一部分</div>
+  <h1>ChatGPT 與 Claude，設定成你的研究助理</h1>
+  <p class="lede">跟著現場做，也可以帶回家照著檢查。每做完一段就解鎖一張技能卡；沒解鎖也能往下看，跟不上照樣往下走。</p>
+  <p class="lede">還沒裝好桌面版？先做 <a href="index.html">行前準備</a>。</p>
+  <div class="meta"><span>2026-10-28（三）・電腦教室（一）</span><span>講師：陳文盛老師（國立東華大學通識教育中心）</span><span>選單名稱查核：2026-10-21</span></div>
+  <div class="tools">
+    <a class="mycards" href="#bring">我的技能卡 <span class="cnt" id="cardCount">0 / 6</span></a>
+    <button class="chip" id="projBtn" aria-pressed="false" type="button">投影大字</button>
+  </div>
+</header>
+</div>
+
+<div class="band" id="b1"><div class="wrap"><div class="tag">01・三扇門</div><p class="big">看得懂</p><p class="sub">網頁、桌面、手機，是同一個帳號的三扇門</p></div></div>
+<main>
+<section class="blk wrap" id="doors">
+  <div class="ask"><b>老師們問的：</b>「原來 ChatGPT 有桌面版？網頁版跟桌面版要怎麼設定才會同步？」<br><b>答案：</b>不用設定。用同一個帳號登入，對話就會跟著帳號走。真正要確認的只有一件事：每一扇門登入的都是同一個帳號。</div>
+  <div class="doors" aria-label="三種使用方式">
+    <div class="door"><div class="k">網頁</div><div class="v">chatgpt.com<br>claude.ai</div></div>
+    <div class="door"><div class="k">桌面版</div><div class="v">裝在電腦上的程式，可以開你電腦裡的資料夾</div></div>
+    <div class="door"><div class="k">手機 app</div><div class="v">出門在外看對話、補問一句</div></div>
+  </div>
+  <p class="account">三扇門後面是同一個 <b>帳號</b>：對話、專案、設定都存在帳號裡</p>
+  <p>但有些東西不跟著帳號走。點下面切換兩家看：</p>
+  <div class="tabs" role="tablist" aria-label="選擇 AI">
+    <button class="tab" role="tab" id="tab-gpt" aria-selected="true" aria-controls="panel-gpt" type="button">ChatGPT</button>
+    <button class="tab" role="tab" id="tab-cl" aria-selected="false" aria-controls="panel-cl" type="button">Claude</button>
+  </div>
+  <div id="panel-gpt" role="tabpanel" aria-labelledby="tab-gpt" class="tablewrap">
+    <table>
+      <thead><tr><th>東西</th><th>跟著帳號走嗎</th><th>說明</th></tr></thead>
+      <tbody>
+        <tr><td>對話、專案、設定</td><td><span class="pill go">會</span></td><td>網頁、桌面版、手機看到的是同一份。</td></tr>
+        <tr><td>Codex</td><td><span class="pill sep">分開放</span></td><td>另一個畫面，紀錄跟一般對話分開，2-6 小節會看到。</td></tr>
+        <tr><td>動到你電腦資料夾的工作</td><td><span class="pill stay">通常只在那台電腦</span></td><td>通常只在那台電腦的程式裡看得到。但內容一樣會送到 OpenAI 的雲端處理，「在本機跑」不等於「資料沒離開電腦」。</td></tr>
+      </tbody>
+    </table>
+    <p class="note">新版桌面版 2026-07-09 推出，把一般對話、Work 和 Codex 放在同一個程式。畫面上的「Work」是另一種會替你做事的模式，今天不用，也不要拿研究資料試。</p>
+  </div>
+  <div id="panel-cl" role="tabpanel" aria-labelledby="tab-cl" class="tablewrap" hidden>
+    <table>
+      <thead><tr><th>東西</th><th>跟著帳號走嗎</th><th>說明</th></tr></thead>
+      <tbody>
+        <tr><td>對話、專案、記憶與設定</td><td><span class="pill go">會</span></td><td>登入同一個帳號，各裝置看到的是同一份。</td></tr>
+        <tr><td>動到你電腦資料夾的工作</td><td><span class="pill stay">通常只在那台電腦</span></td><td>要那台電腦開著 Claude 桌面版才接得上。內容一樣會送到 Anthropic 的雲端處理。</td></tr>
+      </tbody>
+    </table>
+    <p class="note">依 Anthropic 說明中心：用到你電腦檔案的任務，要那台電腦開著 Claude 桌面版。</p>
+  </div>
+  <div class="claim"><button type="button" data-claim="u1" aria-pressed="false">我懂了，收下技能卡 01</button><span>說得出「同步不用設定」，也知道「在本機跑，資料一樣會上雲端」。</span></div>
+</section>
+
+<div class="band" id="b2"><div class="wrap"><div class="tag">02・兩家各六步</div><p class="big">設得好</p><p class="sub">先關訓練開關，再開始用</p></div></div>
+<section class="blk wrap" id="chatgpt">
+  <div class="osbar" role="group" aria-label="選擇作業系統">你的電腦是：
+    <button class="chip" data-os="win" aria-pressed="true" type="button">Windows</button>
+    <button class="chip" data-os="mac" aria-pressed="false" type="button">Mac</button>
+  </div>
+  <div class="app">ChatGPT <small>做過行前準備的人，2-1 確認一下就好</small></div>
+  <ol class="steps">
+    <li class="step">
+      <h3><span class="sn">2-1</span>裝桌面版，用同一個帳號登入</h3>
+      <p>從官方下載頁 <span class="path">chatgpt.com/download</span> 下載，照畫面裝好。不要用搜尋引擎找安裝檔，網路上有假的。</p>
+      <div class="os-mac"><p class="why">需要 macOS 14 以上（蘋果選單 → 關於這台 Mac，可以看版本）。</p></div>
+      <p>用跟網頁 <b>同一個帳號、同一種登入方式</b>（Google、Apple 或 email）登入，不然會變成兩個帳號。</p>
+      <div class="done">完成判準：在桌面版隨便打一句話，到網頁版重新整理，看得到那段對話；兩邊左下角頭像的 email 一樣。</div>
+      <p class="why">裝不起來先用網頁版，2-2 到 2-5 的設定都存在帳號裡，桌面版裝好後自動套用。</p>
+    </li>
+    <li class="step">
+      <h3><span class="sn">2-2</span>先決定：要不要讓對話拿去訓練模型</h3>
+      <p>位置：<span class="path">設定 → 資料控管 → 改善模型以惠及所有人</span>（英文 Improve the model for everyone）。字樣以畫面為準。</p>
+      <p class="why">做研究建議關掉，而且在開始聊之前先關。個人帳號不論免費或付費，預設都可能拿對話改進模型，要自己關。關掉之後新對話不拿去訓練，紀錄照樣留著，每台裝置都生效。學校買的 Business、Enterprise、Edu 方案預設不拿；用學校信箱自己註冊的個人帳號不算。Codex 的設定裡如果另有「Include environments」這一項，跟資料夾內容能不能拿去訓練有關，也確認是關的。</p>
+      <div class="done">完成判準：這個開關是關的，或者你清楚知道自己為什麼開著。</div>
+    </li>
+    <li class="step">
+      <h3><span class="sn">2-3</span>寫自訂指示：讓它每次都知道你是誰</h3>
+      <p>位置：<span class="path">設定 → 個人化 → 自訂指示</span>（英文 Custom instructions）。先確認「啟用自訂」是開的，再貼下面這段，研究主題換成你的。</p>
+      <div class="copybox"><pre id="ci-gpt">我是慈濟大學長期照護研究所的研究人員，研究主題是失智症照護與照顧者教育。請用繁體中文、台灣用語回答。
+1. 引用文獻一定附 DOI 或網址；沒有把握就說「我不確定」，不要編造文獻。
+2. 統計名詞第一次出現時，附上英文原文。
+3. 先給結論，再說理由。
+4. 如果我貼上的內容有受試者、病人、家屬或學生的真實個資（姓名、病歷號、身分證字號、電話、地址），先提醒我刪掉，不要繼續分析。已發表文獻的作者、教材或量表裡的虛構人物不算個資。</pre><button class="copybtn" data-copy="ci-gpt" type="button">複製</button></div>
+      <p class="why">第 4 條只是最後一道提醒：AI 看到的那一刻，資料已經送出去了。個資要在貼上之前就拿掉。</p>
+      <div class="done">完成判準：開新對話問「你知道我是做什麼研究的嗎？」，它答得出你的研究主題。</div>
+    </li>
+    <li class="step">
+      <h3><span class="sn">2-4</span>看一眼記憶開關</h3>
+      <p>位置：<span class="path">設定 → 個人化 → 記憶</span>，有「參照已儲存的記憶」和「參照聊天紀錄」兩個開關。</p>
+      <p class="why">關「參照已儲存的記憶」會連「參照聊天紀錄」一起關；關「參照聊天紀錄」時，從過去對話記下的資訊會刪掉。已儲存的記憶要到「管理記憶」刪，刪對話不會刪記憶。只想問一次、不想留紀錄時，用「暫存對話」：沒按儲存之前，不留紀錄、不建記憶、不拿去訓練，開始前可選要不要套用記憶和自訂指示；按了儲存，它就變成一般對話。沒儲存的暫存對話，OpenAI 仍可能為了安全保留最多 30 天，它不是放個資的地方。</p>
+      <div class="done">完成判準：說得出自己這兩個開關現在是開還是關。</div>
+    </li>
+    <li class="step">
+      <h3><span class="sn">2-5</span>開一個研究專案</h3>
+      <p class="why"><b>上傳前先確認：</b>計畫書若有審查中、合作單位要保密、還沒公開的內容，先確認可以上傳；拿不準，今天就先只放已經發表的文獻。</p>
+      <p>左側欄 <span class="path">新專案</span>，取名後上傳計畫書和幾篇文獻。專案指示在 <span class="path">⋯ → 專案設定</span>，只對這個專案有效、會蓋過全域的自訂指示：</p>
+      <div class="copybox"><pre id="pi-gpt">這個專案是國科會失智症虛擬病人計畫。回答時只根據專案裡的檔案；檔案裡找不到的，直接說找不到，不要用一般知識補。引用時標出是哪一個檔案、哪一頁或哪一段；檔案裡沒有 DOI 或網址的文獻，寫「檔案未提供」，不要自己上網補。</pre><button class="copybtn" data-copy="pi-gpt" type="button">複製</button></div>
+      <p class="why">每個專案的檔案上限：免費 5 個、Go 和 Plus 25 個。</p>
+      <div class="done">完成判準：在專案裡問一個從你放的檔案查得到的問題（例如「計畫書的第二個研究目的是什麼？」），再打開原文，確認答案對得上。</div>
+    </li>
+    <li class="step">
+      <h3><span class="sn">2-6</span>認識 Codex：會動手做事的那一面</h3>
+      <p>桌面版左上角可以切換 ChatGPT 和 Codex。Codex 會打開你指定的資料夾，在裡面建檔、整理資料、做表格。練習用的資料夾只放假資料或公開資料。</p>
+      <p>輸入框下方手掌圖示的權限選單請選 <b>要求核准</b>（英文介面叫 Ask for approval）：在你打開的資料夾裡，它會直接建檔、改檔；要動資料夾以外的檔案或上網，會先問你。不要選「完整存取權」（Full access），也先別選「代我核准」（Approve for me，由系統判斷要不要問）。</p>
+      <p class="why">免費帳號也能用 Codex，但用量（額度）有限，做到一半可能要停下來等。價格以 chatgpt.com/pricing 為準。</p>
+      <div class="done">完成判準：左上角顯示 Codex，權限選單顯示「要求核准」（或 Ask for approval）。今天先認識，第二部分會實際用它。</div>
+    </li>
+  </ol>
+  <div class="minichk"><div class="hd">ChatGPT 做完勾一勾（6 項全勾，解鎖技能卡 02）</div>
+    <label><input type="checkbox" id="c1">桌面版裝好，同步實測通過</label>
+    <label><input type="checkbox" id="c2">「改善模型以惠及所有人」已關閉，或刻意開著</label>
+    <label><input type="checkbox" id="c3">自訂指示寫好了</label>
+    <label><input type="checkbox" id="c4">知道記憶的兩個開關現在是開還是關</label>
+    <label><input type="checkbox" id="c5">建了一個研究專案，放進可以上傳的檔案</label>
+    <label><input type="checkbox" id="c11">Codex 的權限選單顯示「要求核准」</label>
+  </div>
+</section>
+
+<section class="blk wrap" id="claude">
+  <div class="app">Claude <small>做過行前準備的人，3-1 確認一下就好</small></div>
+  <ol class="steps">
+    <li class="step">
+      <h3><span class="sn">3-1</span>裝桌面版，用同一個帳號登入</h3>
+      <p>從官方下載頁 <span class="path">claude.com/download</span> 下載，照畫面裝好。用跟網頁同一個帳號、同一種登入方式。</p>
+      <div class="done">完成判準：在桌面版隨便打一句話，到網頁版重新整理，看得到那段對話；兩邊左下角名字縮寫的 email 一樣。</div>
+      <p class="why">裝不起來先用網頁版，3-2 到 3-5 的設定都存在帳號裡。</p>
+    </li>
+    <li class="step">
+      <h3><span class="sn">3-2</span>先決定：要不要讓對話拿去改善 Claude</h3>
+      <p>位置：<span class="path">設定 → 隱私 → 協助改善 Claude</span>（英文 Help improve Claude）。字樣以畫面為準。</p>
+      <p class="why">做研究建議關掉，而且在開始聊之前先關；這個開關也管 Code 的工作。個人方案（免費、Pro、Max）由你自己決定。</p>
+      <ul class="why" style="margin:0 0 .9rem;padding-left:1.2rem;display:grid;gap:.3rem">
+        <li><b>關掉：</b>對話不拿去訓練，照樣留在你的紀錄裡。你刪掉的對話，一般會在 30 天內從後台清除；法律或安全調查等情況可能保留更久。</li>
+        <li><b>開著：</b>對話可能在拿掉能認出是誰的資訊後，放進訓練流程，最多保留 5 年。</li>
+        <li><b>按讚或倒讚：</b>研究用的對話不要按。按了之後，那次回饋連同對話內容會另外保存 5 年，也可能被拿去訓練。</li>
+      </ul>
+      <div class="done">完成判準：這個開關是關的，或者你清楚知道自己為什麼開著。</div>
+    </li>
+    <li class="step">
+      <h3><span class="sn">3-3</span>寫給 Claude 的指示</h3>
+      <p>位置：<span class="path">設定 → 一般 → 給 Claude 的指示</span>（英文 Instructions for Claude，舊版叫「個人偏好」）。內容可以跟 ChatGPT 用同一段：</p>
+      <div class="copybox"><pre id="ci-cl">我是慈濟大學長期照護研究所的研究人員，研究主題是失智症照護與照顧者教育。請用繁體中文、台灣用語回答。
+1. 引用文獻一定附 DOI 或網址；沒有把握就說「我不確定」，不要編造文獻。
+2. 統計名詞第一次出現時，附上英文原文。
+3. 先給結論，再說理由。
+4. 如果我貼上的內容有受試者、病人、家屬或學生的真實個資（姓名、病歷號、身分證字號、電話、地址），先提醒我刪掉，不要繼續分析。已發表文獻的作者、教材或量表裡的虛構人物不算個資。</pre><button class="copybtn" data-copy="ci-cl" type="button">複製</button></div>
+      <div class="done">完成判準：新對話裡問「你知道我是做什麼研究的嗎？」，它答得出來。</div>
+    </li>
+    <li class="step">
+      <h3><span class="sn">3-4</span>看一眼記憶設定</h3>
+      <p>位置：<span class="path">設定 → 記憶</span>（舊版在「功能」頁）。免費、Pro、Max 的記憶預設是開的；「搜尋並參考過去的對話」只有付費方案有，也可以在這裡關。</p>
+      <p class="why">只想讓某一次對話不用記憶：送出第一句之前，在輸入框的「＋」選單把記憶關掉。健康、信仰這類敏感主題預設不記。「無痕對話」在專案外的右上角幽靈圖示，不拿去訓練，但仍保留 30 天；專案裡不能用。</p>
+      <div class="done">完成判準：說得出自己的記憶現在是開還是關。</div>
+    </li>
+    <li class="step">
+      <h3><span class="sn">3-5</span>開一個研究專案</h3>
+      <p>左側欄 <span class="path">專案 → 新增專案</span>，上傳文獻到專案的知識區，再按「設定專案指示」：</p>
+      <div class="copybox"><pre id="pi-cl">這個專案是國科會失智症虛擬病人計畫。回答時只根據專案裡的檔案；檔案裡找不到的，直接說找不到，不要用一般知識補。引用時標出是哪一個檔案、哪一頁或哪一段；檔案裡沒有 DOI 或網址的文獻，寫「檔案未提供」，不要自己上網補。</pre><button class="copybtn" data-copy="pi-cl" type="button">複製</button></div>
+      <p class="why">記憶開著時，同一專案的對話會共用「專案記憶」；要確定每次都讀得到的內容，就放進知識區。審查中或要保密的內容，先確認可以上傳。免費帳號最多 5 個專案。</p>
+      <div class="done">完成判準：問「我放的第一篇文獻主要結論是什麼？」，答案在原文找得到。</div>
+    </li>
+    <li class="step">
+      <h3><span class="sn">3-6</span>請它做一頁互動網頁</h3>
+      <p>Claude 可以把整理好的內容做成一頁可以點的網頁（Artifacts）。之前給所長看的虛擬病人計畫討論頁就是這樣做的。試試這句：</p>
+      <div class="copybox"><pre id="art">請把我們專案裡的文獻整理成一頁互動網頁：上面一張比較表，可以依「研究設計」篩選；點一篇可以展開看研究對象、介入方式和主要結果。每一篇附檔案裡有的 DOI 連結或網址，兩者都沒有就寫「檔案未提供」，不要自己上網補。內容只能用專案裡的檔案，找不到的格子寫「檔案未提」；只有摘要、讀不到全文的文獻，在表格下方列出來。</pre><button class="copybtn" data-copy="art" type="button">複製</button></div>
+      <p class="why">做不出網頁的話，到「設定 → 功能」確認「成品」和「雲端程式碼執行與檔案建立」兩個開關都是開的（「成品」就是 Artifacts 的中文名稱）。</p>
+      <p class="why">今天練習做的頁面先不要分享。真的要分享時，看清楚分享範圍（選項依方案不同）：「任何有連結的人」表示拿到連結的人都打得開、也能再轉傳，等於公開。未發表資料、受試者資料一律不放。</p>
+      <div class="done">完成判準：畫面出現一頁可以點的網頁，每篇文獻都對得上專案檔案。</div>
+    </li>
+  </ol>
+  <div class="minichk"><div class="hd">Claude 做完勾一勾（6 項全勾，解鎖技能卡 03）</div>
+    <label><input type="checkbox" id="c6">桌面版裝好，同步實測通過</label>
+    <label><input type="checkbox" id="c7">「協助改善 Claude」已關閉，或刻意開著</label>
+    <label><input type="checkbox" id="c8">「給 Claude 的指示」寫好了</label>
+    <label><input type="checkbox" id="c9">知道記憶現在是開還是關</label>
+    <label><input type="checkbox" id="c10">建了一個研究專案，放進文獻和專案指示</label>
+    <label><input type="checkbox" id="c12">做出一頁互動網頁，也知道分享前先看範圍</label>
+  </div>
+</section>
+
+<div class="band" id="b3"><div class="wrap"><div class="tag">03・三條線</div><p class="big">守得住</p><p class="sub">設定再好，這三條線都要自己守</p></div></div>
+<section class="blk wrap" id="lines">
+  <div class="lines">
+    <div class="line"><div class="num">一</div><div><h3>先去識別化，再上傳</h3><p>原則上只上傳彙總結果；樣本很小或個案很少見時，彙總結果也可能認得出是誰。逐字稿這類個別資料，要先去識別化，而且核准的 IRB 計畫書、同意書範圍與學校規範都允許用這個 AI 工具（需要的話先辦變更），才可以上傳；不確定就先問 IRB，答案不明時一律不上傳。要拿掉的不只姓名：病歷號、身分證字號、電話、地址、出生或就診日期、機構和病房名稱、村里地名、家屬姓名、少見的病史或職業、照片、錄音。</p></div></div>
+    <div class="line"><div class="num">二</div><div><h3>看清楚資料條款</h3><p>個人帳號不論免費或付費，預設都可能拿對話改進模型，要自己關；學校或機構買的 ChatGPT Business／Enterprise／Edu、Claude Team／Enterprise 預設不拿。關掉訓練，不等於對方不存資料。研究用的對話不要按讚或倒讚。IRB 計畫書要寫明用哪一家工具、資料存在哪裡。</p></div></div>
+    <div class="line"><div class="num">三</div><div><h3>AI 給的文獻，每一筆都回查</h3><p>AI 可能編出看起來很真的文獻，也可能把真的論文講錯。每一筆都到 doi.org 輸入 DOI，確認查得到、題目和作者都對；再打開摘要或原文，確認 AI 引的那句話原文真的有寫。沒有 DOI 的中文文獻，改到華藝、國圖期刊文獻資訊網或 Google Scholar 查。</p></div></div>
+  </div>
+  <div class="claim"><button type="button" data-claim="u4" aria-pressed="false">我記住了，收下技能卡 04</button><span>三條線說得出來，也知道為什麼。</span></div>
+</section>
+
+<div class="band" id="b4"><div class="wrap"><div class="tag">04・提示詞組合器</div><p class="big">用得上</p><p class="sub">照自己的研究填，提示詞馬上組好</p></div></div>
+<section class="blk wrap" id="builder">
+  <p>選一個任務、填你的情況，下面的四格提示詞會即時組好。填了的標綠，沒填的標紅。今天練習請用講師給的模擬資料，不要貼真的受試者資料。</p>
+  <div class="builder">
+    <div class="bstep"><div class="circ">1</div><div><div class="lbl">選一個任務</div>
+      <div class="taskchips" role="group" aria-label="任務" id="taskChips"></div>
+      <p class="why" id="taskNote" style="margin:.4rem 0 0"></p>
+    </div></div>
+    <div class="bstep"><div class="circ">2</div><div><div class="lbl">填你的情況</div>
+      <div class="fields">
+        <label>研究主題<input id="fTopic" type="text" placeholder="例：失智症照顧者的照顧負荷" autocomplete="off"></label>
+        <label>你會給它的資料<input id="fData" type="text" placeholder="例：專案裡的 5 篇論文" autocomplete="off"></label>
+        <label>為了什麼（可不填）<input id="fUse" type="text" placeholder="例：寫計畫書的文獻回顧" autocomplete="off"></label>
+      </div>
+    </div></div>
+    <div class="bstep"><div class="circ">3</div><div><div class="lbl">看組好的提示詞</div>
+      <div class="ptcf" id="ptcf">
+        <div class="prow"><div class="k"><b>P</b>視角</div><div class="v" id="vP"></div></div>
+        <div class="prow"><div class="k"><b>T</b>任務</div><div class="v" id="vT"></div></div>
+        <div class="prow"><div class="k"><b>C</b>背景</div><div class="v" id="vC"></div></div>
+        <div class="prow"><div class="k"><b>F</b>格式</div><div class="v" id="vF"></div></div>
+      </div>
+      <p class="legend"><span class="fill">綠色</span> 是你填的，<span class="miss">紅色</span> 是還沒填的。規則可以減少 AI 亂編，但不能保證，結果照第三條線回查。</p>
+      <p class="legend"><b>P 是視角，不是叫它扮專家。</b>研究發現，叫 AI「你是某某專家」不會讓答案比較準；Anthropic 現在也建議直接講你要它從哪個角度看。真正讓答案變好的是 C 背景：給它什麼資料、為了什麼、哪些不准編。你是誰，已經寫在 2-3、3-3 的自訂指示裡了。</p>
+    </div></div>
+    <div class="bstep"><div class="circ">4</div><div><div class="lbl">一鍵複製，貼到 AI（複製一次就解鎖技能卡 05）</div>
+      <div class="actions">
+        <a class="btn primary" id="toGpt" href="https://chatgpt.com/" target="_blank" rel="noopener">複製並開啟 ChatGPT ↗</a>
+        <a class="btn primary" id="toCl" href="https://claude.ai/new" target="_blank" rel="noopener">複製並開啟 Claude ↗</a>
+        <button class="btn ghost" id="copyOnly" type="button">只複製</button>
+      </div>
+      <div class="status" id="bStatus" aria-live="polite"></div>
+    </div></div>
+  </div>
+  <p class="tip">聽完馬上做，結果不滿意就回來改格子再送一次。</p>
+</section>
+
+<div class="band" id="b5"><div class="wrap"><div class="tag">05・接到第二部分</div><p class="big">接得上</p><p class="sub">兩個 AI 共用一個資料夾，GitHub 帶著它跨電腦</p></div></div>
+<section class="blk wrap" id="share">
+  <p>各家聊天的記憶是分開的：ChatGPT 記得的事，Claude 不知道。要讓它們分享資訊，就讓它們打開<b>同一個資料夾</b>：一個 AI 把結果寫成檔案，另一個打開同一個資料夾就讀得到。</p>
+  <div class="share" aria-label="兩個 AI 共用一個資料夾的示意">
+    <div class="agent"><div class="k">Codex</div><div class="v">ChatGPT 桌面版</div><span class="arrow">讀 AGENTS.md →</span></div>
+    <div class="folder"><div class="k">研究計畫資料夾</div><ul>
+      <li><code>AGENTS.md</code> 寫給 AI 看的團隊規則</li>
+      <li><code>CLAUDE.md</code> 只寫一行：<code>@AGENTS.md</code></li>
+      <li><code>inbox/</code> 交辦的紙條</li>
+      <li><code>outbox/</code> 每一版成品</li>
+    </ul></div>
+    <div class="agent"><div class="k">Claude</div><div class="v">桌面版的 Code</div><span class="arrow">← 讀 CLAUDE.md</span></div>
+  </div>
+  <div class="sync" aria-label="用 GitHub 跨電腦同步"><span class="m">辦公室電腦</span>⇄<span class="gh">GitHub</span>⇄<span class="m">家裡電腦</span><span class="m">筆電</span><span class="m">雲端</span></div>
+  <ol class="steps">
+    <li class="step"><p><b>用會打開資料夾的那一面。</b>ChatGPT 桌面版的 Codex、Claude 桌面版的 Code。網頁上的一般對話看不到你電腦裡的資料夾。權限照行前準備第 7 項：Codex 選「要求核准」（Ask for approval），Claude 的 Code 選 Manual、環境選本機（Local）。</p><p class="why"><b>要付費：</b>Claude 的 Code 要 Pro 以上。只用免費帳號的人，這一段用 Codex 做。</p></li>
+    <li class="step"><p><b>規則寫成檔案。</b>Codex 讀 <code>AGENTS.md</code>，Claude 讀 <code>CLAUDE.md</code>。<code>CLAUDE.md</code> 只寫一行 <code>@AGENTS.md</code>，兩家就照同一份規則，規則只要改一個地方。</p></li>
+    <li class="step"><p><b>開工先拉、做完就推。</b>「推」是把這台電腦的改動送上 GitHub，「拉」是把 GitHub 上的新版抓下來。在 GitHub 建儲存庫時一定選 <b>Private（私人）</b>，建好後看頁面上寫的是 Private。Private 也還是上傳到 GitHub：受試者資料、密碼、金鑰、備援碼都不放進這個資料夾；檔案刪掉了，舊版本裡還找得到。</p></li>
+    <li class="step"><p><b>同一時間只讓一個 AI 改檔。</b>兩個 AI 接力時，一個在改，另一個先只看、只檢查，免得同一個檔案被兩邊改亂。</p></li>
+  </ol>
+  <div class="claim"><button type="button" data-claim="u6" aria-pressed="false">我懂了，收下技能卡 06</button><span>第二部分會用範本資料夾，讓 Claude 和 Codex 實際接力做一件研究工作。</span></div>
+</section>
+
+<div class="band" id="bring"><div class="wrap"><div class="tag">06・技能卡</div><p class="big">帶得走</p><p class="sub">做完一段解鎖一張，回家隨時打開</p></div></div>
+<section class="blk wrap" id="cards">
+  <div class="progress" aria-live="polite"><span id="progText">已解鎖 0 / 6</span><div class="bar"><span id="progBar"></span></div><button class="chip" id="resetBtn" type="button">全部重來</button></div>
+  <div class="skills" id="skills"></div>
+  <p class="tip">沒解鎖也不擋內容，點卡片就能翻面看重點。</p>
+  <p class="note">勾選和解鎖只存在這台電腦的這個瀏覽器裡，不會傳給任何人；換瀏覽器、無痕視窗、清掉網站資料或改用手機，就不會跟著走。</p>
+</section>
+</main>
+
+<footer class="wrap">
+  <p><b>選單名稱會隨改版變動。</b>這頁依 2026-10-21 查到的官方說明寫成；跟你畫面不一樣時，以畫面為準，或到官方說明中心查。</p>
+  <p>出處：</p>
+  <ul>
+    <li>OpenAI：<a href="https://help.openai.com/en/articles/20001276-moving-to-the-new-chatgpt-desktop-app" target="_blank" rel="noopener">新版桌面版</a>、<a href="https://help.openai.com/en/articles/8096356-chatgpt-custom-instructions" target="_blank" rel="noopener">自訂指示</a>、<a href="https://help.openai.com/en/articles/8590148-memory-in-chatgpt" target="_blank" rel="noopener">記憶</a>、<a href="https://help.openai.com/en/articles/7730893-data-controls-in-chatgpt" target="_blank" rel="noopener">資料控管</a>、<a href="https://help.openai.com/en/articles/10169521-projects-in-chatgpt" target="_blank" rel="noopener">專案</a>、<a href="https://help.openai.com/en/articles/8914046-temporary-chat-in-chatgpt" target="_blank" rel="noopener">暫存對話</a>、<a href="https://help.openai.com/en/articles/20001548-agent-security-and-local-work-sync-in-chatgpt" target="_blank" rel="noopener">本機工作與同步</a>、<a href="https://help.openai.com/en/articles/5722486-how-your-data-is-used-to-improve-model-performance" target="_blank" rel="noopener">資料如何用於改進模型</a>、<a href="https://learn.chatgpt.com/docs/sandboxing" target="_blank" rel="noopener">Codex 權限選單</a></li>
+    <li>Anthropic：<a href="https://claude.com/download" target="_blank" rel="noopener">下載 Claude</a>、<a href="https://support.claude.com/en/articles/9519177-how-can-i-create-and-manage-projects" target="_blank" rel="noopener">專案</a>、<a href="https://support.claude.com/en/articles/10185728-understanding-claude-s-personalization-features" target="_blank" rel="noopener">個人化</a>、<a href="https://support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-context" target="_blank" rel="noopener">記憶</a>、<a href="https://support.claude.com/en/articles/12260368-use-incognito-chats" target="_blank" rel="noopener">無痕對話</a>、<a href="https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude" target="_blank" rel="noopener">本機任務與同步</a>、<a href="https://support.claude.com/en/articles/9547008-share-artifacts" target="_blank" rel="noopener">分享 Artifacts</a>、<a href="https://code.claude.com/docs/en/data-usage" target="_blank" rel="noopener">資料使用</a>、<a href="https://privacy.claude.com/en/articles/10023548-how-long-do-you-store-my-data" target="_blank" rel="noopener">資料保存期限</a></li>
+    <li>提示詞的視角：<a href="https://claude.com/blog/best-practices-for-prompt-engineering" target="_blank" rel="noopener">Anthropic〈Prompt engineering best practices for 2026〉</a>、<a href="https://arxiv.org/abs/2512.05858" target="_blank" rel="noopener">Basil 等（2025）Prompting Science Report 4: Expert Personas Don’t Improve Factual Accuracy</a></li>
+  </ul>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function set(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  var st={};try{st=JSON.parse(get('ltc-p1')||'{}')||{}}catch(e){st={}}
+  function save(){set('ltc-p1',JSON.stringify(st))}
+
+  var os=get('ltc-os')||(/Mac/i.test(navigator.platform||'')?'mac':'win');
+  function setOS(v){root.dataset.os=v;document.querySelectorAll('button[data-os]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.os===v))});set('ltc-os',v)}
+  document.querySelectorAll('button[data-os]').forEach(function(b){b.addEventListener('click',function(){setOS(b.dataset.os)})});setOS(os);
+  var pb=document.getElementById('projBtn');
+  function setProj(on){if(on){root.dataset.proj='on'}else{delete root.dataset.proj}pb.setAttribute('aria-pressed',String(on));set('ltc-proj',on?'1':'0')}
+  pb.addEventListener('click',function(){setProj(root.dataset.proj!=='on')});setProj(get('ltc-proj')==='1');
+
+  var tabs=[['tab-gpt','panel-gpt'],['tab-cl','panel-cl']];
+  tabs.forEach(function(t){document.getElementById(t[0]).addEventListener('click',function(){tabs.forEach(function(u){var on=u[0]===t[0];document.getElementById(u[0]).setAttribute('aria-selected',String(on));document.getElementById(u[1]).hidden=!on})})});
+
+  function copyText(text,onok,onfail){
+    function fallback(){var ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}document.body.removeChild(ta);ok?onok():onfail()}
+    try{navigator.clipboard.writeText(text).then(onok,fallback)}catch(e){fallback()}
+  }
+  var isMac=/Mac/i.test(navigator.platform||'');
+  document.querySelectorAll('.copybtn').forEach(function(btn){btn.addEventListener('click',function(){
+    var el=document.getElementById(btn.dataset.copy);
+    copyText(el.textContent,function(){btn.textContent='已複製';btn.classList.add('ok');setTimeout(function(){btn.textContent='複製';btn.classList.remove('ok')},1600)},
+      function(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent=isMac?'已選取，請按 Command＋C':'已選取，請按 Ctrl＋C';setTimeout(function(){btn.textContent='複製'},4000)});
+  })});
+
+  var TASKS=[
+    {k:'lit',n:'文獻比較表',t:'請整理我給你的資料裡關於「{topic}」的論文，做成一張比較表。',f:'表格欄位：作者與年份、研究設計、樣本數、介入方式、主要結果、研究限制。每一格都要能在我給的資料裡找到，找不到寫「資料未提」。最後列出每篇的 DOI，沒有 DOI 就附可以回查的網址。',note:'適合：寫文獻回顧、準備計畫書。',p:'從長照研究方法的角度看，特別注意研究設計、樣本和測量工具。'},
+    {k:'scale',n:'量表翻譯初步檢查',t:'請檢查「{topic}」量表的中文翻譯。',f:'逐題列出：意思有沒有跑掉、有沒有台灣長輩看不懂的詞、有沒有一題問兩件事。只列問題和建議，不要改寫整份量表。',note:'適合：翻譯或改編量表。這只是初步檢查，量表授權與正式的跨文化調適（含回譯）照原本程序做。',p:'從台灣長輩和照顧者讀不讀得懂的角度看。'},
+    {k:'code',n:'訪談初步編碼',t:'請對一段已去識別化、關於「{topic}」的訪談逐字稿做初步編碼。',f:'先列主題，每個主題附一到兩句原文當證據；再標出你不確定的地方。這只是初步編碼，最後由研究團隊決定。',note:'今天請用講師給的模擬逐字稿。',p:'從質性研究的角度看，每個說法都要有原文當證據，不急著下結論。'},
+    {k:'reply',n:'回覆審查意見',t:'我是投稿作者，請幫我起草「{topic}」論文的審查意見回覆。',f:'逐點回應、說明我們改了哪裡；不同意的意見寫出理由。語氣客氣但不卑微。不要寫出我們沒做過的分析或修改；我沒告訴你的修改內容和頁碼，標「待作者補充」，不要替我編。',note:'你是審查人時，不要把別人的稿件或計畫貼進 AI。',p:'從審查人會在意的地方看：研究方法、樣本、研究限制。'},
+    {k:'stat',n:'統計結果說白話',t:'請用研究生聽得懂的話，解釋「{topic}」的統計結果。',f:'逐個係數說明代表什麼、哪些達到統計顯著、哪些沒有。缺 p 值或信賴區間就說無法判定，不要自己補。不要誇大效果，也不要把相關說成因果。',note:'適合：指導研究生、寫討論段。',p:'從第一次讀統計結果的研究生的角度看。'},
+    {k:'plan',n:'計畫書段落改清楚',t:'請把「{topic}」計畫書的段落改得更清楚。',f:'每句一個重點，去掉重複；不要加入新的事實或數字。改完逐條列出你改了什麼。',note:'審查中或要保密的內容，先確認可以上傳。',p:'從國科會審查委員讀計畫書的角度看：重點清不清楚、做不做得到。'}
+  ];
+  var GUARD='如果資料不夠回答，就說「我不確定」，不要編造；引用文獻有 DOI 就附 DOI，沒有就附可以回查的網址。我說會提供的資料如果還沒貼上，先請我補，不要開始分析。如果我貼的內容有受試者、病人或學生的真實個資（姓名、病歷號這類），先提醒我刪掉，不要繼續分析；已發表文獻的作者、教材裡的虛構人物不算。用繁體中文、台灣用語回答。';
+  var cur=st.task||'lit';
+  var chips=document.getElementById('taskChips');
+  TASKS.forEach(function(t){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=t.n;b.dataset.k=t.k;b.addEventListener('click',function(){cur=t.k;st.task=cur;save();render()});chips.appendChild(b)});
+  var fT=document.getElementById('fTopic'),fD=document.getElementById('fData'),fU=document.getElementById('fUse');
+  fT.value=st.topic||'';fD.value=st.data||'';fU.value=st.use||'';
+  [fT,fD,fU].forEach(function(i){i.addEventListener('input',function(){st.topic=fT.value;st.data=fD.value;st.use=fU.value;save();render()})});
+  function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function slot(v,label){v=(v||'').trim();return v?'<span class="fill">'+esc(v)+'</span>':'<span class="miss">【待填：'+label+'】</span>'}
+  function plain(v,label){v=(v||'').trim();return v?v:'【待填：'+label+'】'}
+  function task(){return TASKS.filter(function(t){return t.k===cur})[0]}
+  function render(){
+    var t=task();
+    [].forEach.call(chips.children,function(b){b.setAttribute('aria-pressed',String(b.dataset.k===cur))});
+    document.getElementById('taskNote').textContent=t.note;
+    document.getElementById('vP').textContent=t.p;
+    document.getElementById('vT').innerHTML=esc(t.t).replace('{topic}',slot(fT.value,'研究主題'));
+    var use=(fU.value||'').trim();
+    document.getElementById('vC').innerHTML='我會提供：'+slot(fD.value,'你會給它的資料')+'。'+(use?'這是為了 '+slot(use,'用途')+'。':'')+esc(GUARD);
+    document.getElementById('vF').textContent=t.f;
+  }
+  function promptText(){var t=task();var use=(fU.value||'').trim();
+    return '【視角】'+t.p+'\n【任務】'+t.t.replace('{topic}',plain(fT.value,'研究主題'))+'\n【背景】我會提供：'+plain(fD.value,'你會給它的資料')+'。'+(use?'這是為了'+use+'。':'')+GUARD+'\n【格式】'+t.f}
+  var bs=document.getElementById('bStatus');
+  function doCopy(where){var missing=!(fT.value||'').trim()||!(fD.value||'').trim();
+    copyText(promptText(),function(){bs.textContent='已複製'+(where?'，'+where+'在新分頁打開，貼上就好':'')+(missing?'（還有紅色格子沒填，貼上後記得補）':'');st.copied=true;save();updateCards()},
+      function(){bs.textContent=isMac?'複製被瀏覽器擋住了，請把上面四格選起來按 Command＋C':'複製被瀏覽器擋住了，請把上面四格選起來按 Ctrl＋C'})}
+  document.getElementById('toGpt').addEventListener('click',function(){doCopy('ChatGPT ')});
+  document.getElementById('toCl').addEventListener('click',function(){doCopy('Claude ')});
+  document.getElementById('copyOnly').addEventListener('click',function(){doCopy('')});
+  render();
+
+  var CARDS=[
+    {u:'u1',n:'01',ttl:'三扇門同步',one:'同步不用設定，登入同一個帳號就好',back:['網頁、桌面、手機看到同一份','動到電腦資料夾的工作，通常只在那台看得到','在本機跑，資料一樣會上雲端']},
+    {u:'u2',n:'02',ttl:'ChatGPT 研究設定',one:'先關訓練，再寫自訂指示',back:['資料控管：改善模型以惠及所有人 → 關','自訂指示：研究者身分＋不編造文獻','專案：只根據檔案回答','Codex 權限：要求核准']},
+    {u:'u3',n:'03',ttl:'Claude 研究設定',one:'隱私先決定，再給指示',back:['隱私：協助改善 Claude → 研究建議關','給 Claude 的指示：同一段','專案知識區＋專案指示','分享 Artifacts 先看範圍']},
+    {u:'u4',n:'04',ttl:'研究用 AI 三條線',one:'去識別化、看條款、文獻回查',back:['原則只傳彙總，個別資料先去識別化','個人帳號都要自己關訓練；關了也會存','DOI 查得到，還要對原文']},
+    {u:'u5',n:'05',ttl:'提示詞四格',one:'視角、任務、背景、格式',back:['視角：從哪個角度看（不必叫它扮專家）','任務：要做什麼','背景：給什麼資料、為了什麼（最重要）','格式：交出什麼樣子']},
+    {u:'u6',n:'06',ttl:'共用資料夾',one:'兩個 AI 打開同一個資料夾就能分享',back:['規則寫在 AGENTS.md','CLAUDE.md 一行 @AGENTS.md','開工先拉、做完就推','GitHub 儲存庫選 Private']}
+  ];
+  var grid=document.getElementById('skills');
+  CARDS.forEach(function(c){
+    var b=document.createElement('button');b.type='button';b.className='skill';b.id='card-'+c.u;b.setAttribute('aria-pressed','false');
+    b.innerHTML='<span class="inner"><span class="face front"><span class="badge">未解鎖</span><span class="no">'+c.n+'</span><span class="ttl">'+c.ttl+'</span><span class="one">'+c.one+'</span><span class="hint">點我翻面</span></span><span class="face back"><span class="ttl">'+c.ttl+'</span><span class="pts">'+c.back.map(function(x){return '<span class="pt">'+x+'</span>'}).join('')+'</span><span class="hint">再點一下翻回來</span></span></span>';
+    b.addEventListener('click',function(){b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'))});
+    grid.appendChild(b);
+  });
+  function unlocked(u){
+    if(u==='u2')return ['c1','c2','c3','c4','c5','c11'].every(function(i){return st[i]});
+    if(u==='u3')return ['c6','c7','c8','c9','c10','c12'].every(function(i){return st[i]});
+    if(u==='u5')return !!st.copied;
+    return !!st[u];
+  }
+  function updateCards(){
+    var n=0;CARDS.forEach(function(c){var on=unlocked(c.u);var el=document.getElementById('card-'+c.u);el.classList.toggle('on',on);el.querySelector('.badge').textContent=on?'已解鎖':'未解鎖';if(on)n++});
+    document.getElementById('progText').textContent='已解鎖 '+n+' / 6';document.getElementById('progBar').style.width=(n/6*100)+'%';
+    document.getElementById('cardCount').textContent=n+' / 6';
+  }
+  function claimLabel(b){var on=b.getAttribute('aria-pressed')==='true';b.textContent=on?'已收下技能卡 '+b.dataset.claim.slice(1).padStart(2,'0')+' ✓':b.dataset.label}
+  document.querySelectorAll('[data-claim]').forEach(function(b){var u=b.dataset.claim;b.dataset.label=b.textContent;b.setAttribute('aria-pressed',String(!!st[u]));claimLabel(b);
+    b.addEventListener('click',function(){st[u]=!st[u];b.setAttribute('aria-pressed',String(st[u]));claimLabel(b);save();updateCards()})});
+  document.querySelectorAll('.minichk input').forEach(function(i){i.checked=!!st[i.id];i.addEventListener('change',function(){st[i.id]=i.checked;save();updateCards()})});
+  document.getElementById('resetBtn').addEventListener('click',function(){st={task:cur};save();document.querySelectorAll('.minichk input').forEach(function(i){i.checked=false});document.querySelectorAll('[data-claim]').forEach(function(b){b.setAttribute('aria-pressed','false');claimLabel(b)});fT.value=fD.value=fU.value='';render();updateCards()});
+  updateCards();
+})();
+</script>
+</body>
+</html>
