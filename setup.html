@@ -194,6 +194,17 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
     <button class="chip" id="projBtn" aria-pressed="false" type="button">字放大</button>
   </div>
 </header>
+<section id="faq" style="margin-top:.4rem">
+  <div class="ask">
+    <p style="margin-top:0"><b>老師們課前問的四件事（10/22 所長轉來），答案先寫在這裡：</b></p>
+    <p><b>1. 桌面版和網頁版怎麼同步？</b>不用設定。用同一個帳號登入，一般對話、專案和設定就會跟著帳號走。只有一個例外：Codex 和 Claude 的 Code 在電腦資料夾裡做的事，紀錄通常只留在那台電腦。看第 01 段<a href="#doors">〈三扇門〉</a>。</p>
+    <p><b>2. AI 讀 PDF，要不要先轉成 Markdown？</b>一般不用：網頁版、桌面版的對話和專案，都能直接上傳 PDF。兩種情況才建議轉：① 掃描的 PDF（用滑鼠選不起來字），AI 可能讀錯，先問它「這份讀得到全文嗎」；② 要放進資料夾、讓 Codex 或 Claude 的 Code 反覆用的長文件。Markdown（.md）是純文字檔，記事本就打得開。轉法：在打開那個資料夾的 AI 助手裡貼這句（＿＿換成檔名）：</p>
+    <div class="copybox"><pre id="pdf-md">請把 material/＿＿.pdf 轉成 Markdown，存成同一個資料夾裡的同名 .md 檔；表格要保留成表格。轉完告訴我：用了什麼方法、有沒有讀不到或沒把握的地方（例如表格、數字、公式），列給我看。</pre><button class="copybtn" data-copy="pdf-md" type="button">複製</button></div>
+    <p class="note">10/23 用 Codex 實跑這句（拿第三部分的範例論文 PDF）：三張表轉成表格，220 個數字逐一比對都一致，兩張圖另存成圖檔。它可能要先裝轉檔的小工具，跳框時照第 2-6 段的判斷方式。轉完自己抽查幾個數字。</p>
+    <p><b>3. 「不知道就說不知道」「去 AI 味」，能不能設定一次就好？</b>可以。寫在 ChatGPT 的「自訂指示」（2-3）和「給 Claude 的指示」（3-3），之後每一段新對話都會照著做；只跟某一件研究有關的，寫在專案指示（2-5、3-5）。2-3 那段已經寫了「沒有把握就說『我不確定』，不要編造文獻」。想去 AI 味，可以在那段後面自己加一行，例如：「5. 寫作時用自然的台灣學術中文，不要用『首先、其次、總而言之』這類套話，不要每段都條列，不要誇大的形容詞。」改完開一段新對話試試。對話拉得很長時，它還是可能忘，重要的事再提醒一次。</p>
+    <p><b>4. Claude 的 skills 怎麼跟其他 AI 連結，不用每次下 prompt？</b>skill 是一個資料夾，裡面一份 SKILL.md，寫「什麼時候用、怎麼做」。Claude 和 ChatGPT 的 Codex 讀得懂同一種格式，AI 看到任務符合說明，會自己拿出來用，不用每次貼提示詞。放法：Claude 在設定裡先打開程式碼執行，再到「Customize → Skills」上傳 skill 資料夾的 ZIP 檔，Claude 的 Code 也讀得到；Codex 讀研究資料夾裡的 <code>.agents/skills/</code>（字樣與位置以你的畫面和官方說明為準：<a href="https://support.claude.com/en/articles/12512180" target="_blank" rel="noopener">Claude</a>、<a href="https://learn.chatgpt.com/docs/build-skills" target="_blank" rel="noopener">Codex</a>）。第 05 段的 AGENTS.md 是同一個想法：規則寫成檔案一次，兩家都照著做；第二部分會實際做一次。</p>
+  </div>
+</section>
 </div>
 
 <div class="band" id="b1"><div class="wrap"><div class="tag">01・三扇門</div><p class="big">看得懂</p><p class="sub">網頁、桌面、手機，是同一個帳號的三扇門</p></div></div>
@@ -334,7 +345,7 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
     </li>
     <li class="step">
       <h3><span class="sn">3-3</span>寫給 Claude 的指示</h3>
-      <p>位置：<span class="path">設定 → 一般 → 給 Claude 的指示</span>（英文 Instructions for Claude，舊版叫「個人偏好」）。內容可以跟 ChatGPT 用同一段（研究主題一樣換成你的）：</p>
+      <p>位置：點左下角的名字縮寫 → <span class="path">設定 → 給 Claude 的指示</span>（英文介面叫 Instructions for Claude，舊版叫 Profile preferences）。找到了，標題下面會寫「Claude 會在 Anthropic 的準則範圍內，於此帳戶及您所有相關帳戶的各個對話中記住這些內容」，框裡的灰字是「例如：讓說明簡潔扼要」。這裡寫的，Claude 每一段對話都會照著做，像 ChatGPT 的自訂指示。內容可以跟 ChatGPT 用同一段（研究主題一樣換成你的）：</p>
       <div class="copybox"><pre id="ci-cl">我是慈濟大學長期照護研究所的研究人員，研究主題是失智症照護與照顧者教育。請用繁體中文、台灣用語回答。
 1. 引用文獻一定附 DOI 或網址；沒有把握就說「我不確定」，不要編造文獻。
 2. 統計名詞第一次出現時，附上英文原文。
