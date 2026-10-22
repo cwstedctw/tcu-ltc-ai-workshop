@@ -338,7 +338,7 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
   <div class="warnbox"><b>練習資料不是原始資料。</b>原論文沒有公開原始資料，範本裡的 140 筆是依論文表 1、表 2 重建的：平均和標準差四捨五入後跟原論文一樣，表 1、表 2 的 p 值相同，效果量最多差 0.01；每個人的分數是假的，不能拿來下研究結論。</div>
   <details class="gloss" open><summary>這頁會一直看到的詞（點一下可以收起來）</summary>
     <ul>
-      <li><b>原論文／範例論文</b>：<b>原論文</b>是 2021 年發表在 <i>BMC Geriatrics</i> 的那篇；<b>範例論文</b>是範本裡用重建的練習資料重算、重寫的版本（<code>output/main.pdf</code>，9 頁），只拿來練習，不能投稿。</li>
+      <li><b>原論文／範例論文</b>：<b>原論文</b>是 2021 年發表在 <i>BMC Geriatrics</i> 的那篇；<b>範例論文</b>是範本裡用重建的練習資料重算、重寫的版本（<code>output/main.pdf</code>，10 頁，用該刊建議的 Springer Nature 期刊範本排版，雙倍行距、有行號），只拿來練習，不能投稿。</li>
       <li><b>build</b>：一個指令（<code>uv run build.py</code>），把資料算成數字、表、圖，再排成 PDF。你不用自己打，跟 AI 說「跑一次 build」就好。最後一行是 <code>BUILD OK</code> 就是成功，<code>BUILD FAILED</code> 就是停在某一步，它會說哪裡要改。</li>
       <li><b>代號</b>：給一個數字取的英文名字。例如 <code>DKASIntTOneMean</code> 代表「介入組（Int）第 12 週（TOne）DKAS 的平均（Mean）」。論文裡寫代號，排版時換成數字；資料一改，數字跟著改。</li>
       <li><b>CSV</b>：Excel 打得開的表格檔，一列一筆、用逗號分欄。</li>
@@ -492,7 +492,7 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
         <dt>gnuplot/</dt><dd>畫圖腳本，一張圖一支：<code>fig1_outcomes.gp</code>、<code>fig2_effects.gp</code>。AI 改</dd>
         <dt>tables/</dt><dd>（選用）你用 Excel 做好的表，存成 CSV UTF-8</dd>
         <dt>figdata/</dt><dd>（選用）你用 Excel 做好的畫圖資料，存成 CSV UTF-8</dd>
-        <dt>paper/</dt><dd>論文本文 <code>main.tex</code>，AI 寫</dd>
+        <dt>paper/</dt><dd>論文本文 <code>main.tex</code>，AI 寫；旁邊的 <code>sn-jnl.cls</code>、<code>sn-vancouver-num.bst</code> 是期刊範本檔（Springer Nature 官方版型，<i>BMC Geriatrics</i> 建議用的），不要改</dd>
       </dl>
     </div>
     <div class="mid"><span class="big2">→</span><span>跑一次<br>build</span></div>
@@ -563,7 +563,7 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
 <section class="blk wrap" id="walkthrough">
   <p>2026-10-22，我們用「不會寫程式、只用過 LINE 和 Word」的老師視角，把第 04 段的句子<b>一字不改</b>貼給 AI，從頭做到尾。環境是 Windows、ChatGPT 桌面版裡的 Codex，同一段對話做到底；9 次回覆，AI 處理的時間加起來大約 7 分半鐘（不含看 PDF、開 Excel 的時間）。</p>
   <p>下面是 AI 真正回的話（摘錄，資料夾路徑用「…」代替），每張卡後面附白話說明。實跑時為了自動錄下過程，AI 設成「不問、直接做」，所以紀錄裡看不到「可不可以」的確認；你用 Claude 的 Code（Manual），改檔、跑指令前會多跳出這些確認。</p>
-  <p>AI 每次的說法、行號都可能不一樣，照第 04 段每一步的「你會看到」核對就好。</p>
+  <p>AI 每次的說法、行號都可能不一樣，照第 04 段每一步的「你會看到」核對就好。這次實跑時，範例論文還是舊版型（9 頁、圖 1 在第 6 頁、那一句在 main.tex 第 78 行）；10/22 晚換成期刊範本後是 10 頁、圖 1 在第 6 頁、第 83 行，數字都一樣。</p>
   <div class="walks">
     <details class="walk"><summary><span class="sn">0</span>報到<span class="t">約 20 秒</span></summary>
       <p class="you"><b>老師貼：</b>請先讀 AGENTS.md 和 WORKFLOW.md，再跟我報到。今天是練習。開始前先確認 source/ 有沒有還沒存版的修改或新增檔；有的話先列給我、停下來。</p>
@@ -674,13 +674,13 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
   <p>前面的練習是改一篇<b>已經寫好</b>的論文。這一段反過來：研究內容只靠三樣原料：練習資料（<code>source/data/</code>）、13 篇文獻的書目（<code>material/模擬/refs.bib</code>）和一份研究構想（<code>material/模擬/研究構想.md</code>）。另外，AI 也會看範本裡的規則、工具和收起來的範例程式。老師一句一句說，AI 從開一篇新論文做到交稿前檢查，最後把原本的範例放回去。</p>
   <p><b>怎麼跑的：</b>2026-10-22，我們在範本的<b>複本</b>裡實跑一次（你手上那份範本沒有被動到）。AI 是 Claude（在雲端跑的 Claude Code），照下面十句話做，每一步錄下老師說的話、AI 原樣的回覆、改了哪些檔、build 最後一行。實跑時另外先給 AI 一段開場說明：扮演老師身邊的 AI 助手、這次會錄下來做成教材、照 AGENTS.md 的規矩做，並交代「這次模擬不用紙條，直接做」（研究模擬不是練習，所以用這句，不用「今天是練習」）。</p>
   <p><b>結果：</b><b>十步全部 BUILD OK</b>，PDF 頁數依序是 1 → 1 → 1 → 4 → 4 → 8 → 12 → 13 → 13 → 8（最後一步把原本的範例放回來，所以回到 8 頁）。十步 AI 大約用了 85 次工具（讀一個檔、跑一次程式都算一次）。用 Claude 的 Code（Manual）做的話，改檔、跑程式前都會先問你，十步加起來會問很多次。</p>
-  <p><b>現在照做會不一樣的地方：</b>這是 10/22 上午用當時的範本跑的。之後範本改了 Fisher 檢定的算法、文獻回報要附摘要原句、AI 聲明的提醒、資料不再複製進 examples/，原本的範例也變成 9 頁；第 8 步的檢查清單現在是 13 條，編號也不一樣。你現在照做，第 3、6、7、8 步的過程和頁數可能跟紀錄不一樣，新版還沒完整重跑十步。下面引號裡是 AI 的原話（摘錄，資料夾路徑用「…」代替）。</p>
+  <p><b>現在照做會不一樣的地方：</b>這是 10/22 上午用當時的範本跑的。之後範本改了 Fisher 檢定的算法、文獻回報要附摘要原句、AI 聲明的提醒、資料不再複製進 examples/，原本的範例也換成期刊範本（現在 10 頁）；第 8 步的檢查清單現在是 13 條，編號也不一樣。你現在照做，第 3、6、7、8 步的過程和頁數可能跟紀錄不一樣，新版還沒完整重跑十步。下面引號裡是 AI 的原話（摘錄，資料夾路徑用「…」代替）。</p>
   <div class="warnbox"><b>寫出來的論文只能練習，不能投稿。</b>資料是依原論文的表格重建的練習資料，每個人的分數是假的。AI 在標題、註腳、Methods 和資料可得性聲明裡都寫明了這一點。</div>
   <div class="prep"><b>想自己跑一次：開始前先報到（這次不是練習）</b>
     <p style="margin:.4rem 0"><b>你自己做：</b>照行前準備第 6 項的方法，在 Codex 或 Claude 的 Code 打開 ai-paper-kit 資料夾。</p>
     <p style="margin:.4rem 0"><b>跟 AI 說：</b>貼下面這句，不要貼第 04 段那句「今天是練習」。</p>
     <div class="copybox"><pre>請先讀 AGENTS.md 和 WORKFLOW.md，再跟我報到。接下來是研究模擬，不是練習：這次模擬不用紙條，直接做。開始前先確認 source/ 有沒有還沒存版的修改或新增檔；有的話先列給我、停下來；沒有的話幫這個資料夾存一版（commit），存好告訴我。</pre><button type="button" class="copybtn">複製</button></div>
-    <p style="margin:.4rem 0"><b>你要看什麼：</b>第一行「領隊 · 」後面的路徑，最後一段是 ai-paper-kit；它說存好了一版。存這一版，第 9 步才比得出 <code>source/</code> 有沒有完全回到原樣。（10/22 用 Codex 實跑這句：資料夾本來就沒有改過，它存的是一個「空的」還原點，這是正常的；接著第 0 步 <code>refs=13</code>、第 9 步回到 <code>pages=9 refs=7</code>，<code>source/</code> 跟還原點一模一樣。）</p>
+    <p style="margin:.4rem 0"><b>你要看什麼：</b>第一行「領隊 · 」後面的路徑，最後一段是 ai-paper-kit；它說存好了一版。存這一版，第 9 步才比得出 <code>source/</code> 有沒有完全回到原樣。（10/22 用 Codex 實跑這句：資料夾本來就沒有改過，它存的是一個「空的」還原點，這是正常的；接著第 0 步 <code>refs=13</code>、第 9 步回到原本範例的 <code>refs=7</code>，<code>source/</code> 跟還原點一模一樣。）</p>
     <p style="margin:.4rem 0">接著照下面第 0 步到第 9 步做（十句話跟範本 README 第五節一樣）。<b>一定要做到第 9 步</b>：第 0 步會把範例收起來，第 9 步才放回來；中途停下來，範本會停在只有標題的空白論文，第 04 段的練習就找不到 37.04。</p>
   </div>
   <div class="walks">
@@ -753,7 +753,7 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
       <div class="copybox"><pre>模擬做完了。請執行 uv run tools/new_paper.py --name 模擬論文 --restore examples/範例論文重算，把這篇收進 examples/、把原本的範例搬回來，再跑一次 build。</pre><button type="button" class="copybtn">複製</button></div>
       <p class="mean"><b>AI 做了什麼：</b>寫完的模擬論文整份收進 <code>examples/模擬論文/</code>，範例論文放回 <code>source/</code>。它用 git 比對過：現在的 <code>source/</code> 跟模擬開始前<b>完全一樣</b>。build 回到原本的範例：8 頁、7 篇文獻。</p>
       <blockquote>「搬回來」其實是複製回來：examples/…/ 還在……不需要的話，老師可以自己刪掉，我不刪檔。<br><code>BUILD OK pages=8 undefined_cites=0 undefined_refs=0 refs=7 refs_without_doi=0 bib_warnings=0</code></blockquote>
-      <p class="mean"><b>你要看什麼：</b>頁數回到原本範例的頁數（現在的範本是 <code>pages=9</code>；這次實跑用的是 10/22 上午的範本，當時是 8 頁）、<code>refs=7</code>，就是原本的範例。如果 AI 貼出的檔案清單裡有 <code>\346\250\241…</code> 這種數字，那是 git 把中文資料夾名稱印成代碼，檔案沒有壞。</p>
+      <p class="mean"><b>你要看什麼：</b>頁數回到原本範例的頁數（現在的範本是 <code>pages=10</code>；這次實跑用的是 10/22 上午的範本，當時是 8 頁）、<code>refs=7</code>，就是原本的範例。如果 AI 貼出的檔案清單裡有 <code>\346\250\241…</code> 這種數字，那是 git 把中文資料夾名稱印成代碼，檔案沒有壞。</p>
     </details>
   </div>
 
@@ -835,7 +835,7 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
   var EX=[
     {t:'報到',y:'照行前準備第 6 項的方法，在 Codex 或 Claude 的 Code 打開 ai-paper-kit 資料夾。',say:'請先讀 AGENTS.md 和 WORKFLOW.md，再跟我報到。今天是練習。開始前先確認 source/ 有沒有還沒存版的修改或新增檔；有的話先列給我、停下來。',c:'第一行是「領隊 ·」加上資料夾路徑（領隊＝範本給 AI 的角色名字）。AI 回話第一行顯示的路徑，最後一段要是 ai-paper-kit；不是的話（例如 my-research-team），關掉這個對話，照行前準備第 6 項重開正確的資料夾，再貼一次。接著它會說 source/ 有沒有還沒存版的檔，再把練習規則複述一次：不寫紙條（AI 寫給自己的工作單）、不寫報告、不 commit（不存版）。它列出檔案、停下來的話，先別讓它刪或還原：那些可能是你以前的東西，請它說明那些檔是什麼（在現場也可以問講師）。'},
     {t:'看原料',y:'用 Excel 打開 source/data/study_data.csv：一列一個人，共 140 人（Excel 顯示到第 141 列，第一列是欄名）；dkas_t0、dkas_t1、dkas_t2 是三個時間點的知識分數（t0＝前測、t1＝第 12 週、t2＝第 24 週）。再打開 source/data/published_values.csv：這是從原論文抄下來、拿來對照的數字。看完關掉時，Excel 問要不要儲存，一律按「不要儲存」。',c:'study_data.csv：第 1 列是欄名（id、group、age……共 19 欄），往下每列一個人；id 開頭 I 是介入組（intervention），C 是對照組（control）。published_values.csv：每一列是原論文印的一個數字。table 欄的 T1、T2、T4 是原論文的表 1、表 2、表 4；level 欄的 T0、T1、T2 才是時間點（前測、第 12 週、第 24 週）；stat 欄 mean＝平均、sd＝標準差、n＝人數、p＝p 值，value 是數字。程式只讀這兩個檔，不會改它們。'},
-    {t:'跑一次 build，看成品長出來',say:'請跑一次 build（執行 uv run build.py），告訴我最後一行，再告訴我 output 資料夾裡多了哪些檔。',c:'最後一行是 BUILD OK pages=9 undefined_cites=0 undefined_refs=0 refs=7 refs_without_doi=0 bib_warnings=0。開頭 BUILD OK 就是成功；pages=9 是 PDF 有 9 頁；undefined_cites、undefined_refs、bib_warnings 這三個要是 0。',
+    {t:'跑一次 build，看成品長出來',say:'請跑一次 build（執行 uv run build.py），告訴我最後一行，再告訴我 output 資料夾裡多了哪些檔。',c:'最後一行是 BUILD OK pages=10 undefined_cites=0 undefined_refs=0 refs=7 refs_without_doi=0 bib_warnings=0。開頭 BUILD OK 就是成功；pages=10 是 PDF 有 10 頁；undefined_cites、undefined_refs、bib_warnings 這三個要是 0。',
       more:[
         {k:'a',lab:'跟 AI 說（最後一行是 BUILD FAILED，或 AI 說失敗了）',text:'build 失敗了，訊息如上。請照它說的去看，告訴我是什麼問題、你打算怎麼修；我同意之後再修，修好再跑一次 build，把最後一行給我看。'},
         {k:'y',text:'成功之後，用 Excel 打開 output/tables/table2.csv，再打開 output/main.pdf。看完兩個都要關掉（Excel 問要不要儲存，按「不要儲存」）：開著的話，下一次 build 會失敗，訊息會叫你先關掉再跑一次。'},
