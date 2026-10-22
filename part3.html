@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
 <link rel="icon" href="data:,">
-<title>長照所 AI 論文管線</title>
+<title>長照所 AI 論文流程</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap">
@@ -223,6 +223,23 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
 .route ol{margin:.3rem 0 0;padding-left:1.2rem;font-size:.93rem}
 .qa{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.9rem 1rem;margin:.6rem 0}
 .qa h3{margin:0 0 .3rem;font-size:1.02rem}
+/* 10/22 易讀性總檢追加：頁首詞彙小框、示範的代號對照表、步驟卡裡的多句複製框 */
+.glossary{background:var(--card);border:1.5px solid var(--line);border-left:5px solid var(--gold);border-radius:10px;padding:.6rem 1rem;margin:1.1rem 0 0;font-size:.93rem}
+.glossary summary{cursor:pointer;font-weight:700}
+.glossary dl{margin:.4rem 0 0}
+.glossary dt{font-weight:700;margin-top:.5rem}
+.glossary dd{margin:0}
+.demo .sentence .ln{display:block}
+.demo .sentence .ln + .ln{margin-top:.4rem}
+.mval.chg{text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px}
+.maptab{margin:.6rem 0 .4rem}
+.maptab th,.maptab td{padding:.4rem .5rem}
+.maptab .cur{background:var(--gold-soft)}
+.chgtag{font-size:.8rem;font-weight:700;color:var(--warn)}
+.samtag{font-size:.8rem;color:var(--muted)}
+.srcbox{font-family:var(--font-mono);font-size:.8rem;color:var(--muted);word-break:break-word;margin:.5rem 0}
+.srcbox .ln{display:block;margin-top:.2rem}
+.saylead{margin:.2rem 0 0;font-size:.93rem}
 @media (max-width:720px){
   .flow3{grid-template-columns:minmax(0,1fr)}
   .flow3 .to{transform:rotate(90deg)}
@@ -237,13 +254,29 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
 <header class="top">
   <div class="eyebrow">慈濟大學長期照護研究所・研究團隊工作坊・第三部分</div>
   <h1>讓 AI 小隊陪你把論文做完</h1>
-  <p class="lede">第二部分的研究小隊，再加一條論文流程：找文獻、Zotero 管書目、分析資料、gnuplot 畫圖、LaTeX 寫稿，編出 PDF，要 Word 也有。</p>
+  <p class="lede">這一部分另外建一個論文資料夾 <code>ai-paper-kit</code>：裡面一樣有第二部分那種 AI 小隊，再加上一條寫論文的流程：用 Zotero 管書目、分析資料、用 gnuplot（畫圖的程式）畫圖、用 LaTeX（學術論文常用的排版工具）寫稿，最後排成 PDF；要 Word 也能另外產生一份。</p>
   <p class="lede"><b>先講結論：你不用打指令，也不用學 LaTeX。</b>你跟 AI 說話，AI 去改檔、跑程式；你看 PDF、做決定。這一頁每一步都附上「跟 AI 說的那句話」。</p>
-  <p class="lede">範例用的是所長團隊 2021 年發表的論文（Su 等，<i>BMC Geriatrics</i>）：用依論文表格重建的練習資料，把論文的表重算一次、逐一對照。<b>練習資料不是原始資料</b>；7 篇文獻是查證過的真文獻。動手練習在<a href="practice.html">練習頁</a>。前兩部分：<a href="setup.html">第一部分</a>、<a href="part2.html">第二部分</a>。</p>
+  <p class="lede">範例用的是所長團隊 2021 年發表在 <i>BMC Geriatrics</i> 的論文（Su 等，以下叫<b>原論文</b>）。原始資料沒有公開，所以我們照原論文表 1、表 2 的人數、平均和標準差，用程式重建一份 140 人的練習資料（每個人的分數都是假的），把原論文的表重算一次、跟它印的數字逐一對照，寫成範本裡的<b>範例論文</b>：只拿來練習，不能投稿。7 篇文獻是查證過的真文獻。動手練習在<a href="practice.html">練習頁</a>。前兩部分：<a href="setup.html">第一部分</a>、<a href="part2.html">第二部分</a>。</p>
   <div class="meta"><span>2026-10-28（三）・電腦教室（一）</span><span>講師：陳文盛老師（國立東華大學通識教育中心）</span><span>查核與實測：2026-10-22</span></div>
+  <details class="glossary">
+    <summary>這頁會一直看到的詞（點開看；不用背，忘了回來看）</summary>
+    <dl>
+      <dt>build</dt><dd>一個指令（<code>uv run build.py</code>），把資料算成數字、表、圖，再排成 PDF。你不用自己打，跟 AI 說「跑一次 build」就好。最後一行是 <code>BUILD OK</code> 就是成功，<code>BUILD FAILED</code> 就是停在某一步，它會說哪裡要改。</dd>
+      <dt>代號</dt><dd>給一個數字取的英文名字。例如 <code>DKASIntTOneMean</code> 代表「介入組（Int）第 12 週（TOne）DKAS 的平均（Mean）」。論文裡寫代號，排版時換成數字；資料一改，數字跟著改。</dd>
+      <dt>CSV</dt><dd>Excel 打得開的表格檔，一列一筆、用逗號分欄。</dd>
+      <dt>LaTeX</dt><dd>學術論文常用的排版工具。你只要看它排出來的 PDF。</dd>
+      <dt>gnuplot</dt><dd>畫圖的程式，照一支小腳本（<code>.gp</code> 檔）把小表畫成圖。</dd>
+      <dt>DKAS／ADQ／SCIDS</dt><dd>範例研究的三個量表：失智症知識（DKAS，0–50 分）、失智症態度（ADQ，19–95 分）、失智照護能力感（SCIDS，17–68 分）。</dd>
+      <dt>p 值</dt><dd>假如兩組其實沒有差別，還會看到這麼大差距的機率。越小，越不像碰巧。</dd>
+      <dt>效果量（Cohen's d）</dt><dd>兩組差多少，用「差了幾個標準差」來表示。大約 0.2 算小、0.5 算中、0.8 以上算大。</dd>
+      <dt>DOI</dt><dd>DOI 是每篇論文的固定編號（像身分證號碼）。在瀏覽器網址列打 <code>https://doi.org/</code>，後面接上 DOI，按 Enter，就會開到那篇論文的頁面。例如 <code>https://doi.org/10.1186/s12877-021-02075-3</code>。</dd>
+      <dt>存一版（commit）／推上去（push）</dt><dd>存一版＝在自己電腦記下資料夾這一刻的樣子，之後能回到這裡；推上去＝把存好的版本放到 GitHub。</dd>
+      <dt>Private（私人）</dt><dd>GitHub 上只有你和你邀請的人看得到。<b>Private 不代表研究資料可以放上去</b>（看主頁第 07 段的四個條件）。</dd>
+    </dl>
+  </details>
   <div class="tools">
     <a class="mycards" href="#bring">我的技能卡 <span class="cnt" id="cardCount">0 / 5</span></a>
-    <button class="chip" id="projBtn" aria-pressed="false" type="button">投影大字</button>
+    <button class="chip" id="projBtn" aria-pressed="false" type="button">字放大</button>
   </div>
 </header>
 </div>
@@ -251,15 +284,15 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
 <div class="band" id="b1"><div class="wrap"><div class="tag">01・為什麼不用 Word</div><p class="big">看得懂</p><p class="sub">數字、文獻、圖都從源頭自動接上</p></div></div>
 <main>
 <section class="blk wrap" id="why">
-  <div class="ask"><b>Word 最常出事的地方：</b>改了一筆資料，內文、表格、摘要、圖要一處一處改，漏一處就前後不一致；文獻刪了一篇，編號要重排。<br><b>這條流程的做法：</b>數字由分析程式寫出來，文獻由 Zotero 匯出，圖由腳本畫。改源頭，請 AI 重跑一次，全部一起更新。</div>
+  <div class="ask"><b>Word 最常出事的地方：</b>改了一筆資料，內文、表格、摘要、圖要一處一處改，漏一處就前後不一致；文獻刪了一篇，編號要重排。<br><b>這條流程的做法：</b>數字由分析程式寫出來，文獻由 Zotero 匯出，圖由 gnuplot 照一支小腳本畫出來。改源頭，請 AI 重跑一次，全部一起更新。</div>
   <div class="tablewrap"><table class="vs">
-    <thead><tr><th></th><th>Word 手工</th><th>LaTeX＋AI 流程</th></tr></thead>
+    <thead><tr><th></th><th>Word 手動維護</th><th>LaTeX＋AI 流程</th></tr></thead>
     <tbody>
       <tr><td>改一筆資料</td><td class="meh">內文、表、圖、摘要逐處改</td><td class="win">重跑一次，數字全部更新</td></tr>
       <tr><td>引用文獻</td><td class="meh">插入、重排編號，容易漏</td><td class="win">連到 Zotero；引了書目裡沒有的文獻，產生 PDF 時會停下來告訴你是哪篇</td></tr>
       <tr><td>圖</td><td class="meh">另外畫、貼上，字型跟內文不同</td><td class="win">gnuplot 腳本畫，圖上的字跟內文同一套字型</td></tr>
-      <tr><td>換期刊格式</td><td class="meh">重新排版</td><td class="win">換期刊範本，內容不動</td></tr>
-      <tr><td>AI 幫忙</td><td class="meh">複製貼上來回</td><td class="win">純文字，AI 讀得懂、改得動，改了什麼看得清楚</td></tr>
+      <tr><td>換期刊格式</td><td class="meh">重新排版</td><td class="win">換期刊範本就換好排版；字數、圖表規定再照投稿須知調</td></tr>
+      <tr><td>AI 幫忙</td><td class="meh">複製貼上來回</td><td class="win">純文字，AI 讀得懂、改得動；改完它會告訴你改了哪些檔</td></tr>
       <tr><td>合作者只會 Word</td><td class="win">直接用</td><td>另外出一份 Word 給他（只收 Word 的期刊也是）</td></tr>
     </tbody>
   </table></div>
@@ -273,37 +306,50 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
     <div class="to" aria-hidden="true">→</div>
     <div class="box"><div class="k">AI 助手</div><div class="v">Codex 或 Claude 的 Code：改檔、跑程式</div></div>
     <div class="to" aria-hidden="true">→</div>
-    <div class="box"><div class="k">程式</div><div class="v">算數字、畫圖、編 PDF</div></div>
+    <div class="box"><div class="k">程式</div><div class="v">算數字、畫圖、排成 PDF</div></div>
     <div class="to" aria-hidden="true">→</div>
     <div class="box you"><div class="k">你</div><div class="v">看 PDF，做決定</div></div>
   </div>
-  <p>範本資料夾分兩半：<b>原料放 <code>source/</code>，成品在 <code>output/</code></b>。要改結果就改原料，再跑一次 build；成品每次重做，不要手改。每個檔案都標了<b>誰會用到</b>，你自己要打開的，只有 <code>README.md</code>、你的資料、Zotero，和 <code>output/main.pdf</code>。</p>
+  <p>你的論文資料夾分兩半：<b>原料放 <code>source/</code>，成品在 <code>output/</code></b>。要改結果就改原料，再請 AI「跑一次 build」（一次做完算數字、畫圖、檢查文獻、排成 PDF）；成品每次重做，不要手改。每個檔案都標了<b>誰會用到</b>。平常你自己要打開的是：<code>README.md</code>（使用說明；在 GitHub 上打開你的論文資料夾，往下捲就看得到）、你的資料（用 Excel）、Zotero，和 <code>output/main.pdf</code>（論文）。不知道檔案在電腦的哪裡，就問 AI。</p>
   <div class="tablewrap"><table>
     <thead><tr><th>檔案</th><th>做什麼</th><th>誰會用</th><th>什麼時候</th></tr></thead>
     <tbody>
       <tr><td><code>README.md</code></td><td>給你看的使用說明</td><td><span class="runby you">你</span></td><td>第一次打開時</td></tr>
-      <tr><td><code>build.py</code></td><td>一次跑完：分析 → 畫圖 → 檢查文獻 → 編 PDF</td><td><span class="runby ai">AI 執行</span></td><td>你說「跑一次 build」</td></tr>
+      <tr><td><code>build.py</code></td><td>一次跑完：分析 → 畫圖 → 檢查文獻 → 排成 PDF</td><td><span class="runby ai">AI 執行</span></td><td>你說「跑一次 build」</td></tr>
       <tr><td><code>source/data/</code></td><td>研究資料（範例是依所長論文重建的練習資料）</td><td><span class="runby you">你放進來</span></td><td>符合四個條件才放（見第 07 段）</td></tr>
-      <tr><td><code>source/refs/refs.bib</code></td><td>書目</td><td><span class="runby auto">Zotero 自動匯出</span></td><td>你在 Zotero 加文獻時自己更新</td></tr>
+      <tr><td><code>source/refs/refs.bib</code></td><td>書目</td><td><span class="runby auto">Zotero 自動匯出</span></td><td>用接法 A：你把文獻加進 Zotero 的那個文獻集，它就跟著更新（見第 05 段）</td></tr>
       <tr><td><code>source/scripts/analyze.py</code></td><td>統計分析：算出論文裡的數字、表、畫圖用的小表</td><td><span class="runby auto">build 自動跑</span> <span class="runby ai">AI 修改</span></td><td>換資料、換統計方法時，AI 改它</td></tr>
       <tr><td><code>source/gnuplot/*.gp</code></td><td>gnuplot 畫圖腳本，一張圖一個</td><td><span class="runby auto">build 自動跑</span> <span class="runby ai">AI 修改</span></td><td>要加圖、改圖時，AI 改它</td></tr>
-      <tr><td><code>source/paper/main.tex</code></td><td>論文本文（LaTeX）</td><td><span class="runby ai">AI 寫、改</span></td><td>寫作時；你看的是編出來的 PDF</td></tr>
+      <tr><td><code>source/tables/</code>（選用）</td><td>你用 Excel 做好的表（另存成 CSV UTF-8），build 自動轉成論文裡的表格</td><td><span class="runby you">你放進來</span></td><td>想放一張自己做的表時</td></tr>
+      <tr><td><code>source/figdata/</code>（選用）</td><td>你用 Excel 做好的畫圖資料（CSV UTF-8），gnuplot 讀它畫圖</td><td><span class="runby you">你放進來</span></td><td>想用自己的資料畫圖時</td></tr>
+      <tr><td><code>source/paper/main.tex</code></td><td>論文本文（LaTeX）</td><td><span class="runby ai">AI 寫、改</span></td><td>寫作時；你看的是排出來的 PDF</td></tr>
       <tr><td><code>output/</code></td><td>成品：內文數字、表（<code>.csv</code> 用 Excel 打得開）、畫圖用的小表、圖、<code>main.pdf</code></td><td><span class="runby auto">build 自動產生</span></td><td>不要手改；刪掉也能重做</td></tr>
+      <tr><td><code>material/</code></td><td>你的材料：計畫書、投稿須知</td><td><span class="runby you">你放</span> <span class="runby ai">AI 只讀</span></td><td>換期刊、寫計畫時</td></tr>
+      <tr><td><code>workspace/</code></td><td>AI 的工作紀錄：紙條、報告、<code>log.md</code></td><td><span class="runby ai">AI 寫</span></td><td>想知道 AI 做了什麼時打開看</td></tr>
+      <tr><td><code>tools/new_paper.py</code></td><td>開一篇新論文：把範例收進 <code>examples/</code>、換上空白的骨架</td><td><span class="runby ai">AI 執行</span></td><td>開始寫自己的論文時（第 04 段第 4 步）</td></tr>
+      <tr><td><code>examples/</code></td><td>收起來的範例論文，隨時能打開參考</td><td><span class="runby you">你看</span></td><td>開了新論文之後才會出現</td></tr>
       <tr><td><code>tools/make_practice_data.py</code></td><td>重建練習資料</td><td><span class="runby ai">AI 執行</span></td><td>只有練習時；換成真資料就不用</td></tr>
       <tr><td><code>tools/zotero_export.py</code></td><td>從 Zotero 匯出書目（不裝外掛的接法）</td><td><span class="runby ai">AI 執行</span></td><td>只有用第 05 段的接法 C 時</td></tr>
       <tr><td><code>AGENTS.md</code>、<code>WORKFLOW.md</code></td><td>給 AI 看的規則和流程說明書</td><td><span class="runby ai">AI 開工先讀</span></td><td>每次；你不用背</td></tr>
-      <tr><td><code>.github/workflows/</code></td><td>推上 GitHub 後，雲端自動編一份 PDF</td><td><span class="runby auto">GitHub 自動跑</span></td><td>每次推上去</td></tr>
+      <tr><td><code>.github/workflows/</code></td><td>推上 GitHub 後，雲端自動排一份 PDF</td><td><span class="runby auto">GitHub 自動跑</span></td><td>每次推上去</td></tr>
+      <tr><td><code>pyproject.toml</code>、<code>uv.lock</code></td><td>統計用的程式清單，uv 照它裝</td><td><span class="runby auto">uv 自動用</span></td><td>你不用動</td></tr>
     </tbody>
   </table></div>
-  <p class="why">AI 每次要跑程式或改檔，會先問你可不可以（第一部分設定的「會先問」）。看得懂它要做什麼就同意；看不懂就問它「這一步在做什麼」。</p>
+  <p class="why" style="margin-bottom:.3rem"><b>AI 動手前會不會先問你，看行前準備第 7 項設的權限：</b></p>
+  <ul class="why">
+    <li>Codex（要求核准，英文介面 Ask for approval）：在你打開的資料夾裡會直接建檔、改檔、跑程式；動資料夾以外的檔案、上網或裝東西，才會先問你。</li>
+    <li>Claude 的 Code（Manual）：改檔、跑指令前都會先問你；只是讀檔案不會問。</li>
+    <li>跳出要你核准的框：看得懂、是你剛請它做的事（例如跑 build、改 analyze.py、.gp 或 main.tex），就按同意（只同意這一次）。看不懂，就按拒絕，拒絕不會弄壞東西；再問它「這一步要做什麼、為什麼要做」，或截圖問網頁版。</li>
+  </ul>
+  <p class="why">所以你的保護靠的是<b>做完之後看結果</b>：PDF、AI 的報告、它說改了哪些檔。重要的事（裝東西、刪檔、推上 GitHub），可以先跟它說「先告訴我你要做什麼，等我說好再做」。</p>
   <div class="claim"><button type="button" data-claim="u2" aria-pressed="false">我懂了，收下技能卡 02</button><span>知道自己只要說話、看 PDF；程式由 AI 和 build 去跑。</span></div>
 </section>
 
 <div class="band" id="b3"><div class="wrap"><div class="tag">03・只要裝一次</div><p class="big">裝得好</p><p class="sub">TeX、gnuplot、pandoc、Python 套件，請 AI 幫你裝</p></div></div>
 <section class="blk wrap" id="install">
   <div class="qa"><h3>TeX Live 是什麼？要裝哪一個？</h3>
-    <p style="margin:0">要把 LaTeX 編成 PDF，電腦裡要有一套「TeX 發行版」。最完整的一套叫 <b>TeX Live</b>，每年出一版；Mac 版的 TeX Live 叫 <b>MacTeX</b>。Windows 另有一套 <b>MiKTeX</b>，第一次裝比較小，缺什麼再自動補。我們在雲端實測、和 GitHub 自動編譯用的都是 TeX Live。三套都能用，範本不挑。</p>
-    <p style="margin:.4rem 0 0">論文或文獻有中文（例如引了台灣的中文期刊），跟 AI 說「論文裡有中文，請改用 xelatex」就好，中文字型已經設好。</p>
+    <p style="margin:0">LaTeX 原稿要變成 PDF，電腦裡要先裝一套排版軟體，統稱 TeX。最完整的一套叫 <b>TeX Live</b>，每年出一版；Mac 版的 TeX Live 叫 <b>MacTeX</b>。Windows 另有一套 <b>MiKTeX</b>，第一次裝比較小，缺什麼再自動補。三套都能用，範本不挑。</p>
+    <p style="margin:.4rem 0 0">論文或文獻有中文（例如引了台灣的中文期刊），跟 AI 說「論文裡有中文，請改用 xelatex」就好（xelatex 是能排中文的那一種排版方式），中文字型已經設好。</p>
   </div>
   <div class="osbar" role="group" aria-label="選擇作業系統">你的電腦是：
     <button class="chip" data-os="win" aria-pressed="true" type="button">Windows</button>
@@ -313,38 +359,42 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
     <div class="tablewrap"><table>
       <thead><tr><th>工具</th><th>用途</th><th>建議裝</th></tr></thead>
       <tbody>
-        <tr><td>TeX</td><td>把 LaTeX 編成 PDF</td><td><b>MiKTeX</b>（比較小；要打開「缺套件時自動安裝」）。想一次裝齊也可以裝 TeX Live，但檔案很大</td></tr>
+        <tr><td>TeX</td><td>把 LaTeX 原稿排成 PDF</td><td><b>MiKTeX</b>（比較小；要打開「缺套件時自動安裝」）。想一次裝齊也可以裝 TeX Live，但檔案很大</td></tr>
         <tr><td>gnuplot</td><td>畫圖</td><td>gnuplot 官方安裝檔</td></tr>
-        <tr><td>uv（管 Python）</td><td>統計分析</td><td><b>uv</b>：它會自己裝好 Python 和 numpy、pandas、scipy 等套件，放在範本資料夾裡，不動電腦原本的 Python</td></tr>
-        <tr><td>pandoc</td><td>轉成 Word（需要時才裝）</td><td>pandoc 官方安裝檔</td></tr>
+        <tr><td>uv（準備統計用的程式）</td><td>統計分析</td><td><b>uv</b>：一個小工具，會自己把統計要用的 Python 程式和它需要的零件，裝在你的論文資料夾裡，不動電腦原本裝的 Python</td></tr>
+        <tr><td>pandoc</td><td>轉成 Word（期刊只收 Word 時才用得到；下面那句會一起裝）</td><td>pandoc 官方安裝檔</td></tr>
       </tbody>
     </table></div>
-    <p>在 AI 助手（打開範本資料夾的那個）貼：</p>
+    <p>先做第 04 段第 1 步（建好你的論文資料夾 <code>ai-paper-kit</code>、在 AI 助手裡打開它），再回來這裡。在打開 <code>ai-paper-kit</code> 的那個 AI 助手裡貼：</p>
     <div class="copybox"><pre id="inst-win">請幫我裝寫論文要用的工具。每裝一個之前，先告訴我要裝什麼、從哪裡裝，我同意再裝；要我輸入電腦密碼時先停下來，我自己輸入。
 1. TeX：用 winget 裝 MiKTeX（winget install -e --id MiKTeX.MiKTeX），裝好後把「缺套件時自動安裝」設成「是」（不要選每次問我），你在背景跑的時候才不會卡住。
 2. gnuplot：用 winget 裝（winget install -e --id gnuplot.gnuplot）。裝好後打 gnuplot --version；如果找不到、或沒有印出版本就結束（winget 建的捷徑可能缺檔），請找出 gnuplot.exe 所在的 bin 資料夾，先告訴我你打算把它加進「使用者」的 PATH、會影響什麼，我同意再加；加完請我把 Codex／Claude 關掉重開，再打一次 gnuplot --version。
 3. uv：用 winget 裝（winget install -e --id astral-sh.uv）。裝好後請我把 Codex／Claude 關掉重開，再到範本資料夾執行 uv sync（第一次會下載 Python 和套件，要幾分鐘）。
 4. pandoc：winget install -e --id JohnMacFarlane.Pandoc。
 全部裝完，請一一執行 pdflatex --version、gnuplot --version、uv run python --version、pandoc --version，把版本號列給我看。</pre><button class="copybtn" data-copy="inst-win" type="button">複製</button></div>
+    <p class="why">螢幕如果變暗，跳出 Windows 的「您要允許此 App 變更您的裝置嗎？」，跟行前準備第 8 項一樣：視窗上的名稱是 MiKTeX、gnuplot、uv 或 pandoc 就按「是」；名稱看不懂或對不上，就按「否」，截圖問網頁版（字樣以你的畫面為準）。</p>
+    <p class="why">AI 請你把 Codex／Claude 關掉重開時（可能一到兩次）：整個關掉再打開，照行前準備第 6 項打開 <code>ai-paper-kit</code>，貼這句（10/22 用 Codex 實跑過：四樣都找得到時，它只跑 uv sync、列出四個版本號）：</p>
+    <div class="copybox"><pre id="reopen-win">我剛把 AI 助手關掉重開了。我們在裝寫論文要用的工具，請先檢查 pdflatex、gnuplot、uv、pandoc 哪幾個已經找得到，再接著裝還沒好的；uv 裝好了但範本資料夾還沒執行過 uv sync，也幫我做。規則跟剛才一樣：每裝一個先告訴我，我同意再裝。全部裝完，請一一執行 pdflatex --version、gnuplot --version、uv run python --version、pandoc --version，把版本號列給我看。</pre><button class="copybtn" data-copy="reopen-win" type="button">複製</button></div>
   </div>
   <div class="os-mac">
     <div class="tablewrap"><table>
       <thead><tr><th>工具</th><th>用途</th><th>建議裝</th></tr></thead>
       <tbody>
-        <tr><td>TeX</td><td>把 LaTeX 編成 PDF</td><td><b>MacTeX</b>（Mac 版 TeX Live，約 6.4 GB，要 macOS 11 以上）。硬碟不夠就裝 BasicTeX（約 134 MB），缺的套件再補</td></tr>
-        <tr><td>gnuplot、pandoc、uv</td><td>畫圖、轉 Word、管 Python</td><td>用 Homebrew 裝；uv 會自己裝好 Python 和套件</td></tr>
+        <tr><td>TeX</td><td>把 LaTeX 原稿排成 PDF</td><td><b>MacTeX</b>（Mac 版 TeX Live，約 6.4 GB，要 macOS 11 以上）。硬碟不夠就裝 BasicTeX（約 134 MB），缺的套件再補</td></tr>
+        <tr><td>gnuplot、pandoc、uv</td><td>畫圖、轉 Word、準備統計用的程式</td><td>用 Homebrew（Mac 上裝軟體的小工具）裝；uv 會自己裝好統計要用的程式</td></tr>
       </tbody>
     </table></div>
-    <p>在 AI 助手（打開範本資料夾的那個）貼：</p>
+    <p>先做第 04 段第 1 步（建好你的論文資料夾 <code>ai-paper-kit</code>、在 AI 助手裡打開它），再回來這裡。在打開 <code>ai-paper-kit</code> 的那個 AI 助手裡貼：</p>
     <div class="copybox"><pre id="inst-mac">請幫我裝寫論文要用的工具。每裝一個之前，先告訴我要裝什麼、從哪裡裝，我同意再裝；要我輸入電腦密碼時先停下來，我自己輸入。
 1. TeX：裝 MacTeX（brew install --cask mactex，或到 tug.org/mactex 下載，約 6.4 GB）。我的硬碟空間不夠的話，先問我要不要改裝 BasicTeX。
 2. 用 Homebrew 裝 gnuplot、pandoc 和 uv（brew install gnuplot pandoc uv）；沒有 Homebrew 的話先告訴我。如果 brew 開始從原始碼編（訊息出現 Building from source、或跑超過 10 分鐘），先停下來告訴我，改用：pandoc 到 pandoc.org 下載官方安裝檔；gnuplot 用 micromamba 從 conda-forge 裝（只裝在使用者資料夾，不動系統）。
 3. 到範本資料夾執行 uv sync（第一次會下載 Python 和套件，要幾分鐘）。
 全部裝完，請一一執行 pdflatex --version、gnuplot --version、uv run python --version、pandoc --version，把版本號列給我看。</pre><button class="copybtn" data-copy="inst-mac" type="button">複製</button></div>
-    <p class="why">MacTeX 很大，下載要一段時間，建議前一天晚上裝。<b>Intel 晶片的 Mac</b>：新版 macOS 上 Homebrew 常沒有現成編好的 gnuplot、pandoc，會改從原始碼編，要好幾個小時（10/22 實測）；上面那句已經請 AI 遇到就停下來、改用官方安裝檔和 conda-forge，那次不到一分鐘就裝好。Apple 晶片（M1 以後）的 Mac 通常有現成編好的版本（這點還沒實測）。</p>
+    <p class="why">MacTeX 很大，下載要一段時間，建議前一天晚上裝。也可以自己裝：到 tug.org/mactex 下載 MacTeX.pkg，雙擊，照畫面一步一步按下去，要密碼時輸入開機密碼；裝好後跟 AI 說「TeX 我自己裝好了，請從第 2 項開始」。AI 要你在「終端機」輸入密碼（例如裝 Homebrew 或 MacTeX 時）：請它一步一步告訴你打開哪個程式、貼哪一行；打密碼時畫面不會出現字，打完按 return。</p>
+    <p class="why"><b>Intel 晶片的 Mac</b>（左上角蘋果選單 →「關於這台 Mac」，「處理器」那一行寫 Intel 的就是）：用 Homebrew 裝 gnuplot、pandoc 常會跑好幾個小時（10/22 實測）；上面那句已經請 AI 遇到就停下來、換一種裝法，那次換了以後不到一分鐘就裝好。寫「晶片 Apple M…」的是 Apple 晶片，通常不會這樣（這點還沒實測）。</p>
   </div>
   <div class="done">完成判準：AI 列出四個版本號，沒有「找不到」。</div>
-  <p class="why">不想在自己電腦裝 TeX 也可以：把資料夾推上 GitHub，雲端會自動編出 PDF（第 04 段第 10 步），只是每改一次都要推上去才看得到。<b>這條路只限練習資料，或資料符合第 07 段的四個條件</b>：推上去，資料就會在 GitHub 的雲端機器上被讀取。</p>
+  <p class="why">不想在自己電腦裝 TeX 也可以：把資料夾推上 GitHub，雲端會自動排出 PDF（第 04 段第 10 步），只是每改一次都要推上去、再到 GitHub 下載才看得到。<b>這條路只限練習資料，或資料符合第 07 段的四個條件</b>：推上去，資料就會在 GitHub 的雲端機器上被讀取。下面十步和練習頁都是照「工具裝在你自己電腦」寫的；沒裝的話，在自己電腦跑 build 會停在「找不到 gnuplot」或「找不到 pdflatex」。第一次做，建議還是裝在自己電腦。</p>
   <div class="claim"><button type="button" data-claim="u3" aria-pressed="false">我懂了，收下技能卡 03</button><span>知道 TeX Live、MacTeX、MiKTeX 是什麼，也知道請 AI 幫忙裝。</span></div>
 </section>
 
@@ -354,40 +404,40 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
   <div class="pipe" role="tablist" aria-label="論文步驟" id="pipe"></div>
   <div class="stepcard" id="stepcard" role="tabpanel" aria-live="polite"></div>
   <div class="stepnav"><button class="chip" type="button" id="prevStep">← 上一步</button><button class="chip" type="button" id="nextStep">下一步 →</button></div>
-  <p style="margin-top:1rem"><b>第 3 步跑出來的範例論文</b>（點圖看大圖）：</p>
+  <p style="margin-top:1rem"><b>第 3 步跑出來的範例論文</b>（點圖看大圖；想看懂這些數字和圖怎麼來，去練習頁做一次）：</p>
   <div class="shots">
-    <figure><a href="img/part3/page1.png" target="_blank" rel="noopener"><img src="img/part3/page1.png" alt="範例論文第 1 頁：標題與結構式摘要" loading="lazy"></a><figcaption>第 1 頁：摘要裡的數字全由程式產生</figcaption></figure>
-    <figure><a href="img/part3/page4.png" target="_blank" rel="noopener"><img src="img/part3/page4.png" alt="範例論文第 4 頁：表 1，八個 p 值論文印的和重算的並排" loading="lazy"></a><figcaption>第 4 頁：表 1，八個 p 值論文印的和重算的並排</figcaption></figure>
-    <figure><a href="img/part3/page6.png" target="_blank" rel="noopener"><img src="img/part3/page6.png" alt="範例論文第 6 頁：gnuplot 畫的圖 1 與效果量的表 3" loading="lazy"></a><figcaption>第 6 頁：gnuplot 畫的圖 1 和表 3</figcaption></figure>
+    <figure><a href="img/part3/page1.png" target="_blank" rel="noopener"><img src="img/part3/page1.png" alt="範例論文第 1 頁：標題與結構式摘要" loading="lazy"></a><figcaption>第 1 頁：摘要裡的 140、70、70、8 of 8、9 of 9、0.01，都是程式算好填進去的（原稿裡寫的是代號）</figcaption></figure>
+    <figure><a href="img/part3/page4.png" target="_blank" rel="noopener"><img src="img/part3/page4.png" alt="範例論文第 4 頁：表 1，最右邊兩欄是論文印的和程式重算的 p 值" loading="lazy"></a><figcaption>第 4 頁：表 1。最右邊兩欄是 p 值：Published＝原論文印的，Reproduced＝程式重算的，八個都一樣</figcaption></figure>
+    <figure><a href="img/part3/page6.png" target="_blank" rel="noopener"><img src="img/part3/page6.png" alt="範例論文第 6 頁：gnuplot 畫的圖 1 與效果量的表 3" loading="lazy"></a><figcaption>第 6 頁：上面是 gnuplot 畫的圖 1（三個量表、兩組、三個時間點），下面是表 3：效果量，原論文印的和重算的並排</figcaption></figure>
   </div>
   <div class="qa"><h3>出錯了怎麼辦？</h3>
-    <p style="margin:0">build 失敗時，最後一行會寫 <code>BUILD FAILED</code> 和原因（例如缺哪個工具、哪篇文獻沒有 DOI、去看哪個檔）。把那段整個貼給 AI：</p>
+    <p style="margin:0">AI 跑 build 失敗時，它的回覆裡會出現 <code>BUILD FAILED</code> 和原因（例如缺哪個工具、哪篇文獻沒有 DOI、去看哪個檔）。不用自己看懂，直接貼這句給它（在 GitHub 看到紅色叉叉的話，先把紅字那段複製貼上，再貼這句）：</p>
     <div class="copybox"><pre id="fix">build 失敗了，訊息如上。請照它說的去看，告訴我是什麼問題、你打算怎麼修；我同意之後再修，修好再跑一次 build，把最後一行給我看。</pre><button class="copybtn" data-copy="fix" type="button">複製</button></div>
   </div>
 </section>
 
-<div class="band" id="b5"><div class="wrap"><div class="tag">05・Zotero</div><p class="big">接得穩</p><p class="sub">文獻放 Zotero，書目檔自己更新</p></div></div>
+<div class="band" id="b5"><div class="wrap"><div class="tag">05・Zotero</div><p class="big">接得穩</p><p class="sub">文獻放 Zotero，書目檔從它匯出</p></div></div>
 <section class="blk wrap" id="zotero">
   <p>論文用的書目檔是 <code>source/refs/refs.bib</code>。三種接法，挑一種就好，第一種最穩：</p>
   <div class="routes">
     <div class="route best"><h3>A. 自動匯出<span class="tag2">推薦</span></h3>
       <ol>
-        <li>把 Zotero 更新到最新版。到 <a href="https://retorque.re/zotero-better-bibtex/installation/" target="_blank" rel="noopener">Better BibTeX 官網</a>下載 <code>.xpi</code> 檔（用 Firefox 下載要按右鍵另存），在 Zotero 選「工具 → 外掛（Tools → Plugins）」→ 齒輪 →「從檔案安裝（Install Plugin From File）」。</li>
-        <li>把這篇論文要用的文獻放進一個文獻集，例如「VP 論文」。</li>
-        <li>對文獻集按右鍵 →「匯出文獻集（Export Collection）」，格式選 <b>Better BibTeX</b>，勾「<b>保持更新</b>（Keep updated）」，存成範本裡的 <code>source/refs/refs.bib</code>（蓋掉範例那份）。</li>
-        <li>之後在 Zotero 加一篇，refs.bib 就自己更新。</li>
+        <li>把 Zotero 更新到最新版。Better BibTeX 是 Zotero 的免費外掛，讓 Zotero 能把書目自動存成論文原稿用的檔案。到 <a href="https://retorque.re/zotero-better-bibtex/installation/" target="_blank" rel="noopener">Better BibTeX 官網的安裝頁</a>，照它的連結下載檔名結尾是 <code>.xpi</code> 的檔（下載頁的樣子以你的畫面為準；用 Firefox 下載要按右鍵另存連結，直接點會被當成 Firefox 自己的外掛）。在 Zotero 選「工具 → 外掛（Tools → Plugins）」→ 齒輪 →「從檔案安裝（Install Plugin From File）」，選剛下載的檔。</li>
+        <li>把這篇論文要用的文獻放進一個文獻集，例如「虛擬病人論文」。</li>
+        <li>對文獻集按右鍵 →「匯出文獻集（Export Collection）」，格式選 <b>Better BibTeX</b>，勾「<b>保持更新</b>（Keep updated）」。存檔視窗裡，一層一層點進你的論文資料夾 → <code>source</code> → <code>refs</code>，檔名改成 <code>refs.bib</code>，存檔；問要不要取代原本的檔，選取代。</li>
+        <li>之後把文獻加進這個文獻集，refs.bib 就自己更新。</li>
       </ol>
     </div>
     <div class="route"><h3>B. 讓 AI 操作 Zotero</h3>
-      <p class="why" style="margin:.2rem 0 0">請 AI 幫你裝一個讓它能操作 Zotero 的小工具 zotero-mcp（要先裝 uv，再 <code>uv tool install zotero-mcp-server</code>），接到 Claude 或 Codex。之後 AI 能搜你的文獻庫。要讓它用 DOI 把文獻<b>加進</b> Zotero，Zotero 要開著，而且要照 zotero-mcp 的說明另外授權。版本與設定以它的官方說明為準。適合熟一點之後再試。</p>
+      <p class="why" style="margin:.2rem 0 0">請 AI 幫你裝 zotero-mcp（一個讓 AI 能搜尋、新增你 Zotero 文獻的小工具），可以跟它說「請照 WORKFLOW.md 第 2 步接法 B，幫我接上 zotero-mcp，每一步先告訴我要做什麼，等我說好再做」。之後 AI 能搜你的文獻庫。要讓它用 DOI 把文獻<b>加進</b> Zotero，Zotero 要開著，而且要照 zotero-mcp 的說明另外授權。版本與設定以它的官方說明為準。<b>接法 B 只讓 AI 搜尋、新增 Zotero 裡的文獻；論文用的 refs.bib 還是要用 A 或 C 匯出。</b>適合熟一點之後再試。</p>
     </div>
     <div class="route"><h3>C. 不裝外掛</h3>
-      <p class="why" style="margin:.2rem 0 0">Zotero 開著，跟 AI 說「請用 tools/zotero_export.py 把 Zotero 的『VP 論文』文獻集匯出成 source/refs/refs.bib」。</p>
+      <p class="why" style="margin:.2rem 0 0">Zotero 開著，跟 AI 說「請用 tools/zotero_export.py 把 Zotero 的『虛擬病人論文』文獻集匯出成 source/refs/refs.bib」。這是匯出一次：之後文獻集有增減，再跟 AI 說一次同一句。</p>
     </div>
   </div>
-  <p class="why">B 和 C 都要先在 Zotero：設定 → 進階，勾「允許此電腦上的其他應用程式與 Zotero 通訊（Allow other applications on this computer to communicate with Zotero）」。三種接法給每篇文獻取的引用代號（cite key）格式不一樣，中途換接法，請 AI 把 main.tex 的引用一起改。</p>
-  <p><b>沒有 DOI 的文獻</b>（例如有些台灣的中文期刊）：在 Zotero 給那一篇加一個標籤 <code>nodoi</code>。產生 PDF 時就會放行，並列出來提醒你自己對一次書目。不要讓 AI 替它編 DOI。</p>
-  <p><b>工具的書目也會錯。</b>這次範例用 Scite 查到 7 篇真文獻，它匯出的書目有兩個錯：把文章種類標成排版程式看不懂的寫法；作者名字裡的連字號（例如 Hsin-Feng）用了一個長得一樣、排版程式卻不認得的特殊符號。所以每篇都要用 DOI 打開原文對一次。</p>
+  <p class="why">B 和 C 都要先在 Zotero：設定 → 進階，勾「允許此電腦上的其他應用程式與 Zotero 通訊（Allow other applications on this computer to communicate with Zotero）」。三種接法給每篇文獻取的引用代號（cite key，原稿裡指某一篇文獻的短名字，例如範例的 Su2021）格式不一樣，中途換接法，請 AI 把 main.tex 的引用一起改。</p>
+  <p><b>沒有 DOI 的文獻</b>（例如有些台灣的中文期刊）：在 Zotero 給那一篇加一個標籤 <code>nodoi</code>。refs.bib 更新之後（接法 A 會自己更新；接法 C 請 AI 再匯出一次），跑 build 就會放行，並列出來提醒你自己對一次書目。不要讓 AI 替它編 DOI。</p>
+  <p><b>工具的書目也會錯。</b>這次範例用 Scite（一個付費的文獻搜尋工具）查到 7 篇真文獻，匯出的書目還是有錯：文章種類標成排版程式看不懂的寫法、作者名字裡的連字號（例如 Hsin-Feng）用了排版程式不認得的特殊符號，這兩種在排版時就會出問題；可是還有兩篇作者多了幾個中間名縮寫、一篇少了文章編號，排版完全正常、build 抓不到，是用 DOI 查原始紀錄核對才發現的。所以每篇都要用 DOI 打開原文對一次。</p>
   <div class="claim"><button type="button" data-claim="u4" aria-pressed="false">我懂了，收下技能卡 04</button><span>知道 refs.bib 從哪裡來，也知道工具匯出的書目要回原文核對。</span></div>
 </section>
 
@@ -395,54 +445,84 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
 <section class="blk wrap" id="figs">
   <p><b>論文裡沒有一個結果數字是手打的，圖也不是手畫的。</b>原料放在 <code>source/</code>，程式和 gnuplot 照順序把它變成 <code>output/</code> 裡的成品：</p>
   <ol class="steps">
-    <li class="step"><h3><span class="sn">1</span>資料 <span class="path">source/data/study_data.csv</span></h3><p>一列一個人，例如 <code>dkas_t1</code> 是第 12 週的知識分數。程式只讀，不改。</p></li>
-    <li class="step"><h3><span class="sn">2</span>分析程式 <span class="path">source/scripts/analyze.py</span></h3><p>算出平均、標準差、p 值、效果量，每個數字取一個代號；同時把表做成 <code>.tex</code>（給 PDF）和 <code>.csv</code>（給 Excel），把畫圖要的數字做成小表。</p></li>
-    <li class="step"><h3><span class="sn">3</span>成品 <span class="path">output/numbers.tex</span>、<span class="path">tables/</span>、<span class="path">figdata/</span></h3><p>例如 <code>\newcommand{\DKASIntTOneMean}{37.04}</code>：代號＝數字。</p></li>
+    <li class="step"><h3><span class="sn">1</span>資料 <span class="path">source/data/study_data.csv</span></h3><p>一列一個人，一欄一個項目。例如 <code>dkas_t1</code> 這一欄，是 DKAS（失智症知識量表）在 t1（第 12 週）的分數；t0＝前測、t2＝第 24 週。程式只讀，不改。</p></li>
+    <li class="step"><h3><span class="sn">2</span>分析程式 <span class="path">source/scripts/analyze.py</span></h3><p>算出平均、標準差、p 值、效果量（這幾個詞見頁首小框），每個要放進論文的數字取一個英文名字，叫「代號」；同時把表做成 <code>.tex</code>（給 PDF）和 <code>.csv</code>（給 Excel），把畫圖要的數字做成小表。</p></li>
+    <li class="step"><h3><span class="sn">3</span>成品 <span class="path">output/numbers.tex</span>、<span class="path">tables/</span>、<span class="path">figdata/</span></h3><p><code>output/numbers.tex</code> 裡一行一個數字，例如這一行：<code>\newcommand{\DKASIntTOneMean}{37.04}</code>。只看兩個大括號：前面的 <code>\DKASIntTOneMean</code> 是代號，後面的 37.04 是數字。代號是四段英文拼起來的：DKAS（量表）＋Int（介入組）＋TOne（第 12 週；代號裡不能有阿拉伯數字，所以 T1 寫成 TOne）＋Mean（平均）。</p></li>
     <li class="step"><h3><span class="sn">4</span>畫圖腳本 <span class="path">source/gnuplot/*.gp</span></h3><p>讀 <code>figdata/</code> 的小表，畫到 <code>output/figures/</code>。</p></li>
     <li class="step"><h3><span class="sn">5</span>論文 <span class="path">source/paper/main.tex</span> → <span class="path">output/main.pdf</span></h3><p>本文寫代號、放表放圖；排版時代號換成數字。</p></li>
   </ol>
-  <p style="margin-top:1rem">按下面的按鈕，模擬「事後發現有一位不符合收案條件、要排除」：同一句話裡的數字自己跟著變，你一個字都不用改。</p>
+  <p style="margin-top:1rem">按下面的按鈕，模擬「事後發現有一位受試者不符合收案條件、要排除」（練習資料裡編號 I048 的那位，在介入組）。下面兩句摘自範例論文的 Results：論文原稿裡寫的是代號，排成 PDF 時才換成數字。排除一個人，原稿一個字都沒改，換上去的數字自己變了。</p>
   <div class="demo">
     <div class="actions" role="group" aria-label="選資料">
       <button class="chip" type="button" data-set="a" aria-pressed="true">全部 140 人</button>
       <button class="chip" type="button" data-set="b" aria-pressed="false">排除 I048</button>
     </div>
     <div class="sentence" id="sentence"></div>
-    <p class="src">main.tex 裡實際寫的是：At week 12, DKAS scores were \DKASIntTOneMean{} in the intervention group and \DKASCtlTOneMean{} in the control group (\DKASTOnePstat{}). For DKAS, $d$ was \DKASTOneD{} at week 12 and \DKASTTwoD{} at week 24.</p>
-    <p class="note" style="margin:0">兩組數字都是 10/22 實際跑範本得到的。數字會自動更新，句子的解讀不會：數字變了，用到它的句子要你重讀。</p>
+    <div class="srcbox">原稿 main.tex 裡的寫法（摘錄兩句，「……」是省略的部分；代號後面的 <code>{}</code> 和 <code>$d$</code> 的錢字號是排版符號，可以不用理它）：
+      <span class="ln">3.2 節第一句的前半：At week 12, DKAS scores were \DKASIntTOneMean{} in the intervention group and \DKASCtlTOneMean{} in the control group (\DKASTOnePstat{}); ……</span>
+      <span class="ln">3.3 節最後一句：For DKAS, $d$ was \DKASTOneD{} at week 12 and \DKASTTwoD{} at week 24.</span>
+    </div>
+    <p style="margin:.6rem 0 0">原稿裡的代號換成了哪個數字（按「排除 I048」時，變了的數字會閃一下、加上虛線底）：</p>
+    <div class="tablewrap"><table class="maptab">
+      <thead><tr><th>原稿裡的代號</th><th>意思</th><th data-col="a">全部 140 人</th><th data-col="b">排除 I048</th></tr></thead>
+      <tbody>
+        <tr><td><code>\DKASIntTOneMean</code></td><td>DKAS 平均，介入組，第 12 週</td><td data-col="a">37.04</td><td data-col="b">37.41 <span class="chgtag">變了</span></td></tr>
+        <tr><td><code>\DKASCtlTOneMean</code></td><td>DKAS 平均，對照組，第 12 週</td><td data-col="a">30.43</td><td data-col="b">30.43 <span class="samtag">沒變：I048 在介入組</span></td></tr>
+        <tr><td><code>\DKASTOnePstat</code></td><td>第 12 週兩組 DKAS 比較的 p 值</td><td data-col="a">p &lt; 0.001</td><td data-col="b">p &lt; 0.001 <span class="samtag">沒變：兩種情況都小於 0.001</span></td></tr>
+        <tr><td><code>\DKASTOneD</code></td><td>效果量 d，DKAS，第 12 週</td><td data-col="a">0.92</td><td data-col="b">1.01 <span class="chgtag">變了</span></td></tr>
+        <tr><td><code>\DKASTTwoD</code></td><td>效果量 d，DKAS，第 24 週</td><td data-col="a">0.95</td><td data-col="b">0.96 <span class="chgtag">變了</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="note" style="margin:0">兩種情況（全部 140 人、排除 I048）的數字，都是 10/22 實際跑範本得到的。數字會自動更新，句子的解讀不會：數字變了，用到它的句子要你重讀。也要記得：I048 剛好是介入組裡分數偏低的人，排除後效果看起來變大。排除誰，要在看結果之前，照事先定好的理由決定。</p>
   </div>
-  <p style="margin-top:1rem"><b>為什麼用 gnuplot？</b>圖放大不會糊，圖上的字交給 LaTeX 排，所以字型、大小跟內文一致（技術上是用 <code>cairolatex</code> 輸出）。每張圖是一個小腳本，資料改了重跑就重畫；同一張小表，換一支腳本就能從折線圖變長條圖。你不用自己寫腳本，跟 AI 說要什麼圖就好（第 04 段第 7 步）。</p>
-  <div class="cmd"># source/gnuplot/fig1_outcomes.gp（節錄，AI 寫的、build 會自動跑）
-set terminal cairolatex pdf size 12cm,6cm
-set datafile separator comma
-set xtics ('0' 0, '12' 1, '24' 2)
+  <p style="margin-top:1rem"><b>為什麼用 gnuplot？</b>圖放大不會糊，圖上的字交給 LaTeX 排，所以字型、大小跟內文一致。每張圖是一個小腳本，資料改了重跑就重畫；同一張小表，換一支腳本就能從折線圖變長條圖。你不用自己寫腳本，跟 AI 說要什麼圖就好（第 04 段第 7 步）。</p>
+  <p>下面是圖 1 的原料和腳本。腳本讀這張小表 <code>output/figdata/fig1_dkas.csv</code>，畫出第 6 頁圖 1 最左邊的 DKAS 小圖。檔案裡寫的是這樣（括號裡的中文是我們加的說明；用 Excel 打開時，結尾的 0 會被省略，例如 8.140 顯示成 8.14）：</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>time（時間）</th><th>int_mean（介入組平均）</th><th>int_sd（介入組標準差）</th><th>ctl_mean（對照組平均）</th><th>ctl_sd（對照組標準差）</th></tr></thead>
+    <tbody>
+      <tr><td>0（前測）</td><td>26.686</td><td>6.719</td><td>25.543</td><td>8.140</td></tr>
+      <tr><td>1（第 12 週）</td><td>37.043</td><td>7.930</td><td>30.429</td><td>6.439</td></tr>
+      <tr><td>2（第 24 週）</td><td>36.200</td><td>5.550</td><td>29.943</td><td>7.539</td></tr>
+    </tbody>
+  </table></div>
+  <p class="why">小表保留小數三位，論文顯示兩位，所以 37.043 在論文裡是 37.04。腳本節錄如下，# 後面是說明，電腦不執行：</p>
+  <div class="cmd"># 圖 1 的畫圖腳本 source/gnuplot/fig1_outcomes.gp（節錄；AI 寫的、build 會自動跑）
+set terminal cairolatex pdf size 12cm,6cm     # 畫成 12 公分寬、6 公分高；圖上的字交給 LaTeX 排，跟內文同一套字型
+set datafile separator comma                  # 小表是 CSV（逗號分隔）
+set xtics ('0' 0, '12' 1, '24' 2)             # 橫軸：time 欄的 0、1、2 標成 0、12、24 週（前測、介入結束、追蹤）
 plot 'figdata/fig1_dkas.csv' every ::1 using ($1-0.04):2:3 with yerrorlines ls 1, \
-     ''                      every ::1 using ($1+0.04):4:5 with yerrorlines ls 2</div>
-  <div class="ask"><b>想一步一步做一次？</b>打開<a href="practice.html">練習頁</a>：看原料、跑一次 build、追一個數字、排除一個人看全部一起變、把圖改成長條圖、加一個新表，六個練習加一個收尾，大約 30 分鐘，用的就是所長的論文。練習頁也放了一位老師照著貼、AI 真正回了什麼的實跑紀錄。練習頁第 07 段還有研究模擬：只給資料和文獻，AI 十步寫出一篇論文的實跑紀錄。</div>
+     ''                      every ::1 using ($1+0.04):4:5 with yerrorlines ls 2
+# ↑ 上面兩行是同一個指令（第一行結尾的 \ 表示「接到下一行」），畫兩條線：
+#   讀小表 fig1_dkas.csv；every ::1＝跳過第一列欄名；''＝同一張小表
+#   第一條線：介入組，用第 2、3 欄（平均、標準差），藍色實線（ls 1）
+#   第二條線：對照組，用第 4、5 欄（平均、標準差），橘色虛線（ls 2）
+#   yerrorlines＝折線加上下的誤差線；兩組左右錯開一點點（-0.04、+0.04），誤差線才不會疊在一起
+#   練習頁的練習 5 把圖 1 改成長條圖，改的就是這種畫法</div>
+  <div class="ask"><b>想一步一步做一次？</b>打開<a href="practice.html">練習頁</a>：看原料、跑一次 build、追一個數字、排除一個人看全部一起變、把圖改成長條圖、加一個新表，六個練習加一個收尾，工具裝好之後大約 30 分鐘，用的就是上面這篇範例論文。練習頁也放了一位老師照著貼、AI 真正回了什麼的實跑紀錄。練習頁第 07 段還有研究模擬：只給資料和文獻，AI 十步寫出一篇論文的實跑紀錄。</div>
 </section>
 
 <div class="band" id="b7"><div class="wrap"><div class="tag">07・研究倫理</div><p class="big">守得住</p><p class="sub">流程再快，這四件事還是你的</p></div></div>
 <section class="blk wrap" id="guard">
   <div class="lines">
-    <div class="line"><div class="num">一</div><div><h3>研究資料：四個條件都符合才放</h3><p>去識別化；IRB 允許用每一家會碰到資料的 AI 工具，而且實際用的帳號、方案與設定符合核准條件（例如關掉「用我的資料改進模型」；不能只看是不是「學校／企業方案」）；資料管理計畫允許存放在 GitHub 這種境外雲端；儲存庫是 Private。<b>Private 不等於可以放受試者資料。</b>推上 GitHub 後，自動編譯也會在它的雲端機器上讀資料。有一條不確定，就先不要放。</p></div></div>
-    <div class="line"><div class="num">二</div><div><h3>每篇文獻都用 DOI 回原文</h3><p>build 通過只代表「引用的文獻存在於書目檔」，不代表書目資訊正確，也不代表 AI 對它的描述正確。作者、年份、卷期，還是要用 DOI 回原文對一次。</p></div></div>
+    <div class="line"><div class="num">一</div><div><h3>研究資料：四個條件都符合才放</h3><ol style="margin:0 0 .5rem;padding-left:1.3rem"><li>去識別化。</li><li>IRB（人體研究倫理審查委員會）核准你用每一家會碰到資料的 AI 工具（例如 Codex 和 Claude 都用，兩家都要核准），而且你實際用的帳號、方案和設定符合核准條件，例如關掉「用我的資料改進模型」；不能只看是不是「學校／企業方案」。</li><li>資料管理計畫允許存放在 GitHub 這種境外（國外）的雲端。</li><li>你的論文資料夾在 GitHub 上是 Private。</li></ol><p><b>Private 不等於可以放受試者資料。</b>推上 GitHub 後，雲端自動產生 PDF 時也會在它的機器上讀資料。有一條不確定，就先不要放。</p></div></div>
+    <div class="line"><div class="num">二</div><div><h3>每篇文獻都用 DOI 回原文</h3><p>build 通過只代表「引用的文獻存在於書目檔」，不代表書目資訊正確，也不代表 AI 對它的描述正確。作者、年份、卷期，還是要用 DOI 回原文對一次；沒有 DOI 的（例如有些中文期刊），用期刊網站或出版單位的網頁對。</p></div></div>
     <div class="line"><div class="num">三</div><div><h3>結論說到多強，由你決定</h3><p>AI 可以起草，但不能替你決定解讀。相關不寫成因果，效果不誇大，資料裡沒有的不寫。</p></div></div>
-    <div class="line"><div class="num">四</div><div><h3>照期刊規定聲明 AI 使用</h3><p>多數期刊要求寫出用了哪個 AI 工具、用在哪裡、你怎麼把關，作者為內容負責。以你要投的期刊規定為準；範本已放了一段聲明可以改。<b>聲明裡每一句都要是你真的做過的事</b>：沒有逐篇對過文獻，就不要寫「每篇都核對過」。</p></div></div>
+    <div class="line"><div class="num">四</div><div><h3>照期刊規定聲明 AI 使用</h3><p>多數期刊要求寫出用了哪個 AI 工具、用在哪裡、你怎麼把關，作者為內容負責。以你要投的期刊規定為準；論文原稿最後已經留了一段 AI 使用聲明（標題是 Declaration of generative AI…），請 AI 照你真的做過的事改寫。<b>聲明裡每一句都要是你真的做過的事</b>：沒有逐篇對過文獻，就不要寫「每篇都核對過」。</p></div></div>
   </div>
   <div class="claim"><button type="button" data-claim="u5" aria-pressed="false">我記住了，收下技能卡 05</button><span>四件事說得出來：資料四條件、DOI 回原文、結論自己定、聲明 AI 使用。</span></div>
 </section>
 
-<div class="band" id="bring"><div class="wrap"><div class="tag">08・技能卡</div><p class="big">帶得走</p><p class="sub">做完一段解鎖一張，回家隨時打開</p></div></div>
+<div class="band" id="bring"><div class="wrap"><div class="tag">08・技能卡</div><p class="big">帶得走</p><p class="sub">讀完五個重點段，各收一張，回家隨時打開</p></div></div>
 <section class="blk wrap" id="cards">
   <div class="progress" aria-live="polite"><span id="progText">已解鎖 0 / 5</span><div class="bar"><span id="progBar"></span></div><button class="chip" id="resetBtn" type="button">全部重來</button></div>
   <div class="skills" id="skills"></div>
   <p class="tip">沒解鎖也不擋內容，點卡片就能翻面看重點。</p>
-  <p class="note">勾選和解鎖只存在這台電腦的這個瀏覽器裡，不會傳給任何人；換瀏覽器、無痕視窗或清掉網站資料就不會跟著走。</p>
+  <p class="note">解鎖的卡片、看到第幾步、選的作業系統，只存在這台電腦的這個瀏覽器裡，不會傳給任何人；換瀏覽器、無痕視窗或清掉網站資料就不會跟著走。</p>
 </section>
 </main>
 
 <footer class="wrap">
-  <p><b>工具和選單名稱會隨改版變動。</b>這頁依 2026-10-22 查到的官方說明與實測寫成；跟你畫面不一樣時，以畫面為準。範例論文用的是依所長論文表格重建的練習資料，不是原始資料，數字不能當研究結果引用。</p>
+  <p><b>工具和選單名稱會隨改版變動。</b>這頁依 2026-10-22 查到的官方說明與實測寫成；跟你畫面不一樣時，以畫面為準。找不到某個按鈕，先停在這一步，把畫面截圖貼給網頁版的 AI，問它在哪裡。範例論文用的是依所長論文表格重建的練習資料，不是原始資料，數字不能當研究結果引用。</p>
   <p>出處與工具：</p>
   <ul>
     <li>TeX：<a href="https://tug.org/texlive/" target="_blank" rel="noopener">TeX Live</a>、<a href="https://www.tug.org/mactex/" target="_blank" rel="noopener">MacTeX</a>、<a href="https://miktex.org/" target="_blank" rel="noopener">MiKTeX</a>；其他：<a href="http://www.gnuplot.info/" target="_blank" rel="noopener">gnuplot</a>、<a href="https://pandoc.org/installing.html" target="_blank" rel="noopener">pandoc</a></li>
@@ -480,35 +560,52 @@ plot 'figdata/fig1_dkas.csv' every ::1 using ($1-0.04):2:3 with yerrorlines ls 1
   })}
   document.querySelectorAll('.copybtn').forEach(wireCopy);
 
-  // 十步：你做什麼（y）、跟 AI 說（say）、AI 會做什麼（a）、你要檢查（c）
+  // 十步：你做什麼（y）、跟 AI 說（say：一句是字串；要貼兩句時是陣列，每句可帶 lead 前導、after 你會看到）、AI 會做什麼（a）、你要檢查（c）
+  // y 裡的 {範本頁} 會換成範本的連結。
   var STEPS=[
-    {t:'建資料夾',y:'用範本在 GitHub 複製一份只有你看得到（Private）的資料夾，再下載（clone）到電腦，在 Codex 或 Claude 的 Code 打開它。做法跟第二部分一樣，範本換成 ai-paper-kit；下載這一步也可以請 AI 代勞。',say:'請先讀 AGENTS.md 和 WORKFLOW.md，再跟我報到。',a:'讀規則，第一行用「領隊 ·」報到，印出資料夾的完整路徑。',c:'路徑的結尾是你的論文資料夾；權限選單還是「會先問」。'},
-    {t:'裝工具',y:'沒有要自己做的，等 AI 問你時按同意；要密碼時自己輸入。',say:'（用第 03 段那一句，分 Windows 和 Mac）',a:'一個一個問你、裝好，再列出四個版本號。',c:'四個版本號都有，沒有「找不到」。'},
-    {t:'先跑範例',y:'沒有要自己做的。',say:'請跑一次 build（執行 uv run build.py），告訴我最後一行，再告訴我 PDF 在哪裡。',a:'跑完整條流程：分析、畫圖、檢查文獻、編 PDF。',c:'最後一行是 BUILD OK pages=9 undefined_cites=0 undefined_refs=0 refs=7 refs_without_doi=0 bib_warnings=0。pages 是頁數、refs 是文獻篇數（換成你的論文就會不同）；undefined_cites（找不到的引用）、undefined_refs（找不到的圖表編號）、bib_warnings（書目缺欄位）都要是 0。打開 output/main.pdf，看起來跟下面的預覽一樣，就代表工具都好了。想看懂這些數字和圖怎麼來，去練習頁做一次。'},
-    {t:'放進你的資料',y:'先確認符合第 07 段的四個條件。把去識別化的資料用 Excel 另存新檔，存檔類型選「CSV UTF-8（逗號分隔）」，放進 source/data/，在 source/data/README.md 照範例寫每一欄是什麼。',say:'我把資料放在 source/data/（檔名＿＿），欄位說明寫在 source/data/README.md。請讀過之後，先列出你打算怎麼改 source/scripts/analyze.py：要做哪些統計、為什麼、會產生哪些數字、表和圖。先不要改，等我同意。',a:'讀資料和說明，提出分析計畫。你同意後才改程式，再跑 build。',c:'統計方法是你認可的、跟你的研究設計相符（不確定就先問統計顧問）；分析計畫裡沒有資料裡不存在的欄位。'},
-    {t:'接 Zotero',y:'照第 05 段接法 A：在 Zotero 建這篇論文的文獻集，用 Better BibTeX 匯出、勾「保持更新」，存成 source/refs/refs.bib。之後在 Zotero 加文獻就好。',say:'我已經把 Zotero 的文獻集匯出成 source/refs/refs.bib。請告訴我裡面有幾筆、每一筆的引用代號（cite key），以及哪幾筆沒有 DOI。',a:'讀 refs.bib，列出清單和缺 DOI 的文獻。',c:'筆數跟你 Zotero 文獻集一樣；缺 DOI 的回 Zotero 補，真的沒有 DOI 的加標籤 nodoi（見第 05 段）。'},
-    {t:'起草一節',y:'想好這一節要講什麼重點（可以先跟 AI 討論）。',say:'請照 WORKFLOW.md 第 5 步，用 refs.bib 裡的文獻起草 Introduction，大約三段。每一句講到文獻的，只寫該篇摘要真的有寫的內容，並在回報裡列出每句根據哪一篇；數字一律用代號。寫完跑一次 build，把最後一行給我看。',a:'在 main.tex 寫這一節，跑 build，列出每句的根據。',c:'挑兩三句，用 DOI 打開原文對一次；論點是你要的。'},
-    {t:'加一張圖',y:'想好要哪一張圖、要表達什麼。',say:'請照 WORKFLOW.md 第 4 步，加一張圖：兩組從前測到第 12 週的改變量，三個量表並排。分析程式要產生它需要的小表，main.tex 要放進去並加圖說。做完跑一次 build，告訴我最後一行。',a:'改 analyze.py 產生小表（output/figdata/）、寫一個新的 .gp 腳本、在 main.tex 放圖，跑 build。',c:'PDF 裡多了這張圖，數字跟表格對得上，點和誤差線沒有被切掉。'},
-    {t:'交稿前檢查',y:'讀一遍 PDF。',say:'請照 WORKFLOW.md 第 8 步的檢查清單逐條檢查，列出沒過的項目和建議怎麼改，先不要改。',a:'逐條檢查：BUILD OK、書目警告是 0、沒有手打的數字、文獻描述、統計方法跟研究設計相符、AI 使用聲明。',c:'每一條沒過的，你決定要不要改。'},
-    {t:'換期刊或出 Word',y:'把要投期刊的投稿須知存進 material/。',say:'我要投的期刊是＿＿，投稿須知在 material/。請列出 main.tex 要改的地方（期刊範本、字數、引用格式、圖表規定），先列給我看。期刊只收 Word 的話，請執行 uv run build.py --docx，告訴我 Word 檔在哪裡、哪裡要人工檢查。',a:'列出要改的地方；你同意後換期刊範本。需要 Word 就另外產生 main.docx。',c:'Word 版的排版、表格、圖、引用格式要人工看一次。每次產生都會蓋掉舊的 output/main.docx，要在 Word 裡改先另存到別的資料夾；PDF 是這條流程的排版基準，實際投稿交哪一種檔照期刊規定。論文是中文的，跟 AI 說「改用 xelatex」。'},
-    {t:'存一版、推上去',y:'確認 source/data/ 和 material/ 裡沒有不該上傳的檔。',say:'請把今天改的檔案列給我看，特別標出 source/data/ 和 material/ 裡新放的檔。我同意之後，存一版並推上 GitHub，再告訴我去哪裡下載雲端編好的 PDF。',a:'列出檔案，你同意後 commit、push。GitHub 會自動跑一次 build。',c:'GitHub 上的儲存庫是 Private；到 Actions 頁面下載 paper-pdf。output/ 不會推上去，雲端會自己重做一份。'}
+    {t:'建資料夾',y:'先在瀏覽器打開範本頁 {範本頁}，看得到頁面再往下做。打開是「404」（找不到頁面）時，先停下來回信問陳老師，不要讓 AI 自己建一個空的。這一部分是另外建一個新的論文資料夾，不是在第二部分的 my-research-team 裡加東西。第一句要用到 gh（行前準備第 10 項裝好、登入過的 GitHub 小工具）。',
+     say:[{lead:'在 AI 助手裡打開 AI-workshop 資料夾（行前準備第 6 項已經建過：Codex 在「選擇專案」裡直接點它，以你的畫面為準；清單裡沒有，才照第 6 項新建），貼：',text:'請用 gh 從範本 cwstedctw/ai-paper-kit 建一個私人儲存庫，名字叫 ai-paper-kit，並 clone 到目前這個 AI-workshop 資料夾裡。做完告訴我三件事：clone 下來的完整路徑、GitHub 網址、它是不是 Private。',after:'clone＝把 GitHub 上那份資料夾下載到你的電腦。接著照行前準備第 6 項，在 AI 助手裡改打開 ai-paper-kit 這個資料夾，再貼下一句。'},
+         {lead:'在打開 ai-paper-kit 的 AI 助手裡貼：',text:'請先讀 AGENTS.md 和 WORKFLOW.md，再跟我報到。'}],
+     a:'第一句：從範本建一個只有你看得到（Private）的資料夾，下載到 AI-workshop 裡，告訴你三件事。要上網連 GitHub 時會跳出要你核准的框：看得懂、是你剛請它做的事（框裡寫的是建 ai-paper-kit），就按同意（只同意這一次）；看不懂，就按拒絕，再問它「這一步要做什麼、為什麼要做」，或截圖問網頁版。第二句：讀規則，第一行用「領隊 ·」報到，印出資料夾的完整路徑。',
+     c:'① 第一句做完：瀏覽器打開 github.com/你的帳號/ai-paper-kit，名字旁邊寫著 Private。② 報到時：AI 回話第一行顯示的路徑，最後一段要是 ai-paper-kit。不是的話，關掉這個對話，照行前準備第 6 項重開正確的資料夾。③ 權限選單還是「要求核准」（Codex）或 Manual（Claude 的 Code）。'},
+    {t:'裝工具',y:'跳出要你核准的框時：看得懂、是在裝第 03 段那四樣工具，就按同意（只同意這一次）；看不懂，就按拒絕，拒絕不會弄壞東西，再問它「這一步要做什麼、為什麼要做」，或截圖問網頁版。要密碼時自己輸入。',say:'（往上捲到第 03 段，選你的電腦，按那一格的「複製」）',a:'一個一個問你、裝好，再列出四個版本號。',c:'四個版本號都有，沒有「找不到」。'},
+    {t:'先跑範例',y:'沒有要自己做的。',say:'請跑一次 build（執行 uv run build.py），告訴我最後一行，再告訴我 PDF 在哪裡。',a:'跑完整條流程：分析、畫圖、檢查文獻、排成 PDF。',c:'AI 回的最後一行是 BUILD OK pages=9 undefined_cites=0 undefined_refs=0 refs=7 refs_without_doi=0 bib_warnings=0。看三件事：開頭是 BUILD OK；undefined_cites（找不到的引用）、undefined_refs（找不到的圖表編號）、bib_warnings（書目缺欄位）都是 0。其他是資訊：pages＝頁數、refs＝文獻篇數、refs_without_doi＝你標了「沒有 DOI」的篇數，換成你的論文就會不同。AI 會告訴你 PDF 在哪裡：用檔案總管（Mac：Finder）找到 output 資料夾裡的 main.pdf，雙擊打開。有 9 頁、第 4 頁是表 1、第 6 頁是圖 1，跟下面三張預覽差不多，就代表工具都裝好了。'},
+    {t:'放進你的資料',y:'照順序做：① 先貼下面第一句，開一篇新論文（只做一次）。② 確認你的資料符合第 07 段的四個條件。③ 把去識別化的資料用 Excel 另存新檔，存檔類型選「CSV UTF-8（逗號分隔）」，放進 source/data/。④ 欄位說明寫在 source/data/README.md（AI 照規矩不改 source/data/，所以這份由你寫）：在檔案總管對它按右鍵 →「開啟檔案」→「記事本」（Mac：按右鍵 →「打開檔案的應用程式」→「文字編輯」；字樣以你的畫面為準）。先刪掉最上面「練習資料，不是原始資料」那個標題和那一段，再把欄位表換成你的欄位，一欄寫一行就好（例如「age：年齡（歲）」），寫好存檔。找不到這個資料夾，問 AI「source/data 在我電腦的哪裡？」。⑤ 再貼下面第二句。',
+     say:[{lead:'第一句：開一篇新論文（換資料、換書目之前一定要先做；想做練習頁的六個練習，先做完練習頁再做這一步）',text:'我要開始寫自己的論文。請先執行 uv run tools/new_paper.py --name 範例論文，把範例收進 examples/、換上空白的骨架；再跑一次 build，告訴我最後一行。',after:'你會看到：BUILD OK pages=1 undefined_cites=0 undefined_refs=0 refs=0 refs_without_doi=0 bib_warnings=0。PDF 只有 1 頁：標題和各節的標題。範例收在 examples/範例論文/，隨時能打開參考；研究資料留在 source/data/（還是範例的練習資料，下一步才換成你的）。沒做這一步就換書目，build 會停在「內文的引用代號在書目檔 refs.bib 裡找不到」，或 AI 把你的內容寫進範例論文裡。'},
+         {lead:'第二句：資料和欄位說明都放好之後',text:'我把資料放在 source/data/（檔名＿＿），欄位說明寫在 source/data/README.md。請讀過之後，先列出你打算怎麼改 source/scripts/analyze.py：要做哪些統計、為什麼、會產生哪些數字、表和圖。先不要改，等我同意。'}],
+     a:'第一句：把範例收起來、換上空白骨架，跑 build。第二句：讀資料和說明，提出分析計畫；你同意後才改程式，再跑 build。',
+     c:'統計方法是你認可的、跟你的研究設計相符（不確定就先問統計顧問）；計畫裡用到的每一欄，你的資料裡都真的有。沒問題就回：「同意，照這個計畫改，改完跑一次 build，告訴我最後一行。」有問題就直接說哪裡要改，請它重提一次。'},
+    {t:'接 Zotero',y:'照第 05 段接法 A：在 Zotero 建這篇論文的文獻集，用 Better BibTeX 匯出、勾「保持更新」，存成 source/refs/refs.bib（蓋掉原本那份）。之後把文獻加進這個文獻集就好。',say:'我已經把 Zotero 的文獻集匯出成 source/refs/refs.bib。請告訴我裡面有幾筆、每一筆的引用代號（cite key），以及哪幾筆沒有 DOI。',a:'讀 refs.bib，列出清單和缺 DOI 的文獻。',c:'筆數跟你 Zotero 文獻集一樣（文獻集裡單獨存的筆記、PDF 不算）；缺 DOI 的回 Zotero 補，真的沒有 DOI 的加標籤 nodoi：點那一篇，在右邊的「標籤」新增一個 nodoi（字樣以你的畫面為準；見第 05 段）。'},
+    {t:'起草一節',y:'想好這一節要講什麼重點（可以先跟 AI 討論）。',say:'請照 WORKFLOW.md 第 5 步，用 refs.bib 裡的文獻起草 Introduction，大約三段。每一句講到文獻的，只寫該篇摘要真的有寫的內容，並在回報裡列出每句根據哪一篇；數字一律用代號。寫完跑一次 build，把最後一行給我看。',a:'在 main.tex 寫這一節，跑 build，列出每句的根據。',c:'挑兩三句，找 AI 列的那一篇，用 DOI 打開原文（瀏覽器網址列打 https://doi.org/ 再接上 DOI，按 Enter），對一次摘要；再確認 AI 寫的論點是你想講的。回報裡標 ⚠️ 的，是它讀不到摘要、不敢寫的地方，要你補摘要或原文。'},
+    {t:'加一張圖',y:'想好要哪一張圖、要表達什麼。',say:'請照 WORKFLOW.md 第 4 步，加一張圖：＿＿（例如兩組從前測到第 12 週的改變量，三個量表並排）。分析程式要產生它需要的資料表，main.tex 要放進去並加圖說。做完跑一次 build，告訴我最後一行。',a:'改 analyze.py 產生小表（output/figdata/）、寫一個新的 .gp 腳本、在 main.tex 放圖，跑 build。',c:'PDF 裡多了這張圖，數字跟表格對得上，點和誤差線沒有被切掉。'},
+    {t:'交稿前檢查',y:'讀一遍 PDF。',say:'請照 WORKFLOW.md 第 8 步的檢查清單逐條檢查，列出沒過的項目和建議怎麼改，先不要改。',a:'逐條檢查：BUILD OK、書目警告是 0、沒有手打的數字、文獻描述、統計方法跟研究設計相符、AI 使用聲明。',c:'每一條沒過的，逐條決定怎麼處理；資料資格、倫理資訊、不實的聲明、還沒解決的方法問題，處理好之前不能投稿。'},
+    {t:'換期刊或出 Word',y:'到期刊網站的投稿須知（Instructions for Authors）那一頁，全選、複製，貼到記事本（Mac：文字編輯），存成文字檔（例如「投稿須知.txt」），放進論文資料夾裡的 material 資料夾。',say:'我要投的期刊是＿＿，投稿須知在 material/。請列出 main.tex 要改的地方（期刊範本、字數、引用格式、圖表規定），先列給我看。期刊只收 Word 的話，請執行 uv run build.py --docx，告訴我 Word 檔在哪裡、哪裡要人工檢查。',a:'列出要改的地方；你同意後換期刊範本。需要 Word 就另外產生 main.docx。',c:'Word 版的排版、表格、圖、引用格式要人工看一次。在 Word 裡改的字不會回到論文原稿（main.tex），下次產生 Word 也會整份蓋掉：要改內容，跟 AI 說要改什麼，讓它改原稿再產生一次；一定要在 Word 裡改（例如給合作者），先另存到別的資料夾。實際投稿交 PDF 還是 Word，照期刊規定。'},
+    {t:'存一版、推上去',y:'確認 source/data/ 和 material/ 裡沒有不該上傳的檔。',say:'請把今天改的檔案列給我看，特別標出 source/data/ 和 material/ 裡新放的檔。我同意之後，存一版並推上 GitHub，再告訴我去哪裡下載雲端編好的 PDF。',a:'列出檔案，你同意後存一版（commit）、推上 GitHub（push）。推上去之後，GitHub 會在雲端自動跑一次 build。',c:'瀏覽器打開 github.com/你的帳號/ai-paper-kit，名字旁邊寫著 Private 就對了。PDF 這樣拿：點上方的 Actions → 點最上面那一次（綠色勾勾＝成功，要等幾分鐘）→ 往下捲到 Artifacts，點 paper-pdf，會下載一個壓縮檔（.zip），解壓縮就是論文 PDF（按鈕字樣以你的畫面為準）。看到紅色叉叉＝雲端產生 PDF 失敗：點進去，把 BUILD FAILED 那幾行複製給 AI。output/ 不會推上去，雲端會自己重做一份。'}
   ];
   var pipe=document.getElementById('pipe'),card=document.getElementById('stepcard');
   var cur=Math.min(st.step||0,STEPS.length-1);
   function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  var KIT='<a href="https://github.com/cwstedctw/ai-paper-kit" target="_blank" rel="noopener">github.com/cwstedctw/ai-paper-kit</a>';
   STEPS.forEach(function(s,i){var b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.innerHTML='<span class="n">'+(i+1)+'</span>'+s.t;b.addEventListener('click',function(){go(i)});pipe.appendChild(b)});
   function go(i){cur=i;st.step=i;save();renderStep()}
+  function sayList(s){return typeof s.say==='string'?[{text:s.say}]:s.say}
   function renderStep(){
     [].forEach.call(pipe.children,function(b,i){b.setAttribute('aria-selected',String(i===cur))});
-    var s=STEPS[cur];
-    var sayHtml=s.say.charAt(0)==='（'?'<p style="margin:0">'+esc(s.say)+'</p>':'<div class="copybox"><pre id="say-step">'+esc(s.say)+'</pre><button class="copybtn" data-copy="say-step" type="button">複製</button></div>';
+    var s=STEPS[cur],says=sayList(s);
+    var sayHtml=says.map(function(x,j){
+      var h=x.lead?'<p class="saylead"><b>'+esc(x.lead)+'</b></p>':'';
+      h+=x.text.charAt(0)==='（'?'<p style="margin:0">'+esc(x.text)+'</p>':'<div class="copybox"><pre id="say-step-'+j+'">'+esc(x.text)+'</pre><button class="copybtn" data-copy="say-step-'+j+'" type="button">複製</button></div>';
+      if(x.after)h+='<p class="why" style="margin:.2rem 0 .7rem">'+esc(x.after)+'</p>';
+      return h;
+    }).join('');
+    var blank=says.some(function(x){return x.text.indexOf('＿＿')>=0});
     card.innerHTML='<h3>第 '+(cur+1)+' 步：'+esc(s.t)+'</h3>'+
-      '<div class="row"><span class="lab y">你自己做</span>'+esc(s.y)+'</div>'+
+      '<div class="row"><span class="lab y">你自己做</span>'+esc(s.y).replace('{範本頁}',KIT)+'</div>'+
       '<div class="row"><span class="lab a">跟 AI 說</span>'+sayHtml+'</div>'+
       '<div class="row"><span class="lab">AI 會做什麼</span>'+esc(s.a)+'</div>'+
       '<div class="row"><span class="lab c">你要檢查</span>'+esc(s.c)+'</div>'+
-      (s.say.indexOf('＿＿')>=0?'<p class="why" style="margin:.3rem 0 0">貼上之後，把「＿＿」換成你的情況。</p>':'');
-    var b=card.querySelector('.copybtn');if(b)wireCopy(b);
+      (blank?'<p class="why" style="margin:.3rem 0 0">貼上之後，把「＿＿」換成你的情況。</p>':'');
+    card.querySelectorAll('.copybtn').forEach(wireCopy);
     document.getElementById('prevStep').disabled=cur===0;
     document.getElementById('nextStep').disabled=cur===STEPS.length-1;
   }
@@ -521,12 +618,18 @@ plot 'figdata/fig1_dkas.csv' every ::1 using ($1-0.04):2:3 with yerrorlines ls 1
     a:{DKASIntTOneMean:'37.04',DKASCtlTOneMean:'30.43',DKASTOnePstat:'p < 0.001',DKASTOneD:'0.92',DKASTTwoD:'0.95'},
     b:{DKASIntTOneMean:'37.41',DKASCtlTOneMean:'30.43',DKASTOnePstat:'p < 0.001',DKASTOneD:'1.01',DKASTTwoD:'0.96'}
   };
-  var TPL='At week 12, DKAS scores were {DKASIntTOneMean} in the intervention group and {DKASCtlTOneMean} in the control group ({DKASTOnePstat}). For DKAS, d was {DKASTOneD} at week 12 and {DKASTTwoD} at week 24.';
-  var sent=document.getElementById('sentence');
+  // 兩句分開排：第一句是 main.tex 3.2 節第一句的前半（後面省略），第二句是 3.3 節最後一句
+  var TPL=['At week 12, DKAS scores were {DKASIntTOneMean} in the intervention group and {DKASCtlTOneMean} in the control group ({DKASTOnePstat}); ……',
+           'For DKAS, <i>d</i> was {DKASTOneD} at week 12 and {DKASTTwoD} at week 24.'];
+  var sent=document.getElementById('sentence'),curSet='a';
   function renderSet(k,flash){
-    var v=SETS[k];
-    sent.innerHTML=TPL.replace(/\{(\w+)\}/g,function(_,m){return '<span class="mval'+(flash?' flash':'')+'" title="\\'+m+'">'+v[m]+'</span>'});
+    var v=SETS[k],prev=SETS[curSet];curSet=k;
+    // 只有跟上一次不一樣的數字才閃；排除 I048 時，跟全部 140 人不一樣的數字加虛線底
+    sent.innerHTML=TPL.map(function(line){return '<span class="ln">'+line.replace(/\{(\w+)\}/g,function(_,m){
+      var cls='mval'+(flash&&prev[m]!==v[m]?' flash':'')+(v[m]!==SETS.a[m]?' chg':'');
+      return '<span class="'+cls+'" title="\\'+m+'">'+esc(v[m])+'</span>'})+'</span>'}).join('');
     document.querySelectorAll('[data-set]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.set===k))});
+    document.querySelectorAll('.maptab [data-col]').forEach(function(x){x.classList.toggle('cur',x.dataset.col===k)});
     if(flash)setTimeout(function(){sent.querySelectorAll('.mval').forEach(function(x){x.classList.remove('flash')})},500);
   }
   document.querySelectorAll('[data-set]').forEach(function(b){b.addEventListener('click',function(){renderSet(b.dataset.set,true)})});
@@ -534,9 +637,9 @@ plot 'figdata/fig1_dkas.csv' every ::1 using ($1-0.04):2:3 with yerrorlines ls 1
 
   var CARDS=[
     {u:'u1',n:'01',ttl:'為什麼不用 Word',one:'改源頭、重跑一次，全部一起更新',back:['數字由分析程式寫','文獻由 Zotero 匯出','圖由 gnuplot 腳本畫','要 Word 另外出一份']},
-    {u:'u2',n:'02',ttl:'誰做什麼',one:'你說話、AI 動手、程式跑、你看 PDF',back:['不用打指令、不用學 LaTeX','build.py 由 AI 執行','分析和畫圖由 build 自動跑','refs.bib 由 Zotero 自動更新']},
-    {u:'u3',n:'03',ttl:'裝一次就好',one:'TeX、gnuplot、Python 套件、pandoc',back:['Windows：MiKTeX','Mac：MacTeX（Mac 版 TeX Live）','請 AI 幫你裝，它會先問','看到四個版本號就好了']},
-    {u:'u4',n:'04',ttl:'Zotero 接得穩',one:'Better BibTeX「保持更新」最穩',back:['文獻集匯出成 source/refs/refs.bib','在 Zotero 加一篇就自動更新','想讓 AI 代勞：zotero-mcp','書目也會錯，用 DOI 回原文']},
+    {u:'u2',n:'02',ttl:'誰做什麼',one:'你說話、AI 動手、程式跑、你看 PDF',back:['不用打指令、不用學 LaTeX','build.py 由 AI 執行','分析和畫圖由 build 自動跑','refs.bib 從 Zotero 匯出（接法 A 會自動更新）']},
+    {u:'u3',n:'03',ttl:'裝一次就好',one:'TeX、gnuplot、統計用的程式、pandoc',back:['Windows：MiKTeX','Mac：MacTeX（Mac 版 TeX Live）','請 AI 幫你裝（那句話要它每裝一個先問你）','看到四個版本號就好了']},
+    {u:'u4',n:'04',ttl:'Zotero 接得穩',one:'Better BibTeX「保持更新」最穩',back:['文獻集匯出成 source/refs/refs.bib','文獻加進那個文獻集就自動更新','想讓 AI 代勞：zotero-mcp','書目也會錯，用 DOI 回原文']},
     {u:'u5',n:'05',ttl:'守得住',one:'四件事還是你的',back:['資料四條件，Private 不夠','每篇文獻 DOI 回原文','結論說到多強你決定','照期刊規定聲明 AI 使用']}
   ];
   var grid=document.getElementById('skills');

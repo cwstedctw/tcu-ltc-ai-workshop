@@ -206,7 +206,8 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
 .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;margin:.8rem 0}
 .box{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.9rem 1rem;min-width:0}
 .box h3{margin:0 0 .4rem;font-size:1.05rem}
-.box ul{margin:.2rem 0 0;padding-left:1.1rem;font-size:.92rem}
+.box ul,.box ol{margin:.2rem 0 0;padding-left:1.1rem;font-size:.92rem}
+.box ol li{margin-bottom:.25rem}
 .plain-list{margin:.4rem 0 1rem;padding-left:1.2rem;display:grid;gap:.35rem}
 @media (max-width:720px){
   .team{grid-template-columns:minmax(0,1fr)}
@@ -222,94 +223,117 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
 <header class="top">
   <div class="eyebrow">慈濟大學長期照護研究所・研究團隊工作坊・第二部分</div>
   <h1>讓 AI 組成你的研究小隊</h1>
-  <p class="lede">第一部分把兩家 AI 設定好了。這一部分把它們放進同一個資料夾：一個當領隊、一個當隊員，紙條和每一版成品都留下來。只有一家 AI 也能跑。</p>
-  <p class="lede">還沒做完的先回去：<a href="index.html">行前準備</a>（要用到第 6～10 項）、<a href="setup.html">第一部分</a>。</p>
+  <p class="lede">第一部分把兩家 AI 設定好了。這一部分讓它們在同一個資料夾裡分工：一個當領隊（分派工作、檢查），一個當隊員（動手做）。交辦工作的「紙條」（一個文字檔）和每一版成品，都會存成檔案留下來。只有一家 AI 也能做。</p>
+  <p class="lede">還沒做完的先回去：<a href="index.html">行前準備</a>（第 2～10 項和第 12 項都要先做完）、<a href="setup.html">第一部分</a>。</p>
   <div class="meta"><span>2026-10-28（三）・電腦教室（一）</span><span>講師：陳文盛老師（國立東華大學通識教育中心）</span><span>查核：2026-10-21</span></div>
   <div class="tools">
     <a class="mycards" href="#bring">我的技能卡 <span class="cnt" id="cardCount">0 / 5</span></a>
-    <button class="chip" id="projBtn" aria-pressed="false" type="button">投影大字</button>
+    <button class="chip" id="projBtn" aria-pressed="false" type="button">字放大</button>
   </div>
 </header>
 </div>
 
-<div class="band" id="b1"><div class="wrap"><div class="tag">01・一個資料夾＝一個小隊</div><p class="big">看得懂</p><p class="sub">AI 記不住的事，寫成檔案就記得住</p></div></div>
+<div class="band" id="b1"><div class="wrap"><div class="tag">01・一個資料夾＝一個小隊</div><p class="big">看得懂</p><p class="sub">AI 換個對話就會忘；寫成檔案、開工先讀，就記得住</p></div></div>
 <main>
 <section class="blk wrap" id="idea">
   <div class="ask"><b>為什麼要一個資料夾？</b>AI 的記憶各家分開，換一個對話常常就忘了。寫在資料夾裡的規則和紙條，哪一家打開都讀得到。<br><b>對研究的好處：</b>每一步都留下檔案，事後查得到 AI 做了什麼、你改了什麼。</div>
   <div class="team" aria-label="小隊的分工">
-    <div class="who navy"><div class="k">你＝小隊長</div><div class="v">出題目、看成果、做決定</div></div>
+    <div class="who navy"><div class="k">你（小隊長，人）</div><div class="v">出題目、看成果、做決定</div></div>
     <div class="to" aria-hidden="true">→</div>
-    <div class="who"><div class="k">領隊</div><div class="v">想清楚、寫紙條、驗收</div></div>
+    <div class="who"><div class="k">領隊（AI）</div><div class="v">想清楚、寫紙條、驗收</div></div>
     <div class="to" aria-hidden="true">→</div>
-    <div class="who"><div class="k">隊員</div><div class="v">照紙條動手、交成品</div></div>
+    <div class="who"><div class="k">隊員（AI）</div><div class="v">照紙條動手、交成品；只有一家時由同一個 AI 兼</div></div>
   </div>
-  <p>這個小隊住在一個範本資料夾裡，叫 <code>ai-team-starter</code>。打開它，會看到：</p>
+  <p>講師在 GitHub 上放了一份範本（已經建好的空白小隊），叫 <code>ai-team-starter</code>。第 02 段你會照它複製一份自己的，取名 <code>my-research-team</code>，再下載到電腦上。打開 my-research-team，會看到：</p>
+  <p class="why">名字結尾有 / 的是資料夾，其他是檔案。.md 是純文字檔，用記事本就打得開。英文名字不用記，看中文說明就好。</p>
   <div class="tablewrap"><table>
-    <thead><tr><th>檔案或資料夾</th><th>做什麼</th></tr></thead>
+    <thead><tr><th>你會看到的名字</th><th>做什麼</th></tr></thead>
     <tbody>
-      <tr><td><code>AGENTS.md</code></td><td>小隊公約：誰是誰、怎麼傳紙條、三種模式、共同規則。Codex 讀這份。</td></tr>
-      <tr><td><code>CLAUDE.md</code></td><td>只有一行 <code>@AGENTS.md</code>。Claude 讀這份，等於照同一份公約。</td></tr>
+      <tr><td><code>AGENTS.md</code></td><td>小隊公約：誰是誰、怎麼傳紙條、三種模式（第 03、04 段會講）、共同規則。Codex 讀這份。</td></tr>
+      <tr><td><code>CLAUDE.md</code></td><td>只有一行 <code>@AGENTS.md</code>，意思是「去讀 AGENTS.md」。Claude 讀這份，所以兩家照的是同一份公約。</td></tr>
+      <tr><td><code>README.md</code></td><td>這個範本的說明書，給人看的。</td></tr>
       <tr><td><code>team.md</code></td><td>這個小隊平常用哪一種模式。</td></tr>
-      <tr><td><code>roles/</code></td><td>領隊和隊員的個性與原則，名字可以改。</td></tr>
-      <tr><td><code>material/</code></td><td>你的材料，公約規定 AI 只讀、不寫。<code>練習用/</code> 裡放了一份<b>虛構</b>的照顧者訪談，給今天練習；換成自己的材料前先移走。</td></tr>
-      <tr><td><code>workspace/inbox/</code></td><td>領隊寫的紙條：做什麼、什麼格式、怎樣算做完。</td></tr>
-      <tr><td><code>workspace/outbox/</code></td><td>隊員交的成品，<code>-v1</code>、<code>-v2</code> 每一版都留著。</td></tr>
-      <tr><td><code>workspace/log.md</code></td><td>小隊紀錄：每一棒寫一行，領隊簽收也寫在這裡。</td></tr>
+      <tr><td><code>roles/</code>（角色）</td><td>兩個檔：<code>leader.md</code> 是領隊，預設名字叫「洄瀾」（花蓮的舊名）；<code>member.md</code> 是隊員，預設叫「太魯閣」。名字和個性都可以改。</td></tr>
+      <tr><td><code>material/</code>（材料）</td><td>你的材料，公約規定 AI 只讀、不寫。<code>練習用/</code> 裡放了一份<b>虛構</b>的照顧者訪談，給今天練習；換成自己的材料前先移走。</td></tr>
+      <tr><td><code>workspace/inbox/</code>（工作區裡的紙條區）</td><td>領隊寫的紙條（交辦工作的文字檔）：做什麼、什麼格式、怎樣算做完。裡面原本的 README.md 是說明，不是紙條。</td></tr>
+      <tr><td><code>workspace/outbox/</code>（工作區裡的成品區）</td><td>隊員交的成品。檔名最後有 <code>-v1</code> 是第一版、<code>-v2</code> 是第二版，每一版都留著。</td></tr>
+      <tr><td><code>workspace/log.md</code></td><td>小隊紀錄：AI 每做完一步寫一行；領隊檢查了什麼、收下了哪一版，也寫在這裡。</td></tr>
+      <tr><td><code>.gitignore</code></td><td>告訴 git 哪些暫存檔不要上傳，不用管它（Mac 上看不到是正常的）。</td></tr>
     </tbody>
   </table></div>
   <div class="claim"><button type="button" data-claim="u1" aria-pressed="false">我懂了，收下技能卡 01</button><span>說得出領隊、隊員各做什麼，紙條和成品放在哪裡。</span></div>
 </section>
 
-<div class="band" id="b2"><div class="wrap"><div class="tag">02・三步建好</div><p class="big">拿得到</p><p class="sub">用範本建自己的私人儲存庫，抓到電腦上打開</p></div></div>
+<div class="band" id="b2"><div class="wrap"><div class="tag">02・三步建好</div><p class="big">拿得到</p><p class="sub">用範本建自己的私人儲存庫，下載到電腦上打開</p></div></div>
 <section class="blk wrap" id="setup">
+  <div class="ask"><b>先認識三個詞</b>
+    <ul class="plain-list" style="margin:.4rem 0 .5rem">
+      <li><b>儲存庫</b>：GitHub 上的一個資料夾（英文 repository，常簡稱 repo）。</li>
+      <li><b>範本</b>：講師放在 GitHub 上、已經建好的空白小隊，叫 ai-team-starter。你不改它，只照它複製一份自己的。</li>
+      <li><b>clone</b>：把 GitHub 上那份資料夾下載到你的電腦。</li>
+    </ul>
+    這一段做完，你會有兩份一樣的 my-research-team：一份在 GitHub 上（Private），一份在電腦的 AI-workshop 裡。</div>
   <ol class="steps">
     <li class="step">
       <h3><span class="sn">2-1</span>用範本建自己的私人儲存庫</h3>
-      <p><b>方法一：在網頁上按。</b>打開範本頁 <a class="path" href="https://github.com/cwstedctw/ai-team-starter" target="_blank" rel="noopener">github.com/cwstedctw/ai-team-starter</a>，按 <b>Use this template</b> → <b>Create a new repository</b>。名字填 <code>my-research-team</code>，下面的公開範圍<b>一定要點成 Private</b>（預設可能是 Public），再按 <b>Create repository</b>。</p>
-      <p><b>方法二：請 AI 助手代勞。</b>行前第 10 項裝好 gh、登入過的人，在 AI 助手（第 6 項打開 AI-workshop 的那個）貼：</p>
+      <p>先用瀏覽器打開範本頁 <a class="path" href="https://github.com/cwstedctw/ai-team-starter" target="_blank" rel="noopener">github.com/cwstedctw/ai-team-starter</a>，看得到一排檔案清單（AGENTS.md、material、workspace……）再往下做。<b>範本網址打開是「404」（找不到頁面）時，先停下來回信問陳老師，不要讓 AI 自己建一個空的。</b></p>
+      <p><b>方法一：在網頁上按。</b>在範本頁按檔案清單上方的 <b>Use this template</b> → <b>Create a new repository</b>（找不到這個按鈕，也先停下來問陳老師，不要按 Fork）。名字那一格（Repository name）填 <code>my-research-team</code>；公開範圍（Public／Private）<b>一定要選 Private</b>（預設可能是 Public）；最後按 <b>Create repository</b>。</p>
+      <p><b>方法二：請 AI 助手代勞。</b>行前第 10 項裝好 gh（讓電腦記住你的 GitHub 登入的小程式）、登入過的人，在 AI 助手（第 6 項打開 AI-workshop 的那個）貼：</p>
       <div class="copybox"><pre id="mk">請用 gh 從範本 cwstedctw/ai-team-starter 建一個私人儲存庫，名字叫 my-research-team，並 clone 到目前這個 AI-workshop 資料夾裡。做完告訴我三件事：clone 下來的完整路徑、GitHub 網址、它是不是 Private。</pre><button class="copybtn" data-copy="mk" type="button">複製</button></div>
-      <p class="why">AI 要連上 GitHub，會先問你可不可以：看得到 <code>my-research-team</code> 和 <code>--private</code> 就按同意。<b>Private 不等於可以放受試者資料</b>，放之前先看範本裡的 <code>material/README.md</code>。</p>
-      <div class="done">完成判準：瀏覽器打開 github.com/你的帳號/my-research-team，名字旁邊寫著 Private。</div>
+      <p class="why">AI 要連上 GitHub 時，會先請你核准，畫面上有一行英文指令。看得懂、是你剛請它做的事，就按同意（只同意這一次）：指令裡看得到 <code>my-research-team</code>、<code>ai-team-starter</code> 和 <code>--private</code>（私人），就是在用範本建你的私人儲存庫；只是查看的指令（例如 <code>gh auth status</code>，查有沒有登入）也算。看不懂，就按拒絕，拒絕不會弄壞東西；再問它「這一步要做什麼、為什麼要做」，或截圖問網頁版。</p>
+      <p class="why"><b>Private 不等於可以放受試者資料</b>，放之前先看你資料夾裡的 <code>material/README.md</code>（研究資料能不能放的四個條件）。</p>
+      <div class="done">完成判準：瀏覽器打開 github.com/你的帳號/my-research-team（方法二可以直接點 AI 給的網址），名字旁邊寫著 Private，下面的檔案清單看得到 AGENTS.md、material、workspace。只看到一大段英文說明、沒有檔案清單，表示範本沒複製到：先停下來回信問陳老師。</div>
     </li>
     <li class="step">
-      <h3><span class="sn">2-2</span>抓到電腦上</h3>
-      <p>用方法二的人已經抓好了，跳過這步。用方法一的人，在 AI 助手貼：</p>
+      <h3><span class="sn">2-2</span>下載到電腦上</h3>
+      <p>用方法二的人已經下載好了，不用貼下面這句，直接看最後的完成判準。用方法一的人，在 AI 助手貼：</p>
       <div class="copybox"><pre id="cl">請把我 GitHub 上的 my-research-team 儲存庫 clone 到目前這個 AI-workshop 資料夾裡，做完告訴我完整路徑。</pre><button class="copybtn" data-copy="cl" type="button">複製</button></div>
-      <div class="done">完成判準：AI-workshop 裡多了一個 my-research-team 資料夾，裡面看得到 AGENTS.md。</div>
+      <div class="done">完成判準：打開檔案總管（Mac：Finder），進行前第 6 項建的 AI-workshop，看得到 my-research-team 資料夾；點進去看得到 AGENTS.md（Windows 可能只顯示 AGENTS，也對）。</div>
     </li>
     <li class="step">
       <h3><span class="sn">2-3</span>在桌面版打開這個小隊</h3>
-      <p>Codex：按「開啟資料夾」（或意思一樣的按鈕），選 <b>my-research-team</b>。Claude 的 Code：環境選「本機（Local）」，再選 <b>my-research-team</b>。</p>
-      <p class="why"><b>要選 my-research-team 本身，不是外面的 AI-workshop。</b>AI 只讀打開那一層的 AGENTS.md，選錯層它就不知道自己在小隊裡。</p>
+      <p>開一段新的對話（不要接著用 2-2 那段），照行前準備第 6 項的方法，這次改選 <b>my-research-team</b>：</p>
+      <ul class="plain-list">
+        <li><b>Codex：</b>在輸入框上方點「選擇專案」→「新專案」；來源資料夾按「新增」，先進 AI-workshop，選 my-research-team、按「選擇資料夾」；專案名稱也打 my-research-team，再按「建立專案」。</li>
+        <li><b>Claude 的 Code：</b>先在環境選單選「本機（Local）」，再選資料夾：先進 AI-workshop，選 my-research-team。</li>
+      </ul>
+      <p class="why"><b>要選 my-research-team 本身</b>，不是外面的 AI-workshop，也不是裡面的 workspace。選錯了，AI 讀不到小隊的規則；報到時看路徑就知道對不對。</p>
       <p>打開後先說一句：</p>
       <div class="copybox"><pre id="hi">請先讀 AGENTS.md，再跟我報到。</pre><button class="copybtn" data-copy="hi" type="button">複製</button></div>
-      <div class="done">完成判準：它的第一行以「領隊 ·」開頭，印出的路徑結尾是 my-research-team；輸入框旁的權限選單還是 Ask for approval（Codex）或 Manual（Claude）。</div>
+      <div class="done">完成判準兩樣：①它回話的第一行是「領隊 · 」接資料夾的完整路徑，例如 領隊 · D:\AI-workshop\my-research-team（Mac 像 領隊 · /Users/你的名字/AI-workshop/my-research-team）；<b>路徑的最後一段要是 my-research-team</b>。②輸入框旁的權限選單還是「要求核准」（Codex）或 Manual（Claude）。<br>不是的話：第一行不是「領隊 ·」，或路徑最後一段不是 my-research-team，就關掉這個對話，照行前準備第 6 項重開 my-research-team。它說找不到 AGENTS.md，回 2-2 的完成判準，確認資料夾裡真的有。權限選單變了，照行前第 7 項改回來。</div>
     </li>
   </ol>
   <div class="minichk"><div class="hd">做完勾一勾（3 項全勾，解鎖技能卡 02）</div>
     <label><input type="checkbox" id="c1">GitHub 上的 my-research-team 是 Private</label>
     <label><input type="checkbox" id="c2">電腦裡有 my-research-team，看得到 AGENTS.md</label>
-    <label><input type="checkbox" id="c3">AI 用「領隊 ·」報到，路徑結尾是 my-research-team</label>
+    <label><input type="checkbox" id="c3">AI 用「領隊 ·」報到，路徑最後一段是 my-research-team</label>
   </div>
 </section>
 
-<div class="band" id="b3"><div class="wrap"><div class="tag">03・單人模式</div><p class="big">跑得動</p><p class="sub">只有一家 AI，也能先做、再自己驗收</p></div></div>
+<div class="band" id="b3"><div class="wrap"><div class="tag">03・單人模式</div><p class="big">跑得動</p><p class="sub">只有一家 AI，也能讓它先做、再換個角色檢查</p></div></div>
 <section class="blk wrap" id="solo">
-  <p>單人模式由同一個 AI 輪流戴兩頂帽子。它每換一次帽子，就在資料夾裡留一個檔：</p>
+  <p>單人模式由同一個 AI 輪流戴兩頂帽子：領隊的帽子、隊員的帽子。它每換一次帽子，就在資料夾裡留下紀錄：</p>
   <ol class="flow">
     <li><b>領隊寫紙條</b>放進 inbox：做什麼、什麼格式、怎樣算做完。</li>
-    <li><b>隊員做 v1</b>存進 outbox，第一行寫交接。</li>
-    <li><b>領隊驗收</b>：每一句對回 material 的原文；要改就寫退回紙條。</li>
+    <li><b>隊員做 v1</b>（第一版）存進 outbox。第一行是交接：做了什麼、哪裡要小心、能不能直接用。</li>
+    <li><b>領隊驗收</b>：成品引用的每一句原文，都回訪談稿找；查了哪幾句寫進 log.md。要改就寫退回紙條。</li>
     <li><b>有退回才改 v2</b>，另存新檔、v1 留著。最後向你回報。</li>
   </ol>
   <p>貼這句試試（今天只用虛構的練習訪談）：</p>
   <div class="copybox"><pre id="task">這次用單人模式。請把 material/練習用 裡的虛構訪談做初步編碼：列出 3 到 5 個主題，每個主題附一到兩句原文當證據，並標出你不確定的地方。</pre><button class="copybtn" data-copy="task" type="button">複製</button></div>
-  <p class="why">做的過程中，Claude（Manual）或 Codex 會跳出好幾次權限視窗：要在 workspace 裡建檔，按允許；看不懂的指令按拒絕也沒關係。<b>不要選「以後都允許」或切換到自動模式的選項。</b></p>
-  <p><b>它說做完之後，自己打開這三個地方看：</b>（<code>.md</code> 檔按兩下打不開的話：右鍵 → 開啟檔案 → 記事本；Mac：右鍵 → 打開方式 → 文字編輯）</p>
+  <p>做的過程中，兩家不一樣：</p>
+  <ul class="plain-list why">
+    <li><b>Claude 的 Code（Manual）</b>：改檔、跑指令前都會先問你，會跳好幾次權限視窗。這一步你請它做的事，就是在 workspace 裡建紙條、成品，或改 log.md；它也會查電腦現在幾點（視窗裡寫 date 或 Get-Date），用來寫檔名。</li>
+    <li><b>Codex（要求核准）</b>：在這個資料夾裡會直接建檔、改檔，通常不會問你。</li>
+    <li>跳出權限視窗時：看得懂、是你剛請它做的事，就按同意（只同意這一次）。看不懂，就按拒絕，拒絕不會弄壞東西；再問它「這一步要做什麼、為什麼要做」，或截圖問網頁版。<b>不要選以後都不再問、或切換到自動模式的選項。</b></li>
+  </ul>
+  <p><b>不管有沒有跳視窗，它說做完之後，都要打開檔案總管（Mac：Finder），進 AI-workshop → my-research-team，自己看這四個地方：</b></p>
+  <p class="why">.md 是純文字檔。按兩下打不開的話：Windows 在檔案上按右鍵 → 開啟檔案 → 記事本；Mac 按住 control 再點檔案（觸控板可以兩指點一下）→ 打開檔案的應用程式 → 文字編輯（Mac 的選單字樣以你的畫面為準）。打開會看到 #、&gt;、** 這些符號，是排版記號，不用管。</p>
   <ul class="plain-list">
-    <li><code>workspace/inbox/</code> 的紙條：有沒有寫清楚「怎樣算做完」？</li>
-    <li><code>workspace/outbox/</code> 的成品：第一行有沒有交接？有退回紙條的話，v2 改了什麼？</li>
-    <li>從成品複製兩句「原文證據」，打開 <code>material/練習用/虛構訪談-X01.md</code>，按 Ctrl＋F（Mac：Command＋F）貼上：找得到嗎？不要用手打，全形標點很容易打錯。</li>
+    <li>workspace → inbox 裡的<b>紙條</b>（檔名是日期和時間開頭的那張，例如 20261028-1430-訪談初步編碼.md；README.md 是說明，不是紙條）：有沒有寫清楚「怎樣算做完」？</li>
+    <li>workspace → outbox 裡的<b>成品</b>（檔名最後有 -v1）：第一行是不是交接？長這樣：「&gt; 交接：做了什麼｜注意：……｜能不能直接用：……」。有退回紙條的話，-v2 改了什麼？</li>
+    <li>workspace → <b>log.md</b>：領隊有沒有寫它查了哪幾句、怎麼查？</li>
+    <li><b>自己查兩句證據。</b>成品裡的原文證據，格式像範本公約裡的這個例子：「我睡不好，白天上班就很恍神，有一次開車差點擦撞到前面的車。」（虛構訪談-X01.md 第 16 行）。<b>只複製「」裡面的字</b>，不要連「」和後面的括號。打開 material → 練習用 → 虛構訪談-X01.md，按 Ctrl＋F（Mac：Command＋F）貼上。找得到，就是真的原文；找不到，先看是不是多複製了括號或空白，還是找不到，就跟 AI 說是哪一句找不到，請它退回重做。不要用手打，全形標點很容易打錯。</li>
   </ul>
   <p class="why">AI 說做完，不等於做完。主題怎麼定、證據夠不夠，最後還是研究團隊決定；AI 給的是可以檢查的初稿。</p>
   <div class="minichk"><div class="hd">做完勾一勾（3 項全勾，解鎖技能卡 03）</div>
@@ -321,18 +345,18 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
 
 <div class="band" id="b4"><div class="wrap"><div class="tag">04・兩家接力</div><p class="big">接得上</p><p class="sub">兩家都有，就讓它們分工</p></div></div>
 <section class="blk wrap" id="relay">
-  <p>先看你手上有什麼，下面會建議用哪一種模式，並給你 <code>team.md</code> 要填的內容。</p>
+  <p>先看你手上有什麼，下面會建議用哪一種模式（兩種接力怎麼做，寫在建議器下面）。</p>
   <div class="chooser" id="chooser">
     <div class="q"><div class="lbl">ChatGPT（Codex）</div><div class="opts" data-q="gpt">
       <button class="chip" type="button" data-v="yes">有帳號（10/21 查核時免費也有 Codex）</button>
       <button class="chip" type="button" data-v="no">沒有</button>
     </div></div>
     <div class="q"><div class="lbl">Claude</div><div class="opts" data-q="cl">
-      <button class="chip" type="button" data-v="pro">Pro 以上</button>
+      <button class="chip" type="button" data-v="pro">付費（Pro 以上）</button>
       <button class="chip" type="button" data-v="free">免費</button>
       <button class="chip" type="button" data-v="no">沒有</button>
     </div></div>
-    <div class="q"><div class="lbl">兩家的命令列工具（codex、claude）都裝好、登入了嗎？</div><div class="opts" data-q="cli">
+    <div class="q"><div class="lbl">兩家的命令列工具（codex、claude）都裝好、登入了嗎？</div><p class="note" style="margin:0 0 .4rem">命令列工具＝不開視窗、打一行字就能叫 AI 做事的版本。行前準備沒有裝；沒特別裝過，就選「沒有或不知道」。</p><div class="opts" data-q="cli">
       <button class="chip" type="button" data-v="yes">都好了</button>
       <button class="chip" type="button" data-v="no">沒有或不知道</button>
     </div></div>
@@ -342,36 +366,41 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
   <div class="two">
     <div class="box">
       <h3>手動接力：每一棒由你傳</h3>
-      <ul>
-        <li>兩個桌面版都打開 my-research-team。</li>
-        <li>跟領隊說需求，它寫好紙條就停。</li>
-        <li>到另一個桌面版說「你是隊員。看 inbox 最新的紙條，照著做。」</li>
-        <li>隊員交進 outbox 就停；你回去跟領隊說「收 outbox」。</li>
-      </ul>
-      <p class="why" style="margin:.5rem 0 0">Claude 的 Code 要 Pro 以上。每一棒都經過你，每一步都看得見。</p>
+      <ol>
+        <li>兩個桌面版都照 2-3 打開 my-research-team：Codex 一個、Claude 的 Code 一個。</li>
+        <li>在當領隊的那一邊（例如 Claude），<b>先說「這次用手動接力」</b>，再說需求。它寫好紙條就會停下來，請你去叫隊員。</li>
+        <li>到另一邊（例如 Codex）說「你是隊員。看 inbox 最新的紙條，照著做。」它回話的第一行應該是「隊員 ·」。</li>
+        <li>隊員交進 outbox 就會停；你回領隊那邊說「收 outbox」，它會驗收、回報。</li>
+      </ol>
+      <p class="why" style="margin:.5rem 0 0">team.md 已經改成手動接力的，第 2 步可以不說。Claude 的 Code 要付費（Pro 以上）。每一棒都經過你，每一步都看得見。</p>
     </div>
     <div class="box">
       <h3>自動接力：領隊自己叫隊員（講師示範）</h3>
       <ul>
-        <li>你只跟領隊說話，它在資料夾裡執行另一家的命令列工具。</li>
-        <li>每叫一次隊員，AI 助手會先問你可不可以；但你核准的只是「叫隊員」這一下，隊員在資料夾裡建檔、改檔不會再問你。所以開始前先存一版（commit），出事可以退回。</li>
+        <li>你只跟領隊說話，它會用另一家的命令列工具把隊員叫起來。</li>
+        <li>開始前，領隊會先請你同意存一版（commit）。出了問題，可以請 AI 把檔案還原成存的那一版。</li>
+        <li>每叫一次隊員，領隊會先請你核准。你同意的只是「叫隊員」這一下；之後隊員在資料夾裡建檔、改檔，都不會再問你。</li>
         <li>紙條、每一版照樣留在資料夾裡。</li>
       </ul>
       <p class="why" style="margin:.5rem 0 0">要兩家的命令列工具都裝好、登入，今天由講師示範。</p>
     </div>
   </div>
-  <p>自動接力時，領隊會執行的指令（寫在 AGENTS.md 裡，不用自己打）：</p>
+  <p>自動接力時，領隊會執行下面這一行來叫隊員（寫在 AGENTS.md 裡，不用自己打）。權限視窗裡出現這一行，就是在叫隊員：</p>
   <div class="cmd">領隊是 Claude、隊員是 Codex：
 codex exec --sandbox workspace-write "你是隊員。先讀 AGENTS.md 和 roles/member.md，再照 workspace/inbox 最新那張紙條做。"
 
 領隊是 Codex、隊員是 Claude：
 claude -p --permission-mode acceptEdits "你是隊員。先讀 AGENTS.md 和 roles/member.md，再照 workspace/inbox 最新那張紙條做。"</div>
-  <p><b>領隊每一棒做四道檢查</b>，因為指令「成功」不代表做對：</p>
+  <ul class="plain-list why">
+    <li>英文不用懂，認得兩樣就好：開頭的 codex exec、claude -p＝叫另一家 AI 做一件事、做完就結束；引號裡那句＝交代給隊員的話。</li>
+    <li>中間那段：--sandbox workspace-write 讓 Codex 只能寫這個資料夾；--permission-mode acceptEdits 讓 Claude 改檔不再問你，所以開始前要先存一版。</li>
+  </ul>
+  <p>這四道檢查是<b>領隊（AI）每一棒都要做的</b>，因為指令「成功」不代表做對。你看它的回報有沒有交代這四件事；沒交代，就問它：</p>
   <div class="lines">
     <div class="line"><div class="num">一</div><div><h3>叫到的真的是隊員嗎？</h3><p>隊員最後回覆的第一行要以「隊員 ·」開頭。看到「領隊 ·」，表示叫到第二個領隊，停下來告訴你。</p></div></div>
     <div class="line"><div class="num">二</div><div><h3>outbox 真的多了新檔嗎？</h3><p>指令正常結束，不等於做完。先看到新檔，才說隊員做好了。</p></div></div>
-    <div class="line"><div class="num">三</div><div><h3>指令還在跑嗎？</h3><p>一棒可能要好幾分鐘。指令已經結束，就不能說「隊員還在跑」。叫不起來就改單人模式，不自己繞路。</p></div></div>
-    <div class="line"><div class="num">四</div><div><h3>不該動的檔有沒有被動？</h3><p>用 <code>git status</code> 看：只該多出 workspace 裡的新檔。material、AGENTS.md、roles 有變動就停下來告訴你。</p></div></div>
+    <div class="line"><div class="num">三</div><div><h3>叫隊員的指令結束了沒？</h3><p>一棒可能要好幾分鐘。叫隊員的指令已經結束，就不能說「隊員還在做」。叫不起來就改單人模式，不要自己想別的辦法，也不要替隊員寫成品。</p></div></div>
+    <div class="line"><div class="num">四</div><div><h3>不該動的檔有沒有被動？</h3><p>領隊執行 <code>git status</code>（請 git 列出：跟上次存的版本比，哪些檔案有變動）：變動只該在 workspace 裡。material、AGENTS.md、roles、team.md 有變動，就停下來告訴你。</p></div></div>
   </div>
   <div class="claim"><button type="button" data-claim="u4" aria-pressed="false">我懂了，收下技能卡 04</button><span>知道自己適合哪一種模式，也說得出四道檢查。</span></div>
 </section>
@@ -379,23 +408,30 @@ claude -p --permission-mode acceptEdits "你是隊員。先讀 AGENTS.md 和 rol
 <div class="band" id="b5"><div class="wrap"><div class="tag">05・跨電腦與遙控</div><p class="big">到處用</p><p class="sub">辦公室開始、家裡接著做、手機看進度</p></div></div>
 <section class="blk wrap" id="move">
   <div class="sync" aria-label="用 GitHub 跨電腦同步"><span class="m">辦公室電腦</span>⇄<span class="gh">GitHub（Private）</span>⇄<span class="m">家裡電腦</span><span class="m">筆電</span></div>
-  <p>規則只有一條：<b>開工先拉、做完就推。</b>在另一台電腦第一次用，就像 2-2 那樣 clone 一次。</p>
+  <p>規則只有一條：<b>開工先拉、做完就推。</b>「拉」（pull）是把 GitHub 上的新版下載到這台電腦；「推」（push）是把這台電腦存好的版本送上 GitHub。</p>
+  <p>另一台電腦第一次用：先做完行前準備第 2～10 項，再照 2-2 下載（clone）一次，不用重新建儲存庫；打開的方法照 2-3。</p>
   <div class="two">
     <div class="box"><h3>開工時貼</h3><div class="copybox"><pre id="pull">開工前請先 git pull，告訴我從 GitHub 拿到了哪些新東西。</pre><button class="copybtn" data-copy="pull" type="button">複製</button></div></div>
     <div class="box"><h3>收工時貼</h3><div class="copybox"><pre id="push">今天改了哪些檔案，請先列給我看，特別標出 material 裡新放的檔。我同意之後，再存一版並推上 GitHub。</pre><button class="copybtn" data-copy="push" type="button">複製</button></div></div>
   </div>
-  <p><b>人不在電腦前，也能用手機接著做。</b>兩家都有遙控功能，AI 和檔案都留在原本那台電腦上，手機只是遙控器：</p>
+  <p><b>人不在電腦前，也能用手機接著做。</b>兩家都有遙控功能：檔案和工作都留在原本那台電腦上，手機只是遙控器：</p>
   <div class="tablewrap"><table>
     <thead><tr><th></th><th>Claude（Code）</th><th>ChatGPT（Codex）</th></tr></thead>
     <tbody>
-      <tr><td>電腦這邊</td><td>在 Code 的對話裡輸入 <code>/remote-control</code>，或打開那段對話的 Remote Control 開關。設定 → Claude Code 裡的「Connect new sessions to Remote Control」打開後，新對話都會自動連上。</td><td>用最新的 ChatGPT 桌面版（Mac 或 Windows）：設定 → Connections → Control this Mac or PC，用手機掃畫面上的 QR code。</td></tr>
+      <tr><td>電腦這邊</td><td>在 Code 的對話框打 <code>/remote-control</code>（斜線開頭），按 Enter；或打開那段對話的 Remote Control 開關。想讓每段新對話都自動連上：設定 → Claude Code，打開「Connect new sessions to Remote Control」（新對話自動接上遙控）。</td><td>用最新的 ChatGPT 桌面版（Mac 或 Windows）：設定 → Connections → Control this Mac or PC，用手機掃畫面上的 QR code。</td></tr>
       <tr><td>手機這邊</td><td>Claude app 的 Code 清單裡找到那段對話。</td><td>ChatGPT app 打開 Codex（有些版本叫 Remote）。</td></tr>
-      <tr><td>可以做什麼</td><td>看進度、接著下指令、回應權限提示。</td><td>看進度、核准指令、開新的工作。核准時只選「這一次」。</td></tr>
+      <tr><td>可以做什麼</td><td>看進度、接著下指令、核准權限視窗。</td><td>看進度、核准權限視窗、開新的工作。核准時只選「這一次」。</td></tr>
     </tbody>
   </table></div>
-  <p class="why">電腦要開著、不能睡、要連網，登入同一個帳號。手機能叫 AI 做的事，就是那台電腦上的 AI 能做的事，所以授權要維持行前第 7 項選的「會先問」，手機上也只核准看得懂的。手機掉了，到網頁版的設定把所有裝置登出。字樣以你的畫面為準。</p>
-  <div class="claim"><button type="button" data-claim="u5" aria-pressed="false">我懂了，收下技能卡 05</button><span>知道開工先拉、做完就推，也知道遙控時電腦要開著、只核准看得懂的。</span></div>
-  <p class="tip">第三部分會在這個小隊上，再加搜文獻、Zotero 書目和自動編譯論文的工具。</p>
+  <p class="note">表裡的英文是英文介面的字樣；中文介面找位置一樣的選項，字樣以你的畫面為準。找不到就截圖問網頁版。</p>
+  <ul class="plain-list why">
+    <li>電腦要開著、連網，而且不能進入睡眠（不會設的話，截圖問網頁版）。</li>
+    <li>手機和電腦登入同一個帳號。</li>
+    <li>手機能叫 AI 做的事，就是那台電腦上的 AI 能做的事：權限維持行前第 7 項的「要求核准」（Codex）或 Manual（Claude）。手機上跳出核准框也一樣：看得懂、是你剛請它做的事，才按同意（只同意這一次）；看不懂就按拒絕，再問它這一步要做什麼，或截圖問網頁版。</li>
+    <li>手機掉了，到網頁版的設定把所有裝置登出。</li>
+  </ul>
+  <div class="claim"><button type="button" data-claim="u5" aria-pressed="false">我懂了，收下技能卡 05</button><span>知道開工先拉、做完就推，也知道遙控時電腦要開著；看得懂才同意，看不懂就拒絕。</span></div>
+  <p class="tip">第三部分會另外建一個新的論文資料夾 ai-paper-kit，沿用這裡的小隊做法，再加上寫論文用的工具（Zotero 管書目、把論文排版成 PDF）。my-research-team 留著，不用動。</p>
 </section>
 
 <div class="band" id="bring"><div class="wrap"><div class="tag">06・技能卡</div><p class="big">帶得走</p><p class="sub">做完一段解鎖一張，回家隨時打開</p></div></div>
@@ -408,7 +444,7 @@ claude -p --permission-mode acceptEdits "你是隊員。先讀 AGENTS.md 和 rol
 </main>
 
 <footer class="wrap">
-  <p><b>選單名稱和指令會隨改版變動。</b>這頁依 2026-10-21 查到的官方說明寫成；跟你畫面不一樣時，以畫面為準。範本裡的練習訪談是虛構的，不是真實受訪者。Codex 免費方案的範圍 10/21 查核時有，之後可能調整。</p>
+  <p><b>選單名稱和指令會隨改版變動。</b>這頁依 2026-10-21 查到的官方說明寫成；跟你畫面不一樣時，以畫面為準；找不到就截圖問網頁版，或回信問陳老師。範本裡的練習訪談是虛構的，不是真實受訪者。10/21 查核時，免費帳號也能用 Codex；之後可能調整。</p>
   <p>出處：</p>
   <ul>
     <li>Anthropic：<a href="https://code.claude.com/docs/en/remote-control" target="_blank" rel="noopener">Remote Control</a>、<a href="https://code.claude.com/docs/en/desktop" target="_blank" rel="noopener">桌面版的 Code</a>、<a href="https://code.claude.com/docs/en/headless" target="_blank" rel="noopener">非互動模式（claude -p）</a>、<a href="https://code.claude.com/docs/en/permission-modes" target="_blank" rel="noopener">權限模式</a>、<a href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener">CLAUDE.md 匯入 @AGENTS.md</a></li>
@@ -441,19 +477,21 @@ claude -p --permission-mode acceptEdits "你是隊員。先讀 AGENTS.md 和 rol
   })}
   document.querySelectorAll('.copybtn').forEach(wireCopy);
 
-  // 模式建議器：依手上有的帳號與工具，建議模式並給 team.md 內容
+  // 模式建議器：依手上有的帳號與工具，建議模式；接力模式另給「請 AI 改 team.md」的一句
   var ans=st.ans||{};
   function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  var TEAM_RELAY='請把 team.md 裡的三行設定（模式、誰當領隊、誰當隊員）換成下面這樣，其他不動；改完存一版（commit），告訴我改了什麼。\n- 模式：手動接力\n- 接力時誰當領隊：Claude\n- 接力時誰當隊員：Codex';
+  var KEEP_SOLO='team.md 原本就是單人模式，不用改。第 03 段那句開頭的「這次用單人模式」，就是在告訴它用這個模式。';
   function suggest(){
     var gpt=ans.gpt,cl=ans.cl,cli=ans.cli;
     if(!gpt||!cl)return null;
     var hasCodex=gpt==='yes',hasCode=cl==='pro';
-    if(!hasCodex&&!hasCode)return {warn:true,mode:'先開一個帳號',why:(cl==='free'?'Claude 免費帳號沒有 Code，打不開資料夾。':'')+'最省的是註冊 ChatGPT 帳號（免費也有 Codex，額度較少），再用單人模式。',team:null};
-    if(hasCodex&&!hasCode)return {mode:'單人模式・領隊 Codex',why:'你有 ChatGPT 的 Codex，就由它一個人輪流當領隊和隊員。'+(cl==='free'?'Claude 免費帳號沒有 Code，接力要 Pro 以上。':''),team:'- 模式：單人'};
-    if(!hasCodex&&hasCode)return {mode:'單人模式・領隊 Claude',why:'你有 Claude 的 Code，就由它一個人輪流當領隊和隊員。',team:'- 模式：單人'};
+    if(!hasCodex&&!hasCode)return {warn:true,mode:'先開一個帳號',why:(cl==='free'?'Claude 免費帳號沒有 Code，打不開資料夾。':'')+'最省的是註冊 ChatGPT 帳號（免費也有 Codex，額度較少），再用單人模式。'};
+    if(hasCodex&&!hasCode)return {mode:'單人模式・領隊 Codex',why:'你有 ChatGPT 的 Codex，就由它一個人輪流當領隊和隊員。'+(cl==='free'?'Claude 免費帳號沒有 Code，接力要付費（Pro 以上）。':''),keep:KEEP_SOLO};
+    if(!hasCodex&&hasCode)return {mode:'單人模式・領隊 Claude',why:'你有 Claude 的 Code，就由它一個人輪流當領隊和隊員。',keep:KEEP_SOLO};
     if(!cli)return null;
-    if(cli==='yes')return {mode:'自動接力（也可以先手動接力）',why:'兩家的桌面版和命令列工具都有了。先用手動接力看清楚每一棒，熟了再換自動接力。下面先填 Claude 當領隊；想讓 Codex 當領隊，把兩行的 Claude、Codex 對調。',team:'- 模式：自動接力\n- 接力時誰當領隊：Claude\n- 接力時誰當隊員：Codex'};
-    return {mode:'手動接力',why:'兩家的桌面版都有，打開同一個資料夾，每一棒由你傳。想讓領隊自己叫隊員，要再裝好兩家的命令列工具。',team:'- 模式：手動接力\n- 接力時誰當領隊：Claude\n- 接力時誰當隊員：Codex'};
+    if(cli==='yes')return {mode:'手動接力（熟了可以換自動接力）',why:'你兩家都能用，命令列工具也裝好了。第一次先用手動接力，看清楚每一棒；熟了，開工時改說「這次用自動接力」就好。',say:'這次用手動接力',team:TEAM_RELAY};
+    return {mode:'手動接力',why:'兩家的桌面版都能用：打開同一個資料夾，每一棒由你傳。想讓領隊自己叫隊員，要另外裝兩家的命令列工具；今天不教，講師會示範。',say:'這次用手動接力',team:TEAM_RELAY};
   }
   var res=document.getElementById('result');
   function renderChooser(){
@@ -464,18 +502,20 @@ claude -p --permission-mode acceptEdits "你是隊員。先讀 AGENTS.md 和 rol
     if(!r){res.className='result';res.innerHTML='<span class="note">'+(both?'再回答最後一題。':'選好上面兩題，就會出現建議。')+'</span>';return}
     res.className='result'+(r.warn?' warn':'');
     var h='<div class="mode">'+esc(r.mode)+'</div><p style="margin:.3rem 0 .4rem">'+esc(r.why)+'</p>';
-    if(r.team){h+='<p class="note" style="margin:0">把 team.md 裡對應的行換成：</p><div class="copybox"><pre id="teamtxt">'+esc(r.team)+'</pre><button class="copybtn" data-copy="teamtxt" type="button">複製</button></div><p class="note" style="margin:0">不改 team.md 也行，開工時說一句「這次用'+esc(r.mode.split('・')[0].replace('（也可以先手動接力）',''))+'」就好。</p>'}
+    if(r.keep){h+='<p class="note" style="margin:0">'+esc(r.keep)+'</p>'}
+    if(r.say){h+='<p style="margin:0 0 .4rem">開工時先跟領隊說一句「'+esc(r.say)+'」就好，不用改檔案。</p>'}
+    if(r.team){h+='<p class="note" style="margin:0">想讓它記住、以後不用每次說：在 AI 助手貼下面這句，它會改 team.md 並存一版。想讓 Codex 當領隊，把最後兩行的 Claude、Codex 對調再貼。</p><div class="copybox"><pre id="teamtxt">'+esc(r.team)+'</pre><button class="copybtn" data-copy="teamtxt" type="button">複製</button></div>'}
     res.innerHTML=h;
     var b=res.querySelector('.copybtn');if(b)wireCopy(b);
   }
   document.querySelectorAll('#chooser .opts .chip').forEach(function(b){b.addEventListener('click',function(){var q=b.parentNode.dataset.q;ans[q]=b.dataset.v;if(q!=='cli'&&!(ans.gpt==='yes'&&ans.cl==='pro'))delete ans.cli;st.ans=ans;save();renderChooser()})});
 
   var CARDS=[
-    {u:'u1',n:'01',ttl:'一個資料夾＝一個小隊',one:'規則和紙條寫成檔案，哪一家都讀得到',back:['AGENTS.md：小隊公約','CLAUDE.md：一行 @AGENTS.md','inbox 放紙條，outbox 放成品','每一版都留，事後查得到']},
-    {u:'u2',n:'02',ttl:'三步建好小隊',one:'範本 → 私人儲存庫 → 桌面版打開',back:['Use this template，選 Private','clone 到 AI-workshop','打開 my-research-team 本身','報到第一行是「領隊 ·」']},
-    {u:'u3',n:'03',ttl:'單人模式',one:'同一個 AI 輪流當領隊和隊員',back:['紙條 → v1 → 驗收（有退回才有 v2）','複製證據到原文按 Ctrl＋F 找','AI 說做完，不等於做完','研究判斷由團隊決定']},
-    {u:'u4',n:'04',ttl:'兩家接力',one:'手動接力由你傳棒，自動接力領隊自己叫',back:['手動：兩個桌面版開同一個資料夾','自動：兩家命令列工具都要登入','四道檢查：隊員 ·、新檔、還在跑嗎、git status','叫不起來就改單人']},
-    {u:'u5',n:'05',ttl:'到處用',one:'開工先拉、做完就推；手機遙控看進度',back:['GitHub 儲存庫選 Private','Private 不等於可以放受試者資料','推之前先看要推哪些檔','遙控時只核准看得懂的']}
+    {u:'u1',n:'01',ttl:'一個資料夾＝一個小隊',one:'規則和紙條寫成檔案，哪一家都讀得到',back:['AGENTS.md：小隊公約','CLAUDE.md：叫 Claude 去讀 AGENTS.md','inbox 放紙條，outbox 放成品','每一版都留，事後查得到']},
+    {u:'u2',n:'02',ttl:'三步建好小隊',one:'範本 → 自己的私人儲存庫 → 下載到電腦 → 桌面版打開',back:['Use this template，選 Private（範本頁 404 就停，問陳老師）','下載（clone）到 AI-workshop','打開 my-research-team 本身','報到：第一行「領隊 ·」，路徑最後一段是 my-research-team']},
+    {u:'u3',n:'03',ttl:'單人模式',one:'同一個 AI 輪流當領隊和隊員',back:['紙條 → v1 → 驗收（有退回才有 v2）','只複製「」裡的字，到原文按 Ctrl＋F 找','AI 說做完，不等於做完','研究判斷由團隊決定']},
+    {u:'u4',n:'04',ttl:'兩家接力',one:'手動接力由你傳棒，自動接力領隊自己叫',back:['手動：兩個桌面版開同一個資料夾，先說「這次用手動接力」','自動：兩家命令列工具都要登入','四道檢查：開頭是「隊員 ·」、outbox 有新檔、指令結束就不說還在做、只有 workspace 有變動','叫不起來就改單人']},
+    {u:'u5',n:'05',ttl:'到處用',one:'開工先拉、做完就推；手機遙控看進度',back:['GitHub 儲存庫選 Private','Private 不等於可以放受試者資料','推之前先看要推哪些檔','核准框：看得懂才同意（只這一次），看不懂就拒絕、再問']}
   ];
   var grid=document.getElementById('skills');
   CARDS.forEach(function(c){

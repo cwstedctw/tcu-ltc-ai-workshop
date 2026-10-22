@@ -233,6 +233,10 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
 /* 練習頁追加：數字的旅程、gnuplot 腳本逐行白話、原料與成品對照、練習卡、對照結果。顏色沿用系列的米色紙面＋深綠橫幅＋金色段名。 */
 .warnbox{background:var(--warn-soft);border-left:5px solid var(--warn);border-radius:8px;padding:.7rem 1rem;margin:1rem 0;font-size:.95rem}
 .warnbox b{color:var(--warn)}
+.gloss{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.2rem 1rem;margin:.6rem 0 1rem;font-size:.9rem}
+.gloss summary{cursor:pointer;font-weight:700;padding:.5rem 0}
+.gloss ul{margin:0 0 .6rem;padding-left:1.1rem}
+.gloss li{margin:.25rem 0}
 .prep{background:var(--card);border:2px solid var(--gold);border-radius:12px;padding:.8rem 1.1rem;margin:.6rem 0 1rem}
 .prep ol{margin:.4rem 0 0;padding-left:1.3rem}
 .prep li{margin:.35rem 0}
@@ -326,14 +330,29 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
 <header class="top wrap">
   <div class="eyebrow">慈濟大學長期照護研究所・AI 工作坊 2026-10-28・第三部分練習</div>
   <h1>數字由程式寫，圖由 gnuplot 畫</h1>
-  <p class="lede">用所長團隊 2021 年發表的論文當例子，看一個數字、一張圖，怎麼從資料走進論文。看懂之後，照第 04 段做六個練習：你只跟 AI 說話，大約 30 分鐘。第 07 段是研究模擬：只給資料和文獻，看 AI 十步寫完一篇論文。</p>
+  <p class="lede">用所長團隊 2021 年發表的論文當例子，看一個數字、一張圖，怎麼從資料走進論文。看懂之後，照第 04 段做六個練習：你主要是跟 AI 說話（另外自己開幾次 Excel 看檔），工具裝好之後大約 30 分鐘。第 07 段是研究模擬：只給資料和文獻，看 AI 十步寫完一篇論文。</p>
   <div class="meta">
     <span>例子：Su、Koo、Lee、Sung、Lee、Liu（2021），<a href="https://doi.org/10.1186/s12877-021-02075-3" target="_blank" rel="noopener"><i>BMC Geriatrics</i> 21:126</a></span>
-    <span>140 位居服員，兩組，DKAS／ADQ／SCIDS 三個時間點</span>
+    <span>140 位居服員分兩組：介入組（行動學習＋輔導支持）、對照組（8 小時課堂講授）；三個量表 DKAS／ADQ／SCIDS，各在前測、第 12 週、第 24 週測一次</span>
   </div>
-  <div class="warnbox"><b>練習資料不是原始資料。</b>論文沒有公開原始資料，範本裡的 140 筆是依論文表 1、表 2 重建的：平均、標準差、檢定結果對得上論文，每個人的分數是假的，不能拿來下研究結論。</div>
+  <div class="warnbox"><b>練習資料不是原始資料。</b>原論文沒有公開原始資料，範本裡的 140 筆是依論文表 1、表 2 重建的：平均和標準差四捨五入後跟原論文一樣，表 1、表 2 的 p 值相同，效果量最多差 0.01；每個人的分數是假的，不能拿來下研究結論。</div>
+  <details class="gloss" open><summary>這頁會一直看到的詞（點一下可以收起來）</summary>
+    <ul>
+      <li><b>原論文／範例論文</b>：<b>原論文</b>是 2021 年發表在 <i>BMC Geriatrics</i> 的那篇；<b>範例論文</b>是範本裡用重建的練習資料重算、重寫的版本（<code>output/main.pdf</code>，9 頁），只拿來練習，不能投稿。</li>
+      <li><b>build</b>：一個指令（<code>uv run build.py</code>），把資料算成數字、表、圖，再排成 PDF。你不用自己打，跟 AI 說「跑一次 build」就好。最後一行是 <code>BUILD OK</code> 就是成功，<code>BUILD FAILED</code> 就是停在某一步，它會說哪裡要改。</li>
+      <li><b>代號</b>：給一個數字取的英文名字。例如 <code>DKASIntTOneMean</code> 代表「介入組（Int）第 12 週（TOne）DKAS 的平均（Mean）」。論文裡寫代號，排版時換成數字；資料一改，數字跟著改。</li>
+      <li><b>CSV</b>：Excel 打得開的表格檔，一列一筆、用逗號分欄。</li>
+      <li><b>LaTeX</b>：學術論文常用的排版工具。你只要看它排出來的 PDF。</li>
+      <li><b>gnuplot</b>：畫圖的程式，照一支小腳本（<code>.gp</code> 檔）把小表畫成圖。</li>
+      <li><b>DKAS／ADQ／SCIDS</b>：範例研究的三個量表：失智症知識（DKAS，0–50 分）、失智症態度（ADQ，19–95 分）、失智照護能力感（SCIDS，17–68 分）。</li>
+      <li><b>p 值</b>：假如兩組其實沒有差別，還會看到這麼大差距的機率。越小，越不像碰巧。</li>
+      <li><b>效果量（Cohen's d）</b>：兩組差多少，用「差了幾個標準差」來表示。大約 0.2 算小、0.5 算中、0.8 以上算大。</li>
+      <li><b>存一版（commit）／推上去（push）</b>：存一版＝在自己電腦記下資料夾這一刻的樣子，之後能回到這裡；推上去＝把存好的版本放到 GitHub。</li>
+      <li><b>Private（私人）</b>：GitHub 上只有你和你邀請的人看得到。<b>Private 不代表研究資料可以放上去</b>（看主頁第 07 段的四個條件）。</li>
+    </ul>
+  </details>
   <div class="tools">
-    <button class="chip" id="projBtn" type="button" aria-pressed="false">投影大字</button>
+    <button class="chip" id="projBtn" type="button" aria-pressed="false">字放大</button>
     <a class="chip" href="#do">直接去做練習 ↓</a>
   </div>
 </header>
@@ -341,7 +360,8 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
 <div class="band" id="b1"><div class="wrap"><div class="tag">01・一個數字的旅程</div><p class="big">追得到</p><p class="sub">論文裡的 37.04，是從哪裡來的</p></div></div>
 <main>
 <section class="blk wrap" id="number">
-  <p>用 Word 寫論文，數字是從統計軟體抄進去的。這條流程裡，<b>論文沒有一個結果數字是手打的</b>：程式算好、取一個名字（代號），論文裡只寫代號，排版時才換成數字。下面跟著「介入組第 12 週的知識分數平均」走一次。</p>
+  <p>用 Word 寫論文，數字是從統計軟體抄進去的。這條流程裡，<b>論文沒有一個結果數字是手打的</b>：程式算好、取一個名字（代號），論文裡只寫代號；等 build 把論文排成 PDF 時，才換成數字。下面跟著「介入組第 12 週的 DKAS 知識分數平均」走一次。</p>
+  <p class="why">I048 是練習資料裡一位虛構居服員的編號，分數偏低。按下面的「排除 I048」，可以先看看練習 4 會發生什麼。</p>
   <div class="togglebar" role="group" aria-label="切換資料">
     <span class="lbl">資料：</span>
     <button class="chip" type="button" data-mode="all" aria-pressed="true">全部 140 人</button>
@@ -352,7 +372,7 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
       <div class="rail"><div class="dot">1</div></div>
       <div class="body">
         <div class="where"><span class="path">source/data/study_data.csv</span><span class="kind src">原料</span></div>
-        <p class="what">一列一個人。<code>dkas_t1</code> 是第 12 週的知識分數（0–50）。程式只讀這個檔，不改它。</p>
+        <p class="what">一列一個人。真的檔案有 19 欄、用逗號分欄，這裡只挑 3 欄、用空白對齊方便看。<code>dkas_t1</code> 是第 12 週的 DKAS 知識分數（0–50 分；t0＝前測、t1＝第 12 週、t2＝第 24 週）。程式只讀這個檔，不改它。</p>
         <div class="snip">id    group         dkas_t1
 I001  intervention  37
 I002  intervention  44
@@ -366,74 +386,86 @@ I003  intervention  43
       <div class="rail"><div class="dot">2</div></div>
       <div class="body">
         <div class="where"><span class="path">source/scripts/analyze.py</span><span class="kind src">原料（程式）</span></div>
-        <p class="what">分析程式算介入組 <code>dkas_t1</code> 的平均，照 SPSS、Excel 的方式四捨五入到小數兩位，再給這個數字取名叫 <code>DKASIntTOneMean</code>（DKAS、介入組 Int、第 12 週 TOne、平均 Mean）。</p>
-        <div class="snip"><span class="dim"># 排除名單：老師決定，寫在程式最上面</span>
+        <p class="what">分析程式算介入組 <code>dkas_t1</code> 的平均，四捨五入到小數兩位，再給這個數字取名叫 <code>DKASIntTOneMean</code>（DKAS、介入組 Int、第 12 週 TOne、平均 Mean；代號裡不能有阿拉伯數字，所以 t1 寫成 TOne）。片段裡 <code>#</code> 後面的灰字是說明，程式不會執行。</p>
+        <div class="snip"><span class="dim"># 排除名單：老師決定，寫在程式最上面（第 33 行）。[] 是空的＝一個都不排除</span>
 EXCLUDE_IDS = <span class="hl" data-k="excl">[]</span>
-<span class="dim"># 每個量表、每一組、每個時間點，都算平均並取名</span>
-macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
+
+<span class="dim">…（中間省略一百多行）…</span>
+
+<span class="dim"># 下面兩行是「展開示意」：程式算到「DKAS、介入組、第 12 週」時做的事</span>
+s = grp["intervention"]["dkas_t1"]
+<span class="dim">#   拿出介入組 <span class="hl" data-k="nint">70</span> 人的 dkas_t1 分數，暫時叫它 s</span>
+macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
+<span class="dim">#   等號左邊是名字：DKASIntTOneMean（macros 是放所有代號的清單）</span>
+<span class="dim">#   等號右邊是數字：s.mean() 算平均，fmt(…, 2) 四捨五入到小數 2 位 → <span class="hl" data-k="mean">37.04</span></span>
+<span class="dim">#   這一行的意思：把右邊算出來的數字，取名叫左邊的名字</span></div>
+        <p class="why">實際的 analyze.py 裡沒有這樣的兩行：3 個量表 × 2 組 × 3 個時間點，共 18 個平均，是同一段程式輪流算出來的，名字照「量表＋組別＋時間＋Mean」自動組起來。你不用自己打開 analyze.py：練習 3 問 AI，它會指出是哪一行（實跑時是第 211 行），那一行旁邊的中文註解就寫著 DKASIntTOneMean 這個例子。</p>
       </div>
     </li>
     <li class="stop out">
       <div class="rail"><div class="dot">3</div></div>
       <div class="body">
         <div class="where"><span class="path">output/numbers.tex</span><span class="kind out">成品</span></div>
-        <p class="what">程式把每個數字寫成一行：代號＝數字。這個檔每次 build 都重做，不要手改。</p>
+        <p class="what">程式把每個數字寫成一行，格式是 <code>\newcommand{\代號}{數字}</code>：第一對大括號放名字（前面多一條反斜線 \），第二對放數字。所以第二行讀成「DKASIntTOneMean 代表 <span data-k="mean">37.04</span>」。這個檔每次跑 build 都會重新產生，不要手改。</p>
         <div class="snip">\newcommand{\NTotal}{<span class="hl" data-k="n">140</span>}
 \newcommand{\DKASIntTOneMean}{<span class="hl" data-k="mean">37.04</span>}
 \newcommand{\DKASTOneD}{<span class="hl" data-k="d">0.92</span>}</div>
+        <p class="why">整個檔有 75 行這樣的代號，這裡挑 3 行：NTotal＝總人數；DKASIntTOneMean＝介入組第 12 週 DKAS 平均；DKASTOneD＝DKAS 第 12 週的效果量 d。</p>
       </div>
     </li>
     <li class="stop">
       <div class="rail"><div class="dot">4</div></div>
       <div class="body">
         <div class="where"><span class="path">source/paper/main.tex</span><span class="kind src">原料（論文本文）</span></div>
-        <p class="what">論文本文裡寫的是<b>代號</b>，不是數字。換資料時，這一句一個字都不用改。</p>
-        <div class="snip prose">At week 12, DKAS scores were <span class="hl">\DKASIntTOneMean{}</span> in the intervention group and \DKASCtlTOneMean{} in the control group (\DKASTOnePstat{})…</div>
+        <p class="what">論文本文裡寫的是<b>代號</b>，不是數字：反斜線 \ 開頭、後面接 {} 的就是代號。這句有三個：\DKASIntTOneMean{}（介入組平均）、\DKASCtlTOneMean{}（對照組平均）、\DKASTOnePstat{}（p 值）。數字變了，這一句不用重打。</p>
+        <div class="snip prose">At week 12, DKAS scores were <span class="hl">\DKASIntTOneMean{}</span> in the intervention group and <span class="hl">\DKASCtlTOneMean{}</span> in the control group (<span class="hl">\DKASTOnePstat{}</span>)…</div>
       </div>
     </li>
     <li class="stop out">
       <div class="rail"><div class="dot">5</div></div>
       <div class="body">
         <div class="where"><span class="path">output/main.pdf</span><span class="kind out">成品</span></div>
-        <p class="what">排版時，LaTeX 把代號換成 <code>numbers.tex</code> 裡的數字。你看到的論文長這樣：</p>
-        <div class="snip prose">At week 12, DKAS scores were <span class="hl" data-k="mean">37.04</span> in the intervention group and 30.43 in the control group (<i>p</i> &lt; 0.001)…</div>
+        <p class="what">排成 PDF 時，LaTeX 把三個代號換成 <code>numbers.tex</code> 裡的數字。你看到的論文長這樣：</p>
+        <div class="snip prose">At week 12, DKAS scores were <span class="hl" data-k="mean">37.04</span> in the intervention group and <span class="hl">30.43</span> in the control group (<span class="hl"><i>p</i> &lt; 0.001</span>)…</div>
+        <p class="why">中文意思：第 12 週時，DKAS 分數介入組平均是 <span data-k="mean">37.04</span>，對照組是 30.43（p &lt; 0.001）。</p>
       </div>
     </li>
   </ol>
   <div class="changed" id="changed" aria-live="polite">
     <h3 id="changedTitle">按上面的「排除 I048」，看哪些數字一起變</h3>
-    <ul id="changedList"><li class="same">現在用的是全部 140 人，數字跟論文對得上。</li></ul>
+    <ul id="changedList"><li class="same">現在用的是全部 140 人，數字跟原論文對得上。</li></ul>
   </div>
-  <p class="why">數字會自動更新，<b>句子的解讀不會</b>。例如排除一個人之後，Discussion 裡「結果跟論文對得上」那句就不再成立：數字變了，用到它的句子要你重讀一次。</p>
+  <p class="why">數字會自動更新，<b>句子的解讀不會</b>。例如排除一個人之後，摘要、Methods 和表 2 的說明裡「數字跟原論文相符」的說法就不再成立（練習 4 的 AI 會把這些句子列出來）：數字變了，用到它的句子要你重讀一次。</p>
 </section>
 
 <div class="band" id="b2"><div class="wrap"><div class="tag">02・一張圖的旅程</div><p class="big">畫得出</p><p class="sub">程式做小表，gnuplot 照表畫圖</p></div></div>
 <section class="blk wrap" id="figure">
-  <p>圖也一樣不是手畫的。分析程式先把畫圖要的數字整理成一張小表，gnuplot 腳本讀這張表、照腳本的指示畫出來。資料變了，表跟著變，圖也跟著重畫。</p>
+  <p>圖也一樣不是手畫的。分析程式先把畫圖要的數字整理成一張小表；gnuplot 讀這張小表，照腳本（<code>.gp</code> 檔，一份用文字寫的畫圖指令）畫出來。資料變了，表跟著變，圖也跟著重畫。</p>
   <h3 class="app">① 小表 <small><span class="path">output/figdata/fig1_dkas.csv</span>（Excel 打得開）</small></h3>
   <div class="tablewrap"><table class="mini" aria-label="圖 1 DKAS 小圖用的資料表">
-    <thead><tr><th>time</th><th>int_mean</th><th>int_sd</th><th>ctl_mean</th><th>ctl_sd</th></tr></thead>
+    <thead><tr><th>time<br><small>第幾次測量</small></th><th>int_mean<br><small>介入組平均</small></th><th>int_sd<br><small>介入組標準差</small></th><th>ctl_mean<br><small>對照組平均</small></th><th>ctl_sd<br><small>對照組標準差</small></th></tr></thead>
     <tbody>
       <tr><td>0（前測）</td><td><span class="hl" data-k="f0m">26.686</span></td><td><span class="hl" data-k="f0s">6.719</span></td><td>25.543</td><td>8.140</td></tr>
       <tr><td>1（第 12 週）</td><td><span class="hl" data-k="f1m">37.043</span></td><td><span class="hl" data-k="f1s">7.930</span></td><td>30.429</td><td>6.439</td></tr>
       <tr><td>2（第 24 週）</td><td><span class="hl" data-k="f2m">36.200</span></td><td><span class="hl" data-k="f2s">5.550</span></td><td>29.943</td><td>7.539</td></tr>
     </tbody>
   </table></div>
-  <p class="note">int＝介入組、ctl＝對照組；mean＝平均、sd＝標準差。這張小表跟著第 01 段的「資料」切換一起變。</p>
+  <p class="note">表頭第一行是檔案裡真的欄名，第二行的中文是這頁加的；time 欄在檔案裡也只寫 0、1、2，括號裡的中文同樣是這頁加的。小表多留一位小數（37.043）給畫圖用，論文內文印兩位（37.04）。用 Excel 打開時，結尾的 0 會被省略，例如 8.140 顯示成 8.14。這張小表跟著第 01 段的「資料」切換一起變：I048 在介入組，所以只有介入組的數字會動。</p>
 
   <h3 class="app">② 腳本 <small><span class="path">source/gnuplot/fig1_outcomes.gp</span>：每一行在做什麼</small></h3>
   <div class="annot">
-    <div class="aline"><code>set terminal cairolatex pdf size 12cm,6cm</code><span>畫成 12 公分寬（論文版面的寬度）。圖上的字交給 LaTeX 排，跟內文同一套字型；放大也不會糊。</span></div>
-    <div class="aline"><code>set output 'figures/fig1.tex'</code><span>畫好存到 <code>output/figures/</code>。Word 版另外存一份 PNG。</span></div>
+    <div class="aline"><code>set terminal cairolatex pdf size 12cm,6cm</code><span>畫成 12 公分寬、6 公分高（12 公分是論文版面的寬度）。cairolatex 是一種存法：線條存成 PDF，圖上的字留給 LaTeX 排，所以跟內文同一套字型，放大也不會糊。</span></div>
+    <div class="aline"><code>set output 'figures/fig1.tex'</code><span>畫好存到 <code>output/figures/</code>：build 是在 output 資料夾裡叫 gnuplot 畫圖，所以腳本裡寫 figures/ 就是 output/figures/（下面的 figdata/ 也一樣）。會存成兩個檔：fig1.pdf 是線條，fig1.tex 是圖上的字。Word 版另外畫一份 PNG 圖片。</span></div>
     <div class="aline"><code>set datafile separator comma</code><span>小表是 CSV，用逗號分欄。</span></div>
-    <div class="aline"><code>set style line 1 lc rgb '#0072B2' lw 2 pt 7</code><span>介入組：藍色實線、圓點。藍和橘是色盲也分得出來的配色。</span></div>
-    <div class="aline"><code>set xtics ('0' 0, '12' 1, '24' 2)</code><span>橫軸的三個點標成第 0、12、24 週。</span></div>
-    <div class="aline"><code>set autoscale y</code><span>縱軸範圍跟著資料走。換資料不會把點切掉。</span></div>
-    <div class="aline"><code>set multiplot layout 1,3</code><span>一張圖裡並排三張小圖：DKAS、ADQ、SCIDS。</span></div>
-    <div class="aline"><code>plot 'figdata/fig1_dkas.csv' every ::1 using ($1-0.04):2:3 with yerrorlines ls 1</code><span>讀小表，跳過第一列欄名；第 1 欄當橫軸，第 2 欄（平均）當縱軸，第 3 欄（標準差）畫成誤差線。</span></div>
-    <div class="aline"><code>''  every ::1 using ($1+0.04):4:5 with yerrorlines ls 2</code><span>同一張表的第 4、5 欄是對照組；往右挪一點，兩組的誤差線才不會疊在一起。</span></div>
+    <div class="aline"><code>set style line 1 lc rgb '#0072B2' lw 2 pt 7 ps 0.8</code><span>第 1 種線＝介入組：lc 是顏色（#0072B2＝藍），lw 2 是線的粗細，pt 7 是點的形狀（實心圓），ps 0.8 是點的大小。</span></div>
+    <div class="aline"><code>set style line 2 lc rgb '#D55E00' lw 2 pt 5 ps 0.8 dt 2</code><span>第 2 種線＝對照組：橘色（#D55E00）、實心方塊，dt 2 是虛線。藍和橘是色盲也分得出來的配色。</span></div>
+    <div class="aline"><code>set xtics ('0' 0, '12' 1, '24' 2)</code><span>小表 time 欄的 0、1、2，在橫軸上標成 0、12、24（週）。</span></div>
+    <div class="aline"><code>set autoscale y</code><span>縱軸範圍跟著資料走。改圖之後，還是要打開 PDF 看點和誤差線有沒有被切掉。</span></div>
+    <div class="aline"><code>set multiplot layout 1,3</code><span>1,3＝排成 1 列 3 欄：一張圖裡並排三張小圖 DKAS、ADQ、SCIDS（原檔這一行後面還有邊界設定，這裡省略）。</span></div>
+    <div class="aline"><code>plot 'figdata/fig1_dkas.csv' every ::1 using ($1-0.04):2:3 with yerrorlines ls 1</code><span>讀小表 fig1_dkas.csv；every ::1＝跳過第一列欄名。using 後面的數字是「第幾欄」：第 1 欄（time）稍微往左挪（-0.04）當橫軸位置，第 2 欄（平均）是點的高度，第 3 欄（標準差）畫成點上下的誤差線。ls 1＝用上面定好的第 1 種線（藍色）。</span></div>
+    <div class="aline"><code>''  every ::1 using ($1+0.04):4:5 with yerrorlines ls 2</code><span>'' ＝同一個檔。第 4、5 欄是對照組的平均和標準差，往右挪一點（+0.04），兩組的誤差線才不會疊在一起；ls 2＝第 2 種線（橘色虛線）。</span></div>
   </div>
-  <p class="note">這些你不用背，也不用自己寫：跟 AI 說要什麼圖，它會改腳本。看得懂每一行在做什麼，就能檢查它改得對不對。</p>
+  <p class="note">這些你不用背，也不用自己寫：跟 AI 說要什麼圖，它會改腳本。檢查時看 PDF 的圖：點跟小表的數字對不對、有沒有被切掉。看懂這幾行，是讓你知道圖的顏色、大小、畫法都寫在這份檔裡，想改就跟 AI 說。</p>
 
   <h3 class="app">③ 畫出來的圖 <small><span class="path">output/figures/fig1</span></small></h3>
   <div class="togglebar" role="group" aria-label="切換圖的畫法">
@@ -443,68 +475,105 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
   </div>
   <div class="figswap">
     <img id="figImg" src="img/practice/fig1-line.png" alt="圖 1：兩組在三個時間點的 DKAS、ADQ、SCIDS 平均與標準差，折線圖" width="1500" height="560">
-    <p class="cap" id="figCap">同一張小表，用折線畫。藍色實線是介入組，橘色虛線是對照組；誤差線是標準差。</p>
+    <p class="cap" id="figCap">最左邊的 DKAS 小圖，就是上面那張小表畫的（ADQ、SCIDS 各有自己的小表）。藍色實線是介入組（Intervention），橘色虛線是對照組（Control）；每個點上下的直線是誤差線：往上、往下各是一個標準差。橫軸 Week＝第幾週，縱軸 Mean score (SD)＝平均分數（標準差）。</p>
   </div>
 </section>
 
 <div class="band" id="b3"><div class="wrap"><div class="tag">03・資料夾怎麼分</div><p class="big">分得開</p><p class="sub">原料放 source，成品在 output</p></div></div>
 <section class="blk wrap" id="folders">
+  <p><b>一句話：你和 AI 只改 <code>source/</code>（原料）；跑一次 build，程式把成品全部重做到 <code>output/</code>；你看 <code>output/main.pdf</code>。</b></p>
   <div class="split">
     <div class="side src">
       <h3>source/ <span class="kind src">原料：要改，就改這裡</span></h3>
       <dl>
-        <dt>data/</dt><dd>研究資料（CSV）。你放，AI 只讀</dd>
-        <dt>refs/</dt><dd>書目 refs.bib，Zotero 自動匯出</dd>
-        <dt>scripts/</dt><dd>分析程式 analyze.py，AI 改</dd>
-        <dt>gnuplot/</dt><dd>畫圖腳本，一張圖一個，AI 改</dd>
-        <dt>paper/</dt><dd>論文本文 main.tex，AI 寫</dd>
+        <dt>data/</dt><dd>研究資料（CSV）。你放，AI 只讀。範例：<code>study_data.csv</code>（140 人）、<code>published_values.csv</code>（原論文的數字）</dd>
+        <dt>refs/</dt><dd>書目 <code>refs.bib</code>，從 Zotero（管文獻的軟體）匯出</dd>
+        <dt>scripts/</dt><dd>分析程式 <code>analyze.py</code>：算數字、做表、做畫圖用的小表。AI 改</dd>
+        <dt>gnuplot/</dt><dd>畫圖腳本，一張圖一支：<code>fig1_outcomes.gp</code>、<code>fig2_effects.gp</code>。AI 改</dd>
+        <dt>tables/</dt><dd>（選用）你用 Excel 做好的表，存成 CSV UTF-8</dd>
+        <dt>figdata/</dt><dd>（選用）你用 Excel 做好的畫圖資料，存成 CSV UTF-8</dd>
+        <dt>paper/</dt><dd>論文本文 <code>main.tex</code>，AI 寫</dd>
       </dl>
     </div>
     <div class="mid"><span class="big2">→</span><span>跑一次<br>build</span></div>
     <div class="side out">
       <h3>output/ <span class="kind out">成品：不要手改</span></h3>
       <dl>
-        <dt>numbers.tex</dt><dd>內文數字，一個數字一個代號</dd>
-        <dt>tables/</dt><dd>表：.tex 進 PDF，.csv 給 Excel</dd>
-        <dt>figdata/</dt><dd>畫圖用的小表（CSV）</dd>
-        <dt>figures/</dt><dd>gnuplot 畫好的圖</dd>
+        <dt>numbers.tex</dt><dd>內文數字，一行一個「名字＝數字」</dd>
+        <dt>tables/</dt><dd>表：<code>table1.tex</code> 放進 PDF，<code>table1.csv</code> 用 Excel 核對</dd>
+        <dt>figdata/</dt><dd>畫圖用的小表：<code>fig1_dkas.csv</code>…</dd>
+        <dt>figures/</dt><dd>畫好的圖：<code>fig1.tex</code>＋<code>fig1.pdf</code>…</dd>
         <dt>main.pdf</dt><dd><b>論文：你要看的就是這個</b></dd>
+        <dt>latex-log/</dt><dd>排版過程的紀錄，出錯時才看</dd>
       </dl>
     </div>
   </div>
   <p class="rule">要改結果，改 source；output 不用顧，跟 AI 說「再跑一次 build」就會重新長出來。</p>
-  <p class="why">為什麼要分開：原料是你的研究，要好好保存；成品隨時能重做，所以不推上 GitHub，也不怕被改壞。真的研究資料能不能交給 AI、能不能推上 GitHub，先照主頁第 07 段〈研究倫理〉的四個條件確認；Private 本身不代表可以上傳。核對數字時，用 Excel 打開 <code>output/tables</code> 資料夾裡的 .csv 檔就好；看完關掉時按「不要儲存」。</p>
+  <p class="why">資料夾第一層還有：<code>README.md</code>（給你看的說明）、<code>AGENTS.md</code>／<code>WORKFLOW.md</code>（給 AI 看的規則和流程）、<code>build.py</code>（一個指令跑完整條流程）、<code>material/</code>（你的計畫書、投稿須知，AI 只讀）、<code>workspace/</code>（AI 的工作紀錄，想知道它做了什麼就看這裡）、<code>tools/</code>（小工具，AI 執行）。</p>
+  <p class="why">為什麼要分開：原料是你的研究，要好好保存；成品隨時能重做，被改壞了只要再跑一次 build，所以成品不推上 GitHub。真的研究資料能不能交給 AI、能不能推上 GitHub，先照主頁第 07 段〈研究倫理〉的四個條件確認；Private 本身不代表可以上傳。</p>
+  <p class="why">核對數字時，用 Excel 打開 <code>output/tables</code> 資料夾裡的 .csv 檔就好；看完關掉時按「不要儲存」。下次跑 build 之前要關掉，Excel 開著，build 會失敗。</p>
+
+  <h3 class="app">一個數字、一張表、一張圖：各要三樣東西</h3>
+  <p>論文裡每一個結果都是同一個公式：<b>① 原料（資料）＋ ② 做法（程式或腳本）→ ③ 成品（LaTeX 用的檔）</b>，論文本文再把成品放進來。</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>要做的</th><th>① 原料</th><th>② 做法</th><th>③ 成品</th></tr></thead>
+    <tbody>
+      <tr><td><b>一個數字</b></td><td><code>source/data/study_data.csv</code> 的 <code>dkas_t1</code> 欄</td><td><code>analyze.py</code> 算介入組平均、取名字</td><td><code>output/numbers.tex</code> 的一行：<code>\newcommand{\DKASIntTOneMean}{37.04}</code>（意思是 DKASIntTOneMean＝37.04）</td></tr>
+      <tr><td><b>一張表</b>（程式算的）</td><td><code>source/data/study_data.csv</code></td><td><code>analyze.py</code> 算好、排成表</td><td><code>output/tables/table2.tex</code>（另有 <code>table2.csv</code> 給 Excel 看）</td></tr>
+      <tr><td><b>一張表</b>（你用 Excel 做的）</td><td><code>source/tables/my_table.csv</code></td><td><code>build.py</code> 自動轉成表格</td><td><code>output/tables/my_table.tex</code></td></tr>
+      <tr><td><b>一張圖</b>（程式算的資料）</td><td><code>output/figdata/fig1_dkas.csv</code>（<code>analyze.py</code> 產生）</td><td><code>source/gnuplot/fig1_outcomes.gp</code> 照小表畫</td><td><code>output/figures/fig1.tex</code>＋<code>fig1.pdf</code></td></tr>
+      <tr><td><b>一張圖</b>（你用 Excel 做的資料）</td><td><code>source/figdata/my_data.csv</code></td><td>一支新的 <code>.gp</code> 腳本（請 AI 寫）</td><td><code>output/figures/fig3.tex</code>＋<code>fig3.pdf</code></td></tr>
+    </tbody>
+  </table></div>
+  <p class="why">成品怎麼放進論文（<code>\input{tables/table2.tex}</code> 這種），AI 會寫進 <code>main.tex</code>，你不用自己打。你要記得的是 ①：資料放對地方，其他交給 AI 和 build。</p>
+
+  <h3 class="app">想放一張自己在 Excel 做好的表</h3>
+  <ol class="why">
+    <li>在 Excel 做表：<b>第一列是欄名</b>，下面一列一筆，不要合併儲存格。</li>
+    <li>「另存新檔」→ 存檔類型選「<b>CSV UTF-8（逗號分隔）</b>」，檔名用英文（例如 <code>my_table.csv</code>），存進 <code>source/tables/</code>（沒有這個資料夾就新建一個）。</li>
+    <li>跟 AI 說：「我在 source/tables/ 放了 my_table.csv，請把它放進論文的 Results，表標題寫＿＿，內文提到它，跑一次 build。」</li>
+    <li>你會看到：build 印出「my_table.csv → output/tables/my_table.tex」，最後一行 BUILD OK，PDF 多了這張表。表裡有中文，build 會停下來說要改用 xelatex，跟 AI 說「照 build 說的改」就好。要改內容：改 Excel、重存、再跑一次 build。</li>
+  </ol>
+  <h3 class="app">想用 Excel 的資料畫一張圖</h3>
+  <ol class="why">
+    <li>在 Excel 做好資料：第一列是欄名（例如 month、intervention、control），下面一列一個點。</li>
+    <li>另存成「CSV UTF-8」，檔名用英文（例如 <code>my_data.csv</code>），存進 <code>source/figdata/</code>。</li>
+    <li>跟 AI 說：「我在 source/figdata/ 放了 my_data.csv，第一欄是＿＿、第二欄是＿＿。請照 WORKFLOW.md 第 4 步寫一支 gnuplot 腳本畫成＿＿圖，放進論文的 Results，跑一次 build。」</li>
+    <li>你會看到：<code>source/gnuplot/</code> 多一支 <code>.gp</code>，PDF 多一張圖。打開 PDF 看：點和線沒有被切掉，數字跟你的 Excel 一樣。</li>
+  </ol>
+  <p class="note">表的數字是你手打進 Excel 的，不會跟著資料自動更新；程式算的表才會。2026-10-22 實測：照上面做，PDF 和 Word 版都有這張表和這張圖。</p>
 </section>
 
-<div class="band" id="do"><div class="wrap"><div class="tag">04・六個練習</div><p class="big">動手做</p><p class="sub">你只跟 AI 說話，大約 30 分鐘</p></div></div>
+<div class="band" id="do"><div class="wrap"><div class="tag">04・六個練習</div><p class="big">動手做</p><p class="sub">你主要跟 AI 說話，大約 30 分鐘</p></div></div>
 <section class="blk wrap" id="exercises">
   <div class="prep"><b>開始前（回家自己做也照這張）</b>
     <ol>
-      <li><b>範本資料夾已經在電腦裡</b>（資料夾名稱 <code>ai-paper-kit</code>；範本從哪裡拿，當天講師會說）。還沒有的話，照<a href="part3.html">第三部分主頁</a>第 04 段第 1 步。</li>
+      <li><b>範本資料夾已經在電腦裡</b>（資料夾名稱 <code>ai-paper-kit</code>）。還沒有的話，照<a href="part3.html">第三部分主頁</a>第 04 段第 1 步，從範本 github.com/cwstedctw/ai-paper-kit 建一份。已經照主頁第 04 段第 4 步開了自己的論文的：範例已經收進 examples/，練習的數字會對不上，先停下來回信問陳老師。</li>
       <li><b>工具裝好了</b>：照主頁第 03 段那句話請 AI 幫你裝，AI 列出四個版本號、沒有「找不到」才算。</li>
-      <li><b>打開「看得到你電腦資料夾」的那一面 AI</b>：ChatGPT 桌面版裡的 Codex，或 Claude 桌面版裡的 Code（第一部分設定課教過；網頁上的一般對話看不到你電腦裡的資料夾）。權限照第一部分設定：Codex 選「要求核准」，Claude 的 Code 選 Manual。</li>
-      <li><b>範本是用 ZIP 下載解壓縮的</b>：報到之前先跟 AI 說「請先檢查這台電腦有沒有 git；有的話幫這個資料夾存一版（commit），存好告訴我」。存好了才做下面的報到。用 git 下載（clone）的不用做這步。</li>
+      <li><b>打開能讀你電腦資料夾的 AI</b>：ChatGPT 桌面版裡的 Codex，或 Claude 桌面版裡的 Code（網頁上的一般對話看不到你電腦裡的資料夾）。照行前準備第 6 項的方法，這次改選 <code>ai-paper-kit</code> 資料夾。權限照行前準備第 7 項：Codex 選「要求核准」（英文介面 Ask for approval），Claude 的 Code 選 Manual。</li>
     </ol>
   </div>
-  <div class="ask"><b>AI 問你「可不可以」的時候</b>　權限設成「要求核准」，AI 每次要跑程式或改檔都會先跳出確認（常是英文）。跑 build、改 analyze.py、改 .gp、改 main.tex：這些是練習本來就要做的，按同意。要刪檔、裝東西、動 <code>source/data/</code>、上網：先別按，問它「這一步在做什麼」。一個練習可能會問好幾次，正常。</div>
-  <p>下面是報到加六個練習再加收尾，共 8 步。每一步有三種標籤：<b>「你自己做」</b>是你動手的，<b>「跟 AI 說」</b>的框按「複製」貼給 AI，<b>「你會看到」</b>是做對時會出現的結果。做完打勾，進度只存在這台電腦的瀏覽器裡。想先看別人做一次，看第 05 段。</p>
+  <div class="ask"><b>AI 什麼時候會問你「可不可以」</b>　Codex 設成「要求核准」：在 ai-paper-kit 資料夾裡，它會直接改檔、跑程式；要動資料夾以外的檔案、上網或裝東西，才會先問你。Claude 的 Code 設成 Manual：改檔、跑指令前都會先問你，只是讀檔案不會問。<br><b>跳出要你核准的框（常是英文）時</b>：看得懂、是你剛請它做的事，就按同意（只同意這一次）。這頁的例子：框裡出現 <code>uv run build.py</code>（跑 build），或 analyze.py、.gp、main.tex 這幾個檔名；練習 3 它自己寫一小段程式重算核對；收尾的 <code>git restore</code>（還原）。看不懂，就按拒絕，拒絕不會弄壞東西；再問它「這一步要做什麼、為什麼要做」，或截圖問網頁版。從 GitHub 下載（clone）的資料夾，報到時 AI 可能先要 <code>git pull</code>（把 GitHub 上的新版拿下來），這會上網、可能跳框：框裡是 <code>git pull</code>，按同意（只同意這一次）就好。除此之外，框裡寫著刪檔、裝東西、動 <code>source/data/</code> 或上網：練習用不到這些，也是按拒絕，再問它。不管有沒有跳框，每一步做完都照「你會看到」看結果，這才是你真正的把關。</div>
+  <p>下面是報到加六個練習再加收尾，共 8 步。每一步有三種標籤：<b>「你自己做」</b>是你動手的，<b>「跟 AI 說」</b>的框按「複製」，貼到 Codex 或 Claude 的輸入框送出，<b>「你會看到」</b>是做對時會出現的結果。做完打勾，進度只存在這台電腦的瀏覽器裡。想先看別人做一次，看第 05 段。</p>
   <div class="progress" aria-live="polite"><span id="exProg">已完成 0 / 8</span><div class="bar"><span id="exBar"></span></div><button class="chip" id="exReset" type="button">全部重來</button></div>
   <ol class="exs" id="exList"></ol>
 </section>
 
 <div class="band" id="walk"><div class="wrap"><div class="tag">05・看一位老師走一遍</div><p class="big">看得到</p><p class="sub">句子一字不改貼給 AI，它真的回了什麼</p></div></div>
 <section class="blk wrap" id="walkthrough">
-  <p>2026-10-22，我們用「不會寫程式、只用過 LINE 和 Word」的老師視角，把第 04 段的句子<b>一字不改</b>貼給 AI，從頭做到尾（報到那句後來加了「先確認 source/」，那一步另外實跑了一次；當時跑 build 的句子寫的是 python build.py，範本改用 uv 之後換成 uv run build.py，AI 回覆的內容一樣）。下面是 AI 真正回的話（摘錄；資料夾路徑用「…」代替）和每一步的白話說明。環境是 Windows、Codex 桌面版內附的 Codex，同一段對話做到底；9 次回覆 AI 一共花了大約 7 分半鐘。為了把過程自動錄下來，實跑時 AI 用的是「不問、直接做」的設定，所以紀錄裡看不到「可不可以」的確認；你的 AI 設成「要求核准」，會多跳出這些確認。這是當次的紀錄，AI 下次的說法、行號可能不一樣，照每一步「你要檢查」核對就好。（上一版的句子也用 Claude 做過一次，每一步一樣 BUILD OK。）</p>
+  <p>2026-10-22，我們用「不會寫程式、只用過 LINE 和 Word」的老師視角，把第 04 段的句子<b>一字不改</b>貼給 AI，從頭做到尾。環境是 Windows、ChatGPT 桌面版裡的 Codex，同一段對話做到底；9 次回覆，AI 處理的時間加起來大約 7 分半鐘（不含看 PDF、開 Excel 的時間）。</p>
+  <p>下面是 AI 真正回的話（摘錄，資料夾路徑用「…」代替），每張卡後面附白話說明。實跑時為了自動錄下過程，AI 設成「不問、直接做」，所以紀錄裡看不到「可不可以」的確認；你用 Claude 的 Code（Manual），改檔、跑指令前會多跳出這些確認。</p>
+  <p>AI 每次的說法、行號都可能不一樣，照第 04 段每一步的「你會看到」核對就好。</p>
   <div class="walks">
     <details class="walk"><summary><span class="sn">0</span>報到<span class="t">約 20 秒</span></summary>
       <p class="you"><b>老師貼：</b>請先讀 AGENTS.md 和 WORKFLOW.md，再跟我報到。今天是練習。開始前先確認 source/ 有沒有還沒存版的修改或新增檔；有的話先列給我、停下來。</p>
       <blockquote>領隊 · …\ai-paper-kit<br>已讀完 AGENTS.md、WORKFLOW.md、領隊規則及 team.md。source/ 沒有尚未存版的修改或新增檔。未設定 Git 遠端，無須 pull；目前未修改任何檔案。今天採單人練習模式：不寫紙條、不寫變更報告、不 commit。已準備好。</blockquote>
-      <p class="mean"><b>這是什麼意思：</b>先看第一行的路徑是不是你打開的範本資料夾，再看它有沒有把練習規則講出來：這一行是報到的格式，內容還是要對。commit＝存一版；練習時不存，收尾才退得回去。「沒有遠端，無須 pull」代表這個資料夾還沒接上 GitHub，練習時不影響。</p>
-      <p class="mean"><b>如果資料夾裡有你以前改過、還沒存版的檔</b>（我們故意弄了一份測試），AI 會回：「source/ 有尚未存版的檔案：已修改 source/paper/main.tex；新增、尚未追蹤 source/data/我的筆記.csv。依你的指示停在這裡，未改檔、未 pull、未 build。」這時先別讓它刪或還原，那些可能是你的東西。</p>
+      <p class="mean"><b>這是什麼意思：</b>先看第一行：開頭是「領隊 ·」，路徑最後一段是 ai-paper-kit。格式對了還不夠，再看它有沒有把練習規則講出來（不寫紙條、不寫報告、不 commit）。練習前存的那一版是起點；練習期間不再存版，收尾時才能整個退回起點。「未設定 Git 遠端，無須 pull」代表這個資料夾還沒接上 GitHub，練習時不影響。</p>
+      <p class="mean"><b>如果資料夾裡有你以前改過、還沒存版的檔</b>（我們故意弄了一份測試），AI 會回：「source/ 有尚未存版的檔案：已修改 source/paper/main.tex；新增、尚未追蹤 source/data/我的筆記.csv。依你的指示停在這裡，未改檔、未 pull、未 build。」（「尚未追蹤」＝新檔案，git 還沒記錄過。）這時先別讓它刪或還原，那些可能是你的東西。</p>
     </details>
     <details class="walk"><summary><span class="sn">2</span>跑一次 build<span class="t">33 秒</span></summary>
       <blockquote>build 成功，最後一行是：<code>BUILD OK pages=9 undefined_cites=0 undefined_refs=0 refs=7 refs_without_doi=0 bib_warnings=0</code>。output/ 新增 28 個檔案（main.pdf 9 頁、numbers.tex、figdata/、figures/、tables/、latex-log/）……已在 workspace/log.md 記錄這次練習，沒有 commit。build 另提醒：論文中的 AI 使用聲明仍是範例文字。</blockquote>
-      <p class="mean"><b>這是什麼意思：</b>「build」＝一次做完分析、畫圖、檢查文獻、編 PDF。最後一行是 BUILD OK 就成功；三個「要是 0」的都是 0。latex-log 是排版過程的紀錄，出錯時才要看。最後那個提醒是範本故意留的：寫自己的論文時，AI 使用聲明要改成你自己真的做過的事。</p>
+      <p class="mean"><b>這是什麼意思：</b>最後一行是 BUILD OK 就成功。undefined_cites（找不到的引用）、undefined_refs（找不到的圖表編號）、bib_warnings（書目缺欄位）這三個要是 0，這次都是 0。latex-log 是排版過程的紀錄，出錯時才要看。最後那個提醒是範本故意留的：寫自己的論文時，AI 使用聲明要改成你自己真的做過的事。</p>
     </details>
     <details class="walk"><summary><span class="sn">3</span>追一個數字<span class="t">43 秒</span></summary>
       <blockquote>37.04 是介入組第 12 週 DKAS 分數的平均值。資料欄位：study_data.csv 的 dkas_t1 欄，只取 group=intervention；計算位置：analyze.py 第 211 行；數字代號：numbers.tex 第 24 行 \DKASIntTOneMean；本文使用：main.tex 第 78 行，3.2 節第一句。我另外用 Python 重算介入組 70 筆 dkas_t1，得到 37.042857142857144，四捨五入後確實是 37.04。</blockquote>
@@ -512,7 +581,7 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
     </details>
     <details class="walk"><summary><span class="sn">4</span>排除 I048<span class="t">102 秒</span></summary>
       <blockquote>已將 analyze.py 第 33 行改成 EXCLUDE_IDS = ["I048"]，並完成 build。分析人數由 140 → 139，介入組由 70 → 69；原始資料未改動。……DKAS／第 12 週　37.04 → 37.41……摘要 Results：基線 p 值符合原文 8/8 → 3/8；結果 p 值符合原文 9/9 → 3/9……2.4 節：排除 1 人（I048），但理由仍顯示 [state the reason here]。<br><b>需要重讀的文字</b>：摘要 Methods、2.3 節與表 2 圖說仍宣稱數值符合原文……Methods 也仍需填入您指定的排除理由：不符合收案條件。</blockquote>
-      <p class="mean"><b>這是什麼意思：</b>你只改了「要排除誰」這一行，表、圖、摘要、內文全部自動重算。AI 主動列出「要重讀的句子」：數字會自己變，句子的意思要你重讀。[state the reason here] 是範本故意印出來的，提醒你補排除理由。</p>
+      <p class="mean"><b>這是什麼意思：</b>你只請 AI 改了「要排除誰」這一行，表、圖、摘要、內文就全部自動重算（AI 說的「基線」＝前測時的基本資料，就是表 1）。AI 主動列出「要重讀的句子」：數字會自己變，句子的意思要你重讀。[state the reason here] 是範本故意印出來的，提醒你補排除理由。</p>
     </details>
     <details class="walk"><summary><span class="sn">4</span>改回來<span class="t">36 秒</span></summary>
       <blockquote>已將 EXCLUDE_IDS 改回 []，並完成 build。分析人數恢復為 140 人，3.2 節的 DKAS 平均數恢復為 37.04。</blockquote>
@@ -523,7 +592,7 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
     </details>
     <details class="walk"><summary><span class="sn">6</span>加一張表<span class="t">73 秒</span></summary>
       <blockquote>已新增表 4，放入 Results 的 3.4 節。計算方式是先算每人第 12 週減前測，再計算各組平均值與樣本標準差。DKAS　介入組 10.36（6.38）、控制組（即對照組）4.89（8.62）……表說已註明：這是重建練習資料，改變量 SD 受前後測相關假設影響，不能代表原研究的改變變異。</blockquote>
-      <p class="mean"><b>這是什麼意思：</b>程式加算、表格、論文段落一起長出來。它主動把限制寫進論文，這種句子你要留著。</p>
+      <p class="mean"><b>這是什麼意思：</b>程式加算、表格、論文段落一起長出來。它主動把限制寫進表說（表格上方的說明文字）：同一個人前後兩次分數有多接近，原論文沒有寫，重建練習資料時範本自己設成 0.5（相關係數），所以改變量的標準差（6.38、8.62）不是真的資料；平均改變量（10.36、4.89）是兩個時間點的平均相減，不受影響。這種句子你要留著。</p>
     </details>
     <details class="walk"><summary><span class="sn">7</span>收尾：列清單<span class="t">17 秒</span></summary>
       <blockquote>練習改過的 source/ 檔共有 3 個：fig1_outcomes.gp、analyze.py、main.tex。新增的 source/ 檔：無。EXCLUDE_IDS 已恢復為空清單。請確認是否將上述 3 個檔案用 git restore 還原。……收到確認後才執行。</blockquote>
@@ -535,23 +604,36 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
       <p class="mean"><b>這是什麼意思：</b>論文回到練習前。留下來的只有 workspace/log.md 的練習紀錄和 workspace/preview/ 的預覽圖，都不影響論文。</p>
     </details>
   </div>
-  <p class="note">卡片左邊的數字對應第 04 段的練習編號（0＝報到、7＝收尾）。走一遍之後照實改了的地方（這頁已經是改好的）：Windows 版 gnuplot 會讓 PDF 編不出來（畫圖腳本加了一行）；用 winget 裝的 gnuplot 可能叫不動（範本 README 第三節的句子已改）；Excel 會把「3-6」這種類別顯示成日期（資料改寫成「3-6 h」）；Excel 或 PDF 閱讀器開著 output 裡的檔時 build 會當掉（現在會印出「先關掉…再跑一次」）；排除一個人時論文印出文法錯的句子（改成提醒你補理由）；上一版練習時 AI 會一直寫紙條、存版，收尾退不乾淨（加了「今天是練習」的規則）。</p>
+  <p class="note">卡片左邊的數字對應第 04 段的練習編號（0＝報到、7＝收尾）。</p>
+  <details class="gloss"><summary>走一遍之後，我們改了什麼（給想知道來龍去脈的人）</summary>
+    <ul>
+      <li>報到那句後來加了「先確認 source/」，那一步另外實跑了一次。</li>
+      <li>當時跑 build 的句子寫的是 python build.py；範本改用 uv（幫你裝好 Python 和套件的工具）之後，換成 uv run build.py，AI 回覆的內容一樣。</li>
+      <li>Windows 版 gnuplot 會讓 PDF 編不出來：畫圖腳本加了一行。</li>
+      <li>用 winget（Windows 內建的裝軟體工具）裝的 gnuplot 可能叫不動：範本 README 第三節的句子已改。</li>
+      <li>Excel 會把「3-6」這種類別顯示成日期：資料改寫成「3-6 h」。</li>
+      <li>Excel 或 PDF 閱讀器開著 output 裡的檔時 build 會當掉：現在會印出「先關掉…再跑一次」。</li>
+      <li>排除一個人時，論文印出文法錯的句子：改成提醒你補理由。</li>
+      <li>上一版練習時 AI 會一直寫紙條、存版，收尾退不乾淨：加了「今天是練習」的規則。</li>
+      <li>上一版的句子也用 Claude 做過一次，每一步一樣 BUILD OK。</li>
+    </ul>
+  </details>
 </section>
 
-<div class="band" id="b5"><div class="wrap"><div class="tag">06・跟論文對照</div><p class="big">對得上</p><p class="sub">重算的數字，跟所長論文印的一樣嗎</p></div></div>
+<div class="band" id="b5"><div class="wrap"><div class="tag">06・跟論文對照</div><p class="big">對得上</p><p class="sub">重算的數字，跟原論文印的一樣嗎</p></div></div>
 <section class="blk wrap" id="compare">
-  <p>範例論文把所長論文的三張表重算一次，逐一對照。這些比對結果本身，也是程式算出來、寫進論文的。<b>對得上是預期中的事</b>：t 檢定和效果量只看人數、平均和標準差，練習資料本來就是照論文的這些數字做的。這個對照示範的是：程式算出的數字，怎麼一格一格接回論文。它不是在審這篇論文，也不是重新驗證研究結果。</p>
+  <p>範例論文把原論文的三張表重算一次，逐一對照。這些比對結果本身，也是程式算出來、寫進論文的。<b>對得上是預期中的事</b>：同一個時間點比兩組的 t 檢定（比兩組平均的檢定）和效果量，只要人數、平均和標準差就算得出來，練習資料本來就是照原論文的這些數字做的。這個對照示範的是：程式算出的數字，怎麼一格一格接回論文。它不是在審這篇論文，也不是重新驗證研究結果。下面會看到「95% 信賴區間」：這個估計可能落在的範圍，就是圖 2 每個點左右那條橫線。</p>
   <div class="facts">
-    <div class="fact"><div class="n">8 / 8</div><div><b>表 1（基本資料）的 8 個 p 值全部相同。</b>年齡、年資是重建資料時對齊的；性別、婚姻、工作型態、在職訓練用 Fisher 精確檢定，教育程度、失智症訓練時數用概似比卡方（SPSS 交叉表裡「概似比」那一列），都跟論文寫的「卡方或 Fisher 精確檢定，視情況使用」一致。論文沒寫哪一列用哪一種，範例是為了對照已發表的數字才逐一試；自己的研究要像第 07 段那樣，先定好用哪個檢定再看結果。</div></div>
-    <div class="fact"><div class="n">9 / 9</div><div><b>表 2（三個量表、三個時間點）的 p 值全部相同。</b>ADQ 第 24 週重算是 0.000566，印到小數三位就是論文的 0.001。</div></div>
-    <div class="fact"><div class="n">≤ 0.01</div><div><b>原論文表 4（範例論文裡是表 3）的效果量 Cohen's d，6 個裡 3 個完全相同，其他差 0.01</b>，信賴區間也最多差 0.01，都在四捨五入的範圍內：練習資料是從論文印到小數兩位的平均和標準差重建的，差這一點來自用四捨五入後的數字重建練習資料。</div></div>
-    <div class="fact"><div class="n no">不重算</div><div><b>論文表 3 的 GEE。</b>GEE（一種分析重複測量的統計方法）要用到每個人三次測量之間怎麼變化，論文本來就不會附這種個人資料，所以這個只用論文表格的範例不做。<b>用自己的研究時</b>，資料能放在哪裡、能交給哪個 AI、能不能上雲端，先照主頁第 07 段〈研究倫理〉確認；確認之前，不要放進 AI 的工作資料夾。</div></div>
+    <div class="fact"><div class="n">8 / 8</div><div><b>表 1（基本資料）的 8 個 p 值全部相同。</b>其中年齡、年資兩個，是重建練習資料時就刻意調成跟原論文一樣的。其他 6 個是比兩組的比例：性別、婚姻、工作型態、在職訓練用 Fisher 精確檢定（人數少時比較比例的方法）；教育程度、失智症訓練時數用概似比卡方（卡方檢定的一種算法，就是 SPSS 交叉表「卡方檢定」表裡「概似比」那一列）。原論文只寫「卡方或 Fisher 精確檢定，視情況使用」，沒寫哪一列用哪一種，範例是為了對照已發表的數字才逐一試；自己的研究要像第 07 段那樣，先定好用哪個檢定再看結果。</div></div>
+    <div class="fact"><div class="n">9 / 9</div><div><b>表 2（三個量表、三個時間點）的 p 值全部相同。</b>ADQ 第 24 週重算是 0.000566，比 0.001 小，但四捨五入到小數三位是 0.001，所以印成 0.001，不寫 &lt;0.001（原論文也是印 0.001）。</div></div>
+    <div class="fact"><div class="n">≤ 0.01</div><div><b>原論文表 4 的效果量 Cohen's d（範例論文把它排成表 3）：6 個裡 3 個完全相同，另外 3 個差 0.01</b>；信賴區間也最多差 0.01。原因是練習資料是用原論文印到小數兩位、已經四捨五入過的平均和標準差重建的，最後一位差一點是正常的。</div></div>
+    <div class="fact"><div class="n no">不重算</div><div><b>原論文表 3 的 GEE。</b>GEE（廣義估計方程式，分析同一個人量了好幾次的統計方法）要用到每個人三次分數之間怎麼變化，論文本來就不會附這種個人資料，所以這個只用論文表格的範例不做。第 07 段的研究模擬會用練習資料跑 GEE，那只是示範操作，結果不能拿來對照原論文。<b>用自己的研究時</b>，資料能放在哪裡、能交給哪個 AI、能不能上雲端，先照主頁第 07 段〈研究倫理〉確認；確認之前，不要放進 AI 的工作資料夾。</div></div>
   </div>
   <div class="score">
     <div class="box">
       <h3>表 2 的 p 值</h3>
       <div class="tablewrap"><table class="mini" aria-label="表 2 p 值：論文與重算">
-        <thead><tr><th>量表與時間</th><th>論文</th><th>重算</th></tr></thead>
+        <thead><tr><th>量表與時間</th><th>原論文</th><th>重算</th></tr></thead>
         <tbody>
           <tr><td>DKAS 前測</td><td>0.367</td><td class="ok">0.367</td></tr>
           <tr><td>DKAS 第 12 週</td><td>&lt;0.001</td><td class="ok">&lt;0.001</td></tr>
@@ -568,7 +650,7 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
     <div class="box">
       <h3>原論文表 4 的效果量 Cohen's d</h3>
       <div class="tablewrap"><table class="mini" aria-label="表 4 效果量：論文與重算">
-        <thead><tr><th>量表與時間</th><th>論文</th><th>重算</th></tr></thead>
+        <thead><tr><th>量表與時間</th><th>原論文</th><th>重算</th></tr></thead>
         <tbody>
           <tr><td>DKAS 第 12 週</td><td>0.91</td><td class="near">0.92</td></tr>
           <tr><td>DKAS 第 24 週</td><td>0.94</td><td class="near">0.95</td></tr>
@@ -582,44 +664,53 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
     </div>
   </div>
   <div class="figswap">
-    <img src="img/practice/fig2.png" alt="圖 2：六個效果量的論文值（空心圓）與重算值（實心圓），附 95% 信賴區間" width="1000" height="620" loading="lazy">
-    <p class="cap">範例論文的圖 2：灰色空心是論文印的，藍色實心是重算的。這張也是 gnuplot 照小表 <code>output/figdata/fig2_effects.csv</code> 畫的。</p>
+    <img src="img/practice/fig2.png" alt="圖 2：六個效果量的原論文值（空心圓）與重算值（實心圓），附 95% 信賴區間" width="1000" height="620" loading="lazy">
+    <p class="cap">範例論文的圖 2。每一列是一個量表的一個時間點（week 12＝第 12 週）；點是效果量 d，左右的橫線是 95% 信賴區間。灰色空心（Published）是原論文印的，藍色實心（Reproduced）是重算的，兩條幾乎一樣。中間那條灰色虛線是 d＝0，也就是兩組沒有差別。這張也是 gnuplot 照小表 <code>output/figdata/fig2_effects.csv</code> 畫的。</p>
   </div>
 </section>
 
 <div class="band" id="sim"><div class="wrap"><div class="tag">07・研究模擬</div><p class="big">寫得完</p><p class="sub">只給資料和文獻，AI 一步一步把論文寫出來</p></div></div>
 <section class="blk wrap" id="simulation">
-  <p>前面的練習是改一篇<b>已經寫好</b>的論文。這一段反過來：研究內容只靠三樣原料（另外 AI 也會看範本裡的規則、工具和收起來的範例程式）：練習資料（<code>source/data/</code>）、13 篇文獻的書目（<code>material/模擬/refs.bib</code>）和一份研究構想（<code>material/模擬/研究構想.md</code>）。老師一句一句說，AI 從開一篇新論文做到交稿前檢查，最後把原本的範例放回去。</p>
-  <p>2026-10-22，我們在範本的<b>複本</b>裡實跑一次（你手上那份範本沒有被動到）。AI 是 Claude（在雲端跑的 Claude Code），照下面十句話做，每一步錄下老師說的話、AI 原樣的回覆、改了哪些檔、build 最後一行。<b>十步全部 BUILD OK</b>，PDF 頁數依序是 1 → 1 → 1 → 4 → 4 → 8 → 12 → 13 → 13 → 8（最後一步把原本的範例放回來，所以回到 8 頁）。十步 AI 大約用了 85 次工具（讀一個檔、跑一次程式都算一次；你的 AI 設成「要求核准」的話，會問你好幾十次）。實跑時另外先給 AI 一段開場說明：扮演老師身邊的 AI 助手、這次會錄下來做成教材、照 AGENTS.md 的規矩做，並交代「這次模擬不用紙條，直接做」（研究模擬不是練習，所以用這句，不用「今天是練習」）。<b>這是 10/22 上午用當時的範本跑的</b>：之後範本改了 Fisher 檢定的算法、文獻回報要附摘要原句、AI 聲明的提醒、資料不再複製進 examples/，你現在照做，第 3、6、7 步的過程和頁數可能跟紀錄不一樣。下面引號裡是 AI 的原話（摘錄，資料夾路徑用「…」代替）。</p>
-  <div class="warnbox"><b>寫出來的論文只能練習，不能投稿。</b>資料是依所長論文的表格重建的練習資料，每個人的分數是假的。AI 在標題、註腳、Methods 和資料可得性聲明裡都寫明了這一點。</div>
-  <p class="note">想自己跑一次：照範本 README 第五節，十句話都在那裡。</p>
+  <p>前面的練習是改一篇<b>已經寫好</b>的論文。這一段反過來：研究內容只靠三樣原料：練習資料（<code>source/data/</code>）、13 篇文獻的書目（<code>material/模擬/refs.bib</code>）和一份研究構想（<code>material/模擬/研究構想.md</code>）。另外，AI 也會看範本裡的規則、工具和收起來的範例程式。老師一句一句說，AI 從開一篇新論文做到交稿前檢查，最後把原本的範例放回去。</p>
+  <p><b>怎麼跑的：</b>2026-10-22，我們在範本的<b>複本</b>裡實跑一次（你手上那份範本沒有被動到）。AI 是 Claude（在雲端跑的 Claude Code），照下面十句話做，每一步錄下老師說的話、AI 原樣的回覆、改了哪些檔、build 最後一行。實跑時另外先給 AI 一段開場說明：扮演老師身邊的 AI 助手、這次會錄下來做成教材、照 AGENTS.md 的規矩做，並交代「這次模擬不用紙條，直接做」（研究模擬不是練習，所以用這句，不用「今天是練習」）。</p>
+  <p><b>結果：</b><b>十步全部 BUILD OK</b>，PDF 頁數依序是 1 → 1 → 1 → 4 → 4 → 8 → 12 → 13 → 13 → 8（最後一步把原本的範例放回來，所以回到 8 頁）。十步 AI 大約用了 85 次工具（讀一個檔、跑一次程式都算一次）。用 Claude 的 Code（Manual）做的話，改檔、跑程式前都會先問你，十步加起來會問很多次。</p>
+  <p><b>現在照做會不一樣的地方：</b>這是 10/22 上午用當時的範本跑的。之後範本改了 Fisher 檢定的算法、文獻回報要附摘要原句、AI 聲明的提醒、資料不再複製進 examples/，原本的範例也變成 9 頁；第 8 步的檢查清單現在是 13 條，編號也不一樣。你現在照做，第 3、6、7、8 步的過程和頁數可能跟紀錄不一樣，新版還沒完整重跑十步。下面引號裡是 AI 的原話（摘錄，資料夾路徑用「…」代替）。</p>
+  <div class="warnbox"><b>寫出來的論文只能練習，不能投稿。</b>資料是依原論文的表格重建的練習資料，每個人的分數是假的。AI 在標題、註腳、Methods 和資料可得性聲明裡都寫明了這一點。</div>
+  <div class="prep"><b>想自己跑一次：開始前先報到（這次不是練習）</b>
+    <p style="margin:.4rem 0"><b>你自己做：</b>照行前準備第 6 項的方法，在 Codex 或 Claude 的 Code 打開 ai-paper-kit 資料夾。</p>
+    <p style="margin:.4rem 0"><b>跟 AI 說：</b>貼下面這句，不要貼第 04 段那句「今天是練習」。</p>
+    <div class="copybox"><pre>請先讀 AGENTS.md 和 WORKFLOW.md，再跟我報到。接下來是研究模擬，不是練習：這次模擬不用紙條，直接做。開始前先確認 source/ 有沒有還沒存版的修改或新增檔；有的話先列給我、停下來；沒有的話幫這個資料夾存一版（commit），存好告訴我。</pre><button type="button" class="copybtn">複製</button></div>
+    <p style="margin:.4rem 0"><b>你要看什麼：</b>第一行「領隊 · 」後面的路徑，最後一段是 ai-paper-kit；它說存好了一版。存這一版，第 9 步才比得出 <code>source/</code> 有沒有完全回到原樣。（10/22 用 Codex 實跑這句：資料夾本來就沒有改過，它存的是一個「空的」還原點，這是正常的；接著第 0 步 <code>refs=13</code>、第 9 步回到 <code>pages=9 refs=7</code>，<code>source/</code> 跟還原點一模一樣。）</p>
+    <p style="margin:.4rem 0">接著照下面第 0 步到第 9 步做（十句話跟範本 README 第五節一樣）。<b>一定要做到第 9 步</b>：第 0 步會把範例收起來，第 9 步才放回來；中途停下來，範本會停在只有標題的空白論文，第 04 段的練習就找不到 37.04。</p>
+  </div>
   <div class="walks">
     <details class="walk"><summary><span class="sn">0</span>開工、開一篇新論文<span class="t">BUILD OK・1 頁</span></summary>
       <p class="you"><b>老師說：</b></p>
-      <div class="copybox"><pre>我們來做研究模擬：只給資料和文獻，請你一步一步把論文寫出來。先執行 uv run tools/new_paper.py --keep-data --refs material/模擬/refs.bib --name 所長論文重算，把範例收進 examples/、開一篇新論文；再跑一次 build，告訴我最後一行。</pre><button type="button" class="copybtn">複製</button></div>
-      <p class="mean"><b>AI 做了什麼：</b>先讀了 AGENTS.md、WORKFLOW.md，用單人模式。執行 <code>new_paper.py</code>（開新論文的小工具）：原本的範例整份收進 <code>examples/所長論文重算/</code>（examples＝收起來的舊論文，隨時能打開參考；那次的工具連資料一起收，模擬後已改成資料檔一律留在 <code>source/data/</code>、不複製）；新的 <code>source/</code> 留著練習資料，書目換成模擬用的 13 篇，分析程式只算人數，論文只有各節標題。</p>
+      <div class="copybox"><pre>我們來做研究模擬：只給資料和文獻，請你一步一步把論文寫出來。先執行 uv run tools/new_paper.py --keep-data --refs material/模擬/refs.bib --name 範例論文重算，把範例收進 examples/、開一篇新論文；再跑一次 build，告訴我最後一行。</pre><button type="button" class="copybtn">複製</button></div>
+      <p class="mean"><b>AI 做了什麼：</b>先讀了 AGENTS.md、WORKFLOW.md，用單人模式。執行 <code>new_paper.py</code>（開新論文的小工具）：原本的範例收進 <code>examples/範例論文重算/</code>（examples＝收起來的舊論文，隨時能打開參考）。新的 <code>source/</code> 留著練習資料，書目換成模擬用的 13 篇，分析程式只算人數，論文只有各節標題。（那次的工具會把資料檔也複製一份進 examples/；模擬之後已改成資料檔一律留在 <code>source/data/</code>、不複製。）</p>
       <blockquote>PDF 編出來了、只有 1 頁（骨架而已）；書目有 13 篇，都有 DOI、沒有缺欄位；論文還沒引用任何一篇……分析程式目前只算了人數：N = 140。<br><code>BUILD OK pages=1 undefined_cites=0 undefined_refs=0 refs=13 refs_without_doi=0 bib_warnings=0</code></blockquote>
-      <p class="mean"><b>你要看什麼：</b>最後一行是 BUILD OK，<code>refs=13</code> 代表書目換成模擬用的 13 篇了。原本的範例沒有被刪，收在 <code>examples/所長論文重算/</code>，第 9 步會放回來。</p>
+      <p class="mean"><b>你要看什麼：</b>最後一行是 BUILD OK，<code>refs=13</code> 代表書目換成模擬用的 13 篇了。原本的範例沒有被刪，收在 <code>examples/範例論文重算/</code>，第 9 步會放回來。</p>
     </details>
     <details class="walk"><summary><span class="sn">1</span>先讀懂原料<span class="t">沒改檔・1 頁</span></summary>
       <p class="you"><b>老師說：</b></p>
       <div class="copybox"><pre>請讀 material/模擬/研究構想.md、source/data/README.md 和 source/refs/refs.bib，告訴我：資料有幾筆、有哪些欄位、書目有幾篇、每一篇一句話講它在做什麼（只能根據摘要）。先不要改任何檔。</pre><button type="button" class="copybtn">複製</button></div>
       <p class="mean"><b>AI 做了什麼：</b>只讀、不改。回報資料 140 筆（介入組 70、對照組 70）、19 個欄位、沒有缺值；書目 13 篇（12 篇期刊論文、1 本書），每篇用一句話講它在做什麼，只根據摘要。它也說出哪兩篇沒有摘要（一篇是 GEE 的方法論文、一本是效果量的書），只能當「方法出處」引用，不能寫它們說了什麼；另外三篇摘要不完整。最重要的是它先舉手：</p>
       <blockquote>ADQ 量表在 refs.bib 裡沒有出處。……到第 5 步寫 Methods 時，ADQ 的英文全名和出處我會標「待老師補」，不會憑記憶寫。</blockquote>
-      <p class="mean"><b>你要看什麼：</b>數字跟你知道的對不對得上（140 人、13 篇）。挑一兩篇，用 DOI 打開摘要，對 AI 那句一句話。先讓 AI 說它看懂了什麼，你才知道它等一下會怎麼寫。</p>
+      <p class="mean"><b>你要看什麼：</b>數字跟你知道的對不對得上（140 人、13 篇）。挑一兩篇，用 DOI 打開摘要，對照 AI 寫的那一句。DOI 是每篇論文的固定編號（像身分證號碼）。在瀏覽器網址列打 <code>https://doi.org/</code>，後面接上 DOI，按 Enter，就會開到那篇論文的頁面。例如 <code>https://doi.org/10.1186/s12877-021-02075-3</code>。先讓 AI 說它看懂了什麼，你才知道它等一下會怎麼寫。</p>
     </details>
     <details class="walk"><summary><span class="sn">2</span>提分析計畫，等你同意<span class="t">沒改檔・1 頁</span></summary>
       <p class="you"><b>老師說：</b></p>
       <div class="copybox"><pre>請依研究構想提出分析計畫：表 1、表 2、表 3（GEE）各放什麼、用什麼檢定、效果量怎麼算、圖 1 怎麼畫，列出會產生的數字代號和檔名。先不要改，等我同意。</pre><button type="button" class="copybtn">複製</button></div>
-      <p class="mean"><b>AI 做了什麼：</b>只提計畫、不改檔；為了確認做得到，它在資料夾外面先試算過。表 1 比兩組的基本資料：類別變項（例如性別、婚姻）比兩組比例，檢定方法<b>事先定好規則</b>：每一格的期望人數都有 5 人以上，用卡方檢定；有一格不到 5 人，改用 Fisher 精確檢定（人數少時用的版本）；p &lt; 0.20 的變項自動當作表 3 要調整的變項。表 2 每個時間點比兩組，算效果量 Cohen's d（兩組差了幾個標準差）。表 3 用 GEE（廣義估計方程式，分析同一個人量了好幾次的統計方法）看「組別 × 時間」。圖 1 怎麼畫、配什麼顏色、所有數字代號和檔名也都列出來。</p>
+      <p class="mean"><b>AI 做了什麼：</b>只提計畫、不改檔；為了確認做得到，它在資料夾外面先試算過。表 1 比兩組的基本資料：類別變項（例如性別、婚姻）比兩組比例，檢定方法<b>事先定好規則</b>：每一格的期望人數（照兩組人數的比例推算，這一格「應該」有幾個人）都有 5 人以上，用卡方檢定；有一格不到 5 人，改用 Fisher 精確檢定（人數少時用的版本）；p &lt; 0.20 的變項自動當作表 3 要調整的變項（分析時一併考慮、把它的影響扣掉）。表 2 每個時間點比兩組，算效果量 Cohen's d（兩組差了幾個標準差）。表 3 用 GEE（廣義估計方程式，分析同一個人量了好幾次的統計方法）看「組別 × 時間」（兩組隨著時間的變化是不是不一樣）。圖 1 怎麼畫、配什麼顏色、所有數字代號和檔名也都列出來。</p>
       <blockquote>規則先定，不看結果換檢定。<br>只有 2 家機構、以機構為單位分派：機構的影響跟組別完全分不開……這是設計本身的限制，我建議寫進限制，並請老師問統計顧問要不要另外處理。</blockquote>
-      <p class="mean"><b>你要看什麼：</b>這是整個模擬最要緊的關卡：<b>統計方法由你決定</b>，不是 AI。看檢定規則是不是先定好；調整變項怎麼挑、人數少的類別怎麼併、沒做多重比較校正，這些不確定的，帶去問統計顧問。你點頭了，才回「同意」。</p>
+      <p class="mean"><b>你要看什麼：</b>這是整個模擬最要緊的關卡：<b>統計方法由你決定</b>，不是 AI。看檢定規則是不是先定好；調整變項怎麼挑、人數少的類別怎麼併、沒做多重比較校正（比了很多次時，要不要把「顯著」的標準調嚴），這些不確定的，帶去問統計顧問。你點頭了，才回「同意」。</p>
     </details>
     <details class="walk"><summary><span class="sn">3</span>做表 1～3<span class="t">BUILD OK・4 頁</span></summary>
       <p class="you"><b>老師說：</b></p>
       <div class="copybox"><pre>同意。請照計畫改 source/scripts/analyze.py，先做表 1、表 2、表 3，結果數字寫成代號，表同時輸出 .tex 和 .csv。在 main.tex 的 Results 放進三張表（先不用寫說明文字）。跑一次 build，告訴我最後一行，我會用 Excel 打開 output/tables/ 的 csv 核對。</pre><button type="button" class="copybtn">複製</button></div>
       <p class="mean"><b>AI 做了什麼：</b>把分析程式從骨架改成完整的表 1～3，三張表放進論文。csv 存成 Excel 打開不會亂碼的格式。它另外寫一段<b>不用 analyze.py</b> 的程式，從資料重算幾個數字核對，例如 DKAS 第 12 週介入組 37.04、對照組 30.43，跟表上一樣。過程中它自己修掉兩個 build 不會擋的問題（SciPy 是 Python 的統計工具包）：</p>
       <blockquote>SciPy 的 Fisher 檢定，超過 2×2 時預設用亂數模擬，每跑一次 p 值都不一樣（婚姻的 p 在 0.617 到 0.628 之間跳）。這樣每次 build 數字都會變，所以我改成自己寫的「完整列舉」版本……結果每次都一樣（婚姻 0.624、在職訓練 0.098，跟原論文一樣）。<br>表 1 第一版太寬（超出版面 79 pt），我把列名縮短……<br><code>BUILD OK pages=4 undefined_cites=0 undefined_refs=0 refs=13 refs_without_doi=0 bib_warnings=0</code></blockquote>
+      <p class="mean"><b>這是什麼意思：</b>同一份資料，每跑一次 p 值都不一樣，論文就沒辦法重現；AI 自己發現了，改成每次結果都一樣的算法。2×2＝兩組 × 兩類的表，婚姻有四類，就超過 2×2。79 pt 大約 2.8 公分，就是表格超出紙張右邊這麼多。</p>
       <p class="mean"><b>你要看什麼：</b>用 Excel 打開 <code>output/tables/</code> 的 table1～3.csv，挑幾格跟 PDF 的表對（只看，關掉時按「不要儲存」）。這次實跑 AI 沒有真的開 Excel，是另寫程式重算；<b>你自己對過，才算你核對過</b>，第 7 步的 AI 使用聲明會用到這一點。另外打開 PDF 看表有沒有超出版面：BUILD OK 不代表版面沒問題。</p>
     </details>
     <details class="walk"><summary><span class="sn">4</span>畫圖 1<span class="t">BUILD OK・4 頁</span></summary>
@@ -627,7 +718,7 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
       <div class="copybox"><pre>請畫圖 1：三個量表在三個時間點的平均和標準差，兩組各一條線。analyze.py 產生小表，source/gnuplot/ 寫一支腳本，main.tex 放進 Results。跑一次 build。</pre><button type="button" class="copybtn">複製</button></div>
       <p class="mean"><b>AI 做了什麼：</b>分析程式多產生三張小表（<code>output/figdata/fig1_dkas.csv</code> 等），新增一支 gnuplot 腳本 <code>fig1_means.gp</code>（照收起來的範例腳本改），圖放進論文。它打開 PDF 看過點和誤差線沒被切掉、圖例沒蓋到資料。頁數還是 4 頁：圖跟表 2 排在同一頁。</p>
       <blockquote>圖上的點跟表 2 對得上：例如 DKAS 第 12 週介入組 37.04、對照組 30.43。<br>欄位號碼錯了 build 還是會 OK，只是畫錯資料，所以要打開 PDF 跟表 2 對。</blockquote>
-      <p class="mean"><b>你要看什麼：</b>打開 PDF 的圖 1，挑一兩個點跟表 2 的平均對。圖說有沒有寫清楚誤差線是標準差。</p>
+      <p class="mean"><b>你要看什麼：</b>AI 說的「欄位號碼」，就是第 02 段腳本裡 using 後面的數字。打開 PDF 的圖 1，挑一兩個點跟表 2 的平均對。圖說有沒有寫清楚誤差線是標準差。</p>
     </details>
     <details class="walk"><summary><span class="sn">5</span>寫 Methods 和 Results<span class="t">BUILD OK・8 頁</span></summary>
       <p class="you"><b>老師說：</b></p>
@@ -641,7 +732,7 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
       <div class="copybox"><pre>請用 refs.bib 的文獻起草 Introduction 和 Discussion。每一句講到文獻的，只寫該篇摘要真的有寫的內容；回報時列出每一句根據哪一篇。結論說到多強，先在回報裡列兩三種寫法給我選，論文裡先用最保守的。跑一次 build。</pre><button type="button" class="copybtn">複製</button></div>
       <p class="mean"><b>AI 做了什麼：</b>起草 Introduction、Discussion（含研究限制）和結論，13 篇用了 12 篇（沒用的那篇等老師決定）。回報列出 16 句講到文獻的句子，每一句附上那篇摘要的原句。結論給了三種強度 A、B、C，論文裡先用最保守的 A。</p>
       <blockquote>初稿有 5 句寫得比摘要多，build 抓不到，是我逐句對摘要時改的……Mole2019 原本寫成「受訪者說自己需要訓練」，其實那是作者的結論，改成「the authors concluded」。<br><code>BUILD OK pages=12 undefined_cites=0 undefined_refs=0 refs=13 refs_without_doi=0 bib_warnings=0</code></blockquote>
-      <p class="mean"><b>你要看什麼：</b>抽查兩三句講到文獻的句子：用 DOI 打開那篇的摘要，對 AI 附的原句，確認論文那句沒有說得比摘要多。<code>undefined_cites=0</code> 只代表引用的代號存在，<b>不代表內容對</b>。結論要說到多強，A、B、C 由你選。</p>
+      <p class="mean"><b>你要看什麼：</b>抽查兩三句講到文獻的句子：用 DOI 打開那篇的摘要，對 AI 附的原句，確認論文那句沒有說得比摘要多。<code>undefined_cites=0</code> 只代表引用的每一篇都在書目檔裡，<b>不代表內容對</b>。結論要說到多強，A、B、C 由你選。</p>
     </details>
     <details class="walk"><summary><span class="sn">7</span>標題、摘要、兩份聲明<span class="t">BUILD OK・13 頁</span></summary>
       <p class="you"><b>老師說：</b></p>
@@ -653,15 +744,15 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
     <details class="walk"><summary><span class="sn">8</span>交稿前檢查<span class="t">沒改檔・13 頁</span></summary>
       <p class="you"><b>老師說：</b></p>
       <div class="copybox"><pre>請照 WORKFLOW.md 第 8 步的檢查清單逐條檢查，列出沒過的項目和建議怎麼改，先不要改。</pre><button type="button" class="copybtn">複製</button></div>
-      <p class="mean"><b>AI 做了什麼：</b>10 條逐條查，每一條寫怎麼查的。沒過的三條：AI 使用聲明還有紅字等老師確認、統計方法跟兩家機構的設計還沒問過統計顧問、資料還是練習資料。它也列出 build 抓不到的書目格式問題（例如量表名稱被排成小寫、兩篇缺文章編號），和三個可以直接帶去問統計顧問的問題。</p>
+      <p class="mean"><b>AI 做了什麼：</b>當時的清單有 10 條，逐條查，每一條寫怎麼查的（現在的 WORKFLOW.md 第 8 步是 13 條，編號也不一樣：紅字是第 3 條、AI 使用聲明第 9 條、統計顧問第 10 條、練習資料第 12 條）。沒過的三條：AI 使用聲明還有紅字等老師確認、統計方法跟兩家機構的設計還沒問過統計顧問、資料還是練習資料。它也列出 build 抓不到的書目格式問題（例如量表名稱被排成小寫、兩篇缺文章編號），和三個可以直接帶去問統計顧問的問題。</p>
       <blockquote>這份稿子能當練習稿看，不能投：練習資料（第 9 條）、統計顧問（第 7 條）、紅字（第 6 條和 Methods）三件事沒過。<br><code>BUILD OK pages=13 undefined_cites=0 undefined_refs=0 refs=13 refs_without_doi=0 bib_warnings=0</code></blockquote>
       <p class="mean"><b>你要看什麼：</b>每一條沒過的，逐條決定怎麼處理；資料資格、倫理資訊、不實的聲明、還沒解決的方法問題，處理好之前不能投稿。<code>bib_warnings=0</code> 只代表書目欄位不缺，題目大小寫、文章編號對不對，要回 Zotero 看。</p>
     </details>
     <details class="walk"><summary><span class="sn">9</span>收起模擬論文，放回範例<span class="t">BUILD OK・8 頁</span></summary>
       <p class="you"><b>老師說：</b></p>
-      <div class="copybox"><pre>模擬做完了。請執行 uv run tools/new_paper.py --name 模擬論文 --restore examples/所長論文重算，把這篇收進 examples/、把原本的範例搬回來，再跑一次 build。</pre><button type="button" class="copybtn">複製</button></div>
-      <p class="mean"><b>AI 做了什麼：</b>寫完的模擬論文整份收進 <code>examples/模擬論文/</code>，所長論文的範例放回 <code>source/</code>。它用 git 比對過：現在的 <code>source/</code> 跟模擬開始前<b>完全一樣</b>。build 回到原本的範例：8 頁、7 篇文獻。</p>
-      <blockquote>「搬回來」其實是複製回來：examples/所長論文重算/ 還在……不需要的話，老師可以自己刪掉，我不刪檔。<br><code>BUILD OK pages=8 undefined_cites=0 undefined_refs=0 refs=7 refs_without_doi=0 bib_warnings=0</code></blockquote>
+      <div class="copybox"><pre>模擬做完了。請執行 uv run tools/new_paper.py --name 模擬論文 --restore examples/範例論文重算，把這篇收進 examples/、把原本的範例搬回來，再跑一次 build。</pre><button type="button" class="copybtn">複製</button></div>
+      <p class="mean"><b>AI 做了什麼：</b>寫完的模擬論文整份收進 <code>examples/模擬論文/</code>，範例論文放回 <code>source/</code>。它用 git 比對過：現在的 <code>source/</code> 跟模擬開始前<b>完全一樣</b>。build 回到原本的範例：8 頁、7 篇文獻。</p>
+      <blockquote>「搬回來」其實是複製回來：examples/…/ 還在……不需要的話，老師可以自己刪掉，我不刪檔。<br><code>BUILD OK pages=8 undefined_cites=0 undefined_refs=0 refs=7 refs_without_doi=0 bib_warnings=0</code></blockquote>
       <p class="mean"><b>你要看什麼：</b>頁數回到原本範例的頁數（現在的範本是 <code>pages=9</code>；這次實跑用的是 10/22 上午的範本，當時是 8 頁）、<code>refs=7</code>，就是原本的範例。如果 AI 貼出的檔案清單裡有 <code>\346\250\241…</code> 這種數字，那是 git 把中文資料夾名稱印成代碼，檔案沒有壞。</p>
     </details>
   </div>
@@ -670,8 +761,8 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
   <p>這幾件事沒有一件會讓 build 失敗，都是 AI 自己停下來說的。這就是「你跟 AI 說話」這條流程裡，你最想要它做的事。</p>
   <div class="qa"><h3>文獻裡沒有的，它不編</h3><p>研究構想用了 ADQ 態度量表，可是 13 篇書目裡沒有它的原始文獻。AI 第 1 步就提醒，第 5 步在論文裡標紅字「待老師補」，沒有從範例或記憶補一個出處。</p></div>
   <div class="qa"><h3>研究設計的限制，它先講</h3><p>研究構想是兩家機構、以機構為單位分派：一家當介入組，一家當對照組，機構本身的差別跟組別分不開。所長的原論文在限制段就談到兩家機構的差異；我們給 AI 的研究構想故意沒抄進這一點，AI 第 2 步還是自己提出來，建議寫進研究限制、請老師問統計顧問；第 8 步清單裡「統計方法跟研究設計相符」那一條也沒過。</p></div>
-  <div class="qa"><h3>結果跟原論文不一樣，它說得出原因</h3><p>GEE 的結果不會跟所長論文一樣：GEE 要用到同一個人三次分數之間的關係，練習資料裡這個關係是假設的（0.5），不是真的資料。AI 在第 2 步就說了，論文裡也寫明。</p></div>
-  <div class="qa"><h3>寫得比摘要多，它自己逐句對才抓到</h3><p>第 6 步的初稿有 5 句寫得比文獻摘要多，犯了三種錯：替「上面引用的研究」做的總結寫錯了；把作者的結論寫成受訪者說的話；寫了一句沒有引用、聽起來像結論的轉折句。這種錯 build 完全抓不到，是 AI 逐句對摘要才改掉的。你抽查時，也是找這三種。</p></div>
+  <div class="qa"><h3>結果跟原論文不一樣，它說得出原因</h3><p>GEE 的結果不會跟原論文一樣：GEE 要用到同一個人三次分數之間的關係，練習資料裡這個關係是假設的（相關係數設成 0.5），不是真的資料。AI 在第 2 步就說了，論文裡也寫明。</p></div>
+  <div class="qa"><h3>寫得比摘要多，它自己逐句對才抓到</h3><p>第 6 步的初稿有 5 句寫得比文獻摘要多，犯了三種錯：替前面引用的幾篇研究做了一個總結，那幾篇的摘要卻沒寫這個結論；把作者的結論寫成受訪者說的話；寫了一句沒有引用、聽起來像結論的轉折句。這種錯 build 完全抓不到，是 AI 逐句對摘要才改掉的。你抽查時，也是找這三種。</p></div>
   <div class="qa"><h3>AI 使用聲明，差點替你寫了還沒做的事</h3><p>範例論文的聲明寫著「每篇引用都對過 DOI」「作者看過、改過」。第 7 步 AI 發現，照抄就等於替老師寫了還沒做的事，所以拆成「AI 做了什麼」（真的做過的）和一處紅字「老師要確認的」。</p></div>
 
   <h3 class="app">模擬之後我們改了什麼</h3>
@@ -684,8 +775,8 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
 </main>
 
 <footer class="wrap">
-  <p><b>範例出處。</b>Su HF, Koo M, Lee WL, Sung HC, Lee RP, Liu WI. A dementia care training using mobile e-learning with mentoring support for home care workers: a controlled study. <i>BMC Geriatrics</i> 2021;21:126. <a href="https://doi.org/10.1186/s12877-021-02075-3" target="_blank" rel="noopener">doi:10.1186/s12877-021-02075-3</a>。開放取用，以 CC BY 4.0 授權；頁面與範本引用的數字取自該文的表 1、表 2、表 4。</p>
-  <p>練習資料由範本的 <code>tools/make_practice_data.py</code> 依上述表格重建，不是原始資料。這頁的數字都是 2026-10-22 實際跑範本得到的；工具和選單名稱會隨改版變動，跟你畫面不一樣時，以畫面為準。</p>
+  <p><b>範例出處。</b>Su HF, Koo M, Lee WL, Sung HC, Lee RP, Liu WI. A dementia care training using mobile e-learning with mentoring support for home care workers: a controlled study. <i>BMC Geriatrics</i> 2021;21:126. <a href="https://doi.org/10.1186/s12877-021-02075-3" target="_blank" rel="noopener">doi:10.1186/s12877-021-02075-3</a>。開放取用，以 CC BY 4.0 授權（註明出處就可以引用、轉載）；頁面與範本引用的數字取自該文的表 1、表 2、表 4。</p>
+  <p>練習資料由範本的 <code>tools/make_practice_data.py</code> 依上述表格重建，不是原始資料。這頁的數字都是 2026-10-22 實際跑範本得到的。工具和選單名稱會隨改版變動：找不到這頁寫的按鈕或字樣時，先停在這一步，截圖問網頁版的 ChatGPT 或 Claude，或回信問陳老師。</p>
 </footer>
 
 <script>
@@ -707,7 +798,7 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
     '人數：140 → 139（介入組 70 → 69）',
     '介入組第 12 週 DKAS 平均：37.04 → 37.41；標準差：7.93 → 7.38',
     'DKAS 第 12 週的效果量 d：0.92 → 1.01',
-    '跟論文相同的 p 值：表 1 從 8/8 變 3/8，表 2 從 9/9 變 3/9',
+    '跟原論文相同的 p 值：表 1 從 8/8 變 3/8，表 2 從 9/9 變 3/9',
     'Methods 多一句「1 participant (I048) was excluded [state the reason here]」，提醒你補排除理由',
     '表 1、表 2、表 3、圖 1、圖 2、摘要、內文的這些數字，全部一起更新；你沒有改任何一句'
   ];
@@ -725,14 +816,14 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
       CHANGED.forEach(function(t){var li=document.createElement('li');li.textContent=t;list.appendChild(li)});
     }else{
       title.textContent='按上面的「排除 I048」，看哪些數字一起變';
-      var li=document.createElement('li');li.className='same';li.textContent='現在用的是全部 140 人，數字跟論文對得上。';list.appendChild(li);
+      var li=document.createElement('li');li.className='same';li.textContent='現在用的是全部 140 人，數字跟原論文對得上。';list.appendChild(li);
     }
   }
   document.querySelectorAll('button[data-mode]').forEach(function(b){b.addEventListener('click',function(){setMode(b.dataset.mode)})});
 
   var FIG={
-    line:{src:'img/practice/fig1-line.png',alt:'圖 1：兩組在三個時間點的 DKAS、ADQ、SCIDS 平均與標準差，折線圖',cap:'同一張小表，用折線畫。藍色實線是介入組，橘色虛線是對照組；誤差線是標準差。'},
-    bar:{src:'img/practice/fig1-bar.png',alt:'圖 1 改成長條圖：兩組並排，誤差線是標準差',cap:'同一張小表，改用長條畫，像所長原論文的 Fig. 2。數字一個都沒變，只改了 .gp 腳本。'}
+    line:{src:'img/practice/fig1-line.png',alt:'圖 1：兩組在三個時間點的 DKAS、ADQ、SCIDS 平均與標準差，折線圖',cap:'最左邊的 DKAS 小圖，就是上面那張小表畫的（ADQ、SCIDS 各有自己的小表）。藍色實線是介入組（Intervention），橘色虛線是對照組（Control）；每個點上下的直線是誤差線：往上、往下各是一個標準差。橫軸 Week＝第幾週，縱軸 Mean score (SD)＝平均分數（標準差）。'},
+    bar:{src:'img/practice/fig1-bar.png',alt:'圖 1 改成長條圖：兩組並排，誤差線是標準差',cap:'同樣三張小表，改用長條畫，像原論文的 Fig. 2：藍色是介入組，橘色是對照組。數字一個都沒變，只改了 .gp 腳本。長條從 0 畫起，縱軸刻度跟折線圖不同，兩組的差距看起來比較小。'}
   };
   document.querySelectorAll('button[data-fig]').forEach(function(b){b.addEventListener('click',function(){
     var f=FIG[b.dataset.fig],img=document.getElementById('figImg');
@@ -742,14 +833,27 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
 
   // 04：六個練習＋收尾（跟範本 README 第四節同一套句子）
   var EX=[
-    {t:'報到',y:'在 Codex 或 Claude 的 Code 打開範本資料夾（ai-paper-kit）。',say:'請先讀 AGENTS.md 和 WORKFLOW.md，再跟我報到。今天是練習。開始前先確認 source/ 有沒有還沒存版的修改或新增檔；有的話先列給我、停下來。',c:'第一行是「領隊 ·」加上資料夾路徑；它會說 source/ 有沒有還沒存版的檔，再把練習規則複述一次（不寫紙條、不寫報告、不 commit）。它列出檔案、停下來的話，先別讓它刪或還原，問講師或請它說明那些檔是什麼。'},
-    {t:'看原料',y:'用 Excel 打開 source/data/study_data.csv：一列一個人，共 140 人（Excel 顯示到第 141 列，第一列是欄名）；dkas_t0、dkas_t1、dkas_t2 是三個時間點的知識分數（t0＝前測、t1＝第 12 週、t2＝第 24 週）。再打開 source/data/published_values.csv：這是從所長論文抄下來、拿來對照的數字。看完關掉時，Excel 問要不要儲存，一律按「不要儲存」。',c:'資料就是一張表。程式只讀它，不會改它。'},
-    {t:'跑一次 build，看成品長出來',say:'請跑一次 build（執行 uv run build.py），告訴我最後一行，再告訴我 output 資料夾裡多了哪些檔。',c:'最後一行是 BUILD OK pages=9 … bib_warnings=0。用 Excel 打開 output/tables/table2.csv：欄名有 published 的是論文印的數字，有 reproduced 的是程式重算的，兩欄一對並排。再打開 output/main.pdf。'},
-    {t:'追一個數字',say:'論文 3.2 節的 37.04 是從哪裡來的？請告訴我：資料檔的哪一欄、analyze.py 的哪一行算的、numbers.tex 裡的代號叫什麼、main.tex 哪一句用到它。',c:'AI 說得出第 01 段那五站：dkas_t1 欄 → analyze.py → 代號 \\DKASIntTOneMean → main.tex 那一句 → PDF 的 37.04。'},
-    {t:'排除一個人，看全部一起變',say:'練習：假設事後發現練習資料裡的 I048 不符合收案條件，請在 analyze.py 上面的 EXCLUDE_IDS 加上 "I048"，跑一次 build，告訴我表 2 哪些數字變了、論文哪幾句的數字跟著變。',c:'總人數 140 → 139（介入組 70 → 69），37.04 變 37.41，效果量 d 從 0.92 變 1.01，表、圖、摘要、內文一起更新（第 01 段按「排除 I048」看得到）；Methods 多一句要你補排除理由。句子的解讀要你自己重讀。I048 是練習資料的虛構代號，剛好是介入組分數偏低的人，排除後效果看起來變大：排除誰，要在看結果之前、照事先定好的理由決定。這句貼給 AI 就好，不用自己打開 analyze.py。做完再說：「請把 EXCLUDE_IDS 改回空的，再跑一次 build。」'},
-    {t:'圖從哪裡來',y:'用 Excel 打開 output/figdata/fig1_dkas.csv（三列小表），再打開 source/gnuplot/fig1_outcomes.gp：這是文字檔，按右鍵選「開啟檔案」→「記事本」（不要雙擊、不要用 Excel），每一行旁邊都有中文註解。看完關掉，問要不要儲存都按「不要儲存」。',say:'請把圖 1 改成長條圖，像所長原論文的 Fig. 2 那樣：兩組並排、誤差線是標準差。只改 gnuplot 腳本，跑一次 build，告訴我改了哪幾行。',c:'PDF 的圖 1 變成長條圖（第 02 段按「長條圖」看得到樣子）；數字一個都沒變。AI 會告訴你 source 裡只改了畫圖腳本（.gp），workspace/log.md 多一行紀錄是正常的。長條從 0 畫起，兩組差距看起來比折線圖小，數字其實一樣。'},
-    {t:'加一個新表',say:'請在分析程式加算兩組從前測到第 12 週的平均改變量（和標準差），做成新的表 4 放進論文的 Results，跑一次 build。',c:'output/tables/ 多了 table4.tex 和 table4.csv，PDF 多了表 4（範例論文原本有表 1 到表 3，這是第四張；不是所長原論文裡的表 4）。AI 會提醒：改變量的標準差受重建資料時假設的相關（0.5）影響，不能當成原研究的結果。'},
-    {t:'收尾：還原',say:'請列出練習改過和新增的 source 檔。我確認之後，改過的還原成練習前的樣子（git restore），新增的移到 workspace/練習留底/，其他檔都不要動，再跑一次 build。',c:'AI 先列清單等你；確認沒問題就回「確認，請還原。」。最後一行跟練習 2 一樣，PDF 回到練習前；練習新增的檔收在 workspace/練習留底/，不影響論文。'}
+    {t:'報到',y:'照行前準備第 6 項的方法，在 Codex 或 Claude 的 Code 打開 ai-paper-kit 資料夾。',say:'請先讀 AGENTS.md 和 WORKFLOW.md，再跟我報到。今天是練習。開始前先確認 source/ 有沒有還沒存版的修改或新增檔；有的話先列給我、停下來。',c:'第一行是「領隊 ·」加上資料夾路徑（領隊＝範本給 AI 的角色名字）。AI 回話第一行顯示的路徑，最後一段要是 ai-paper-kit；不是的話（例如 my-research-team），關掉這個對話，照行前準備第 6 項重開正確的資料夾，再貼一次。接著它會說 source/ 有沒有還沒存版的檔，再把練習規則複述一次：不寫紙條（AI 寫給自己的工作單）、不寫報告、不 commit（不存版）。它列出檔案、停下來的話，先別讓它刪或還原：那些可能是你以前的東西，請它說明那些檔是什麼（在現場也可以問講師）。'},
+    {t:'看原料',y:'用 Excel 打開 source/data/study_data.csv：一列一個人，共 140 人（Excel 顯示到第 141 列，第一列是欄名）；dkas_t0、dkas_t1、dkas_t2 是三個時間點的知識分數（t0＝前測、t1＝第 12 週、t2＝第 24 週）。再打開 source/data/published_values.csv：這是從原論文抄下來、拿來對照的數字。看完關掉時，Excel 問要不要儲存，一律按「不要儲存」。',c:'study_data.csv：第 1 列是欄名（id、group、age……共 19 欄），往下每列一個人；id 開頭 I 是介入組（intervention），C 是對照組（control）。published_values.csv：每一列是原論文印的一個數字。table 欄的 T1、T2、T4 是原論文的表 1、表 2、表 4；level 欄的 T0、T1、T2 才是時間點（前測、第 12 週、第 24 週）；stat 欄 mean＝平均、sd＝標準差、n＝人數、p＝p 值，value 是數字。程式只讀這兩個檔，不會改它們。'},
+    {t:'跑一次 build，看成品長出來',say:'請跑一次 build（執行 uv run build.py），告訴我最後一行，再告訴我 output 資料夾裡多了哪些檔。',c:'最後一行是 BUILD OK pages=9 undefined_cites=0 undefined_refs=0 refs=7 refs_without_doi=0 bib_warnings=0。開頭 BUILD OK 就是成功；pages=9 是 PDF 有 9 頁；undefined_cites、undefined_refs、bib_warnings 這三個要是 0。',
+      more:[
+        {k:'a',lab:'跟 AI 說（最後一行是 BUILD FAILED，或 AI 說失敗了）',text:'build 失敗了，訊息如上。請照它說的去看，告訴我是什麼問題、你打算怎麼修；我同意之後再修，修好再跑一次 build，把最後一行給我看。'},
+        {k:'y',text:'成功之後，用 Excel 打開 output/tables/table2.csv，再打開 output/main.pdf。看完兩個都要關掉（Excel 問要不要儲存，按「不要儲存」）：開著的話，下一次 build 會失敗，訊息會叫你先關掉再跑一次。'},
+        {k:'c',text:'table2.csv 每一列是一個量表的一個時間點（Time 欄 Baseline＝前測、Week 12＝第 12 週、Week 24＝第 24 週）。欄名裡 Int＝介入組、Ctl＝對照組、SD＝標準差、published＝原論文印的、reproduced＝程式重算的。順序是先兩欄 published、再兩欄 reproduced，所以 Int mean published 要跟隔兩欄的 Int mean reproduced 比；最後兩欄 p published、p reproduced 是 p 值。'}
+      ]},
+    {t:'追一個數字',say:'論文 3.2 節的 37.04 是從哪裡來的？請告訴我：資料檔的哪一欄、analyze.py 的哪一行算的、numbers.tex 裡的代號叫什麼、main.tex 哪一句用到它。',c:'AI 說得出第 01 段那五站：dkas_t1 欄 → analyze.py → 代號 \\DKASIntTOneMean → main.tex 那一句 → PDF 的 37.04。（實跑時 AI 說的是 analyze.py 第 211 行、numbers.tex 第 24 行、main.tex 第 78 行；行號可能不同。）'},
+    {t:'排除一個人，看全部一起變',y:'不用打開 analyze.py，把下面這句貼給 AI 就好。I048 是練習資料裡一位虛構居服員的編號。',say:'練習：假設事後發現練習資料裡的 I048 不符合收案條件，請在 analyze.py 上面的 EXCLUDE_IDS 加上 "I048"，跑一次 build，告訴我表 2 哪些數字變了、論文哪幾句的數字跟著變。',c:'總人數 140 → 139（介入組 70 → 69），37.04 變 37.41，效果量 d 從 0.92 變 1.01；表、圖、摘要、內文一起更新（第 01 段按「排除 I048」看得到）。Methods 多一句要你補排除理由；句子的解讀要你自己重讀。要記得：I048 剛好是介入組分數偏低的人，排除後效果看起來變大，所以排除誰，要在看結果之前、照事先定好的理由決定。',
+      more:[
+        {k:'a',lab:'做完一定要改回來，跟 AI 說',text:'請把 EXCLUDE_IDS 改回空的，再跑一次 build。'},
+        {k:'c',text:'人數回到 140，3.2 節的 DKAS 平均回到 37.04。'}
+      ]},
+    {t:'圖從哪裡來',y:'用 Excel 打開 output/figdata/fig1_dkas.csv：Excel 會顯示 4 列，第 1 列是欄名，下面 3 列是前測、第 12 週、第 24 週。再打開 source/gnuplot/fig1_outcomes.gp：這是文字檔，按右鍵選「開啟檔案」→「記事本」（不要雙擊、不要用 Excel；Mac 按右鍵選「打開檔案的應用程式」→「文字編輯」，以你的畫面為準），每一行旁邊都有中文註解。看完關掉，問要不要儲存都按「不要儲存」。',say:'請把圖 1 改成長條圖，像所長原論文的 Fig. 2 那樣：兩組並排、誤差線是標準差。只改 gnuplot 腳本，跑一次 build，告訴我改了哪幾行。',c:'PDF 的圖 1 變成長條圖（第 02 段按「長條圖」看得到樣子），圖 1 在 PDF 第 6 頁左右；數字一個都沒變。AI 會告訴你 source 裡只改了畫圖腳本（.gp），workspace/log.md（AI 的工作紀錄）多一行是正常的。長條從 0 畫起，兩組差距看起來比折線圖小，數字其實一樣。'},
+    {t:'加一個新表',say:'請在分析程式加算兩組從前測到第 12 週的平均改變量（和標準差），做成新的表 4 放進論文的 Results，跑一次 build。',c:'output/tables/ 多了 table4.tex 和 table4.csv，PDF 多了表 4（範例論文原本有表 1 到表 3，這是第四張；不是原論文裡的表 4）。AI 會提醒：改變量的標準差不能當成原研究的結果。原因是：同一個人前後兩次分數有多接近，原論文沒有寫，重建練習資料時範本自己設成 0.5（相關係數），改變量的標準差就是被這個假設決定的。'},
+    {t:'收尾：還原',say:'請列出練習改過和新增的 source 檔。我確認之後，改過的還原成練習前的樣子（git restore），新增的移到 workspace/練習留底/，其他檔都不要動，再跑一次 build。',c:'AI 先列清單、停下來等你。照上面做完的話，清單應該是改過 3 個檔（analyze.py、fig1_outcomes.gp、main.tex），新增的沒有；多出別的檔，先問 AI 那是什麼。',
+      more:[
+        {k:'a',lab:'清單沒問題，跟 AI 說',text:'確認，請還原。'},
+        {k:'c',text:'最後一行跟練習 2 一樣，PDF 回到練習前；練習新增的檔收在 workspace/練習留底/，不影響論文。'}
+      ]}
   ];
   var st={};try{st=JSON.parse(get('ltc-p3-practice-v2')||'{}')||{}}catch(e){st={}}
   if(typeof st!=='object'||Array.isArray(st))st={};
@@ -759,24 +863,31 @@ macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
     function fallback(){var ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}document.body.removeChild(ta);ok?onok():onfail()}
     try{navigator.clipboard.writeText(text).then(onok,fallback)}catch(e){fallback()}
   }
-  // 07：研究模擬的「老師說」複製鈕（靜態寫在頁面上，跟練習的複製鈕同一套行為）
-  document.querySelectorAll('#simulation .copybtn').forEach(function(btn){
-    var pre=btn.parentNode.querySelector('pre');
+  function bindCopy(btn,pre){
     btn.addEventListener('click',function(){copyText(pre.textContent,function(){btn.textContent='已複製';btn.classList.add('ok');setTimeout(function(){btn.textContent='複製';btn.classList.remove('ok')},1600)},function(){var rg=document.createRange();rg.selectNodeContents(pre);var s=getSelection();s.removeAllRanges();s.addRange(rg);btn.textContent=isMac?'已選取，請按 Command＋C':'已選取，請按 Ctrl＋C';setTimeout(function(){btn.textContent='複製'},4000)})});
-  });
+  }
+  // 07：研究模擬的「老師說」複製鈕（靜態寫在頁面上，跟練習的複製鈕同一套行為）
+  document.querySelectorAll('#simulation .copybtn').forEach(function(btn){bindCopy(btn,btn.parentNode.querySelector('pre'))});
+  // 04 練習卡的三種列：你自己做（y）、跟 AI 說（a，附複製鈕）、你會看到（c）
+  var LABS={y:'你自己做',a:'跟 AI 說',c:'你會看到'};
+  function makeRow(k,text,lab,id){
+    var r=document.createElement('div');r.className='row';
+    var l=document.createElement('span');l.className='lab '+k;l.textContent=lab||LABS[k];r.appendChild(l);
+    if(k==='a'){
+      var box=document.createElement('div');box.className='copybox';var pre=document.createElement('pre');pre.id=id;pre.textContent=text;
+      var btn=document.createElement('button');btn.type='button';btn.className='copybtn';btn.textContent='複製';bindCopy(btn,pre);
+      box.appendChild(pre);box.appendChild(btn);r.appendChild(box);
+    }else{r.appendChild(document.createTextNode(text))}
+    return r;
+  }
   var list=document.getElementById('exList');
   EX.forEach(function(x,i){
     var li=document.createElement('li');li.className='ex';li.id='ex'+(i+1);
     var h=document.createElement('h3');var sn=document.createElement('span');sn.className='sn';sn.textContent=i===0?'第 0 步':(i<7?('練習 '+i):'收尾');h.appendChild(sn);h.appendChild(document.createTextNode(x.t));li.appendChild(h);
-    if(x.y){var r=document.createElement('div');r.className='row';r.innerHTML='<span class="lab y">你自己做</span>';r.appendChild(document.createTextNode(x.y));li.appendChild(r)}
-    if(x.say){
-      var r2=document.createElement('div');r2.className='row';r2.innerHTML='<span class="lab a">跟 AI 說</span>';
-      var box=document.createElement('div');box.className='copybox';var pre=document.createElement('pre');pre.id='say'+(i+1);pre.textContent=x.say;
-      var btn=document.createElement('button');btn.type='button';btn.className='copybtn';btn.textContent='複製';
-      btn.addEventListener('click',function(){copyText(pre.textContent,function(){btn.textContent='已複製';btn.classList.add('ok');setTimeout(function(){btn.textContent='複製';btn.classList.remove('ok')},1600)},function(){var rg=document.createRange();rg.selectNodeContents(pre);var s=getSelection();s.removeAllRanges();s.addRange(rg);btn.textContent=isMac?'已選取，請按 Command＋C':'已選取，請按 Ctrl＋C';setTimeout(function(){btn.textContent='複製'},4000)})});
-      box.appendChild(pre);box.appendChild(btn);r2.appendChild(box);li.appendChild(r2);
-    }
-    var r3=document.createElement('div');r3.className='row';r3.innerHTML='<span class="lab c">你會看到</span>';r3.appendChild(document.createTextNode(x.c));li.appendChild(r3);
+    if(x.y)li.appendChild(makeRow('y',x.y));
+    if(x.say)li.appendChild(makeRow('a',x.say,'','say'+(i+1)));
+    li.appendChild(makeRow('c',x.c));
+    (x.more||[]).forEach(function(m,j){li.appendChild(makeRow(m.k,m.text,m.lab,'say'+(i+1)+'-'+(j+1)))});
     var fin=document.createElement('label');fin.className='fin';var cb=document.createElement('input');cb.type='checkbox';cb.id='exdone'+(i+1);cb.checked=!!st[i+1];
     cb.addEventListener('change',function(){st[i+1]=cb.checked;save();render()});
     fin.appendChild(cb);fin.appendChild(document.createTextNode('做完了'));li.appendChild(fin);
