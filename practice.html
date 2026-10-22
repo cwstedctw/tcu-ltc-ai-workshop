@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<title>長照所論文管線練習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap">
+<style>
+/* 版面沿用第一部分：米色紙面＋深綠橫幅分段、金色大字當段名、深藍技能卡（Ted 10/21 給的範例方向）。第三部分的段名：看得懂／分得清／裝得好／照著做／接得穩／畫得美／守得住／帶得走。 */
+:root{
+  --paper:#F6EEDD; --card:#FFFBF2; --ink:#1B2420; --muted:#5B655F;
+  --green:#1F4A3A; --green-ink:#F6EEDD; --gold:#C99A2E; --gold-soft:#F2E3B8;
+  --navy:#1C2B3A; --navy-ink:#EEF1F4; --line:#E0D3B6;
+  --ok:#24704F; --ok-soft:#DCEFE3; --warn:#B23A2B; --warn-soft:#F7DDD7;
+  --font-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+  --base:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111A15; --card:#18241E; --ink:#ECE5D4; --muted:#A7B0A8;
+    --green:#0E2E22; --green-ink:#F1E9D6; --gold:#E2B85A; --gold-soft:#3A3120;
+    --navy:#0F1B27; --navy-ink:#E4E9EE; --line:#2C3D33;
+    --ok:#7FD0A6; --ok-soft:#1C3A2B; --warn:#F09A86; --warn-soft:#3D221D; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111A15; --card:#18241E; --ink:#ECE5D4; --muted:#A7B0A8;
+  --green:#0E2E22; --green-ink:#F1E9D6; --gold:#E2B85A; --gold-soft:#3A3120;
+  --navy:#0F1B27; --navy-ink:#E4E9EE; --line:#2C3D33;
+  --ok:#7FD0A6; --ok-soft:#1C3A2B; --warn:#F09A86; --warn-soft:#3D221D; color-scheme:dark;
+}
+:root[data-proj="on"]{--base:20px}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:1rem;line-height:1.75;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+a{color:var(--ok)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:48rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance}
+p{margin:0 0 .9rem}
+header.top{padding-block:2.4rem 1.6rem}
+.eyebrow{font-size:.82rem;letter-spacing:.1em;color:var(--ok);font-weight:700}
+h1{font-size:2.15rem;line-height:1.3;margin:.35rem 0 .7rem;font-weight:900}
+.lede{font-size:1.06rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.3rem 1.2rem;font-size:.88rem;color:var(--muted)}
+.tools{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.1rem;align-items:center}
+.chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:.3rem 1rem;font-size:.92rem}
+.chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--green-ink)}
+.mycards{display:inline-flex;align-items:center;gap:.6rem;background:var(--navy);color:var(--navy-ink);border:2px solid var(--gold);border-radius:999px;padding:.4rem 1.1rem;font-weight:700;text-decoration:none}
+.mycards .cnt{background:var(--gold);color:var(--navy);border-radius:999px;padding:0 .55rem;font-size:.85rem;font-variant-numeric:tabular-nums}
+.band{background:var(--green);color:var(--green-ink);margin-top:2.2rem;scroll-margin-top:0}
+.band .wrap{padding-block:1.6rem 1.4rem}
+.band .big{font-size:3.4rem;line-height:1.1;font-weight:900;color:var(--gold);letter-spacing:.04em;margin:0}
+.band .sub{font-size:1.25rem;font-weight:700;margin:.4rem 0 0}
+.band .tag{font-family:var(--font-mono);font-size:.8rem;color:var(--gold);opacity:.9;letter-spacing:.12em}
+section.blk{padding-block:1.8rem 1rem}
+.ask{background:var(--ok-soft);border-radius:12px;padding:1rem 1.1rem;margin:.6rem 0 1rem}
+.ask b{color:var(--ok)}
+.doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:1rem 0 .4rem}
+.door{background:var(--card);border:1.5px solid var(--line);border-top:5px solid var(--gold);border-radius:10px;padding:.8rem .9rem;min-width:0}
+.door .k{font-weight:700}
+.door .v{font-size:.85rem;color:var(--muted);word-break:break-all}
+.account{text-align:center;font-size:.92rem;color:var(--muted);margin:.2rem 0 1rem}
+.account b{color:var(--ink)}
+.tabs{display:flex;gap:.4rem;margin:.6rem 0;flex-wrap:wrap}
+.tab{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:.35rem 1rem}
+.tab[aria-selected="true"]{background:var(--navy);color:var(--navy-ink);border-color:var(--navy)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;vertical-align:top;padding:.55rem .6rem;border-bottom:1px solid var(--line)}
+th{font-size:.82rem;letter-spacing:.06em;color:var(--muted)}
+.pill{display:inline-block;font-size:.78rem;padding:.05rem .55rem;border-radius:999px;font-weight:700;white-space:nowrap}
+.pill.go{background:var(--ok-soft);color:var(--ok)}
+.pill.stay{background:var(--gold-soft);color:var(--ink)}
+.pill.sep{background:var(--warn-soft);color:var(--warn)}
+.note{font-size:.85rem;color:var(--muted)}
+.claim{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin:1rem 0 .4rem;padding:.8rem 1rem;border:2px dashed var(--gold);border-radius:12px}
+.claim button{background:var(--navy);color:var(--navy-ink);border:0;border-radius:999px;padding:.35rem 1.1rem;font-weight:700}
+.claim button[aria-pressed="true"]{background:var(--gold);color:var(--navy)}
+.claim span{font-size:.9rem;color:var(--muted)}
+.app{font-size:1.3rem;font-weight:900;margin:1.4rem 0 .4rem;display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+.app small{font-size:.85rem;font-weight:500;color:var(--muted)}
+.steps{list-style:none;margin:.6rem 0 0;padding:0;display:grid;gap:.8rem}
+.step{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:1rem 1.1rem;min-width:0}
+.step h3{margin:0 0 .35rem;font-size:1.05rem;display:flex;gap:.5rem;align-items:baseline}
+.sn{font-family:var(--font-mono);color:var(--gold);font-weight:700}
+.step > p:last-child{margin-bottom:0}
+.path{font-family:var(--font-mono);font-size:.84rem;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:.08rem .45rem;display:inline-block;margin:.1rem 0;word-break:break-word}
+.why{font-size:.9rem;color:var(--muted)}
+.done{font-size:.88rem;border-left:4px solid var(--ok);padding-left:.6rem;margin-top:.5rem}
+.os-win,.os-mac{display:none}
+:root[data-os="win"] .os-win{display:block}
+:root[data-os="mac"] .os-mac{display:block}
+.osbar{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:.9rem;margin:.4rem 0}
+.copybox{position:relative;background:var(--paper);border:1.5px dashed var(--ok);border-radius:10px;margin:.6rem 0;min-width:0}
+.copybox pre{margin:0;padding:.8rem .9rem 2.5rem;white-space:pre-wrap;word-break:break-word;font-family:var(--font-body);font-size:.93rem;line-height:1.7}
+.copybtn{position:absolute;right:.5rem;bottom:.5rem;border:0;background:var(--ok);color:var(--card);border-radius:8px;padding:.2rem .8rem;font-size:.85rem;max-width:calc(100% - 1rem)}
+.copybtn.ok{background:var(--gold);color:var(--navy)}
+.minichk{margin-top:1rem;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.8rem 1rem}
+.minichk .hd{font-weight:700;margin-bottom:.2rem}
+.minichk label{display:flex;gap:.5rem;align-items:flex-start;padding:.25rem 0;font-size:.95rem}
+.minichk input{margin-top:.45rem;accent-color:var(--ok);width:1.05rem;height:1.05rem;flex:none}
+.lines{display:grid;gap:.8rem}
+.line{display:grid;grid-template-columns:2.6rem minmax(0,1fr);gap:.7rem;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:1rem}
+.line .num{font-size:2rem;font-weight:900;color:var(--warn);line-height:1}
+.line h3{margin:0 0 .3rem;font-size:1.1rem}
+.builder{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:1rem 1.1rem;margin-top:.6rem}
+.bstep{display:grid;grid-template-columns:2rem minmax(0,1fr);gap:.6rem;align-items:start;padding:.7rem 0;border-bottom:1px dashed var(--line)}
+.bstep:last-child{border-bottom:0}
+.circ{width:1.8rem;height:1.8rem;border-radius:50%;background:var(--gold);color:var(--navy);display:grid;place-items:center;font-weight:900;font-size:.95rem}
+.bstep .lbl{font-weight:700;margin-bottom:.4rem}
+.taskchips{display:flex;flex-wrap:wrap;gap:.45rem}
+.taskchips .chip[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--card)}
+.fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem}
+.fields label{display:flex;flex-direction:column;gap:.25rem;font-size:.85rem;color:var(--muted);min-width:0}
+.fields input{font:inherit;font-size:.95rem;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:.45rem .6rem;min-width:0;width:100%}
+.fields input:focus{border-color:var(--ok);outline:none}
+.ptcf{border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--paper)}
+.prow{display:grid;grid-template-columns:5.5rem minmax(0,1fr);gap:.6rem;padding:.6rem .8rem;border-bottom:1px solid var(--line)}
+.prow:last-child{border-bottom:0}
+.prow .k{font-weight:700;display:flex;gap:.4rem;align-items:baseline}
+.prow .k b{display:inline-grid;place-items:center;width:1.4rem;height:1.4rem;border-radius:4px;background:var(--navy);color:var(--navy-ink);font-size:.8rem;font-family:var(--font-mono)}
+.prow .v{font-size:.93rem;min-width:0;word-break:break-word}
+.fill{background:var(--ok-soft);color:var(--ok);font-weight:700;border-radius:4px;padding:0 .2rem}
+.miss{color:var(--warn);font-weight:700}
+.legend{font-size:.82rem;color:var(--muted);margin:.4rem 0 0}
+.actions{display:flex;flex-wrap:wrap;gap:.5rem}
+.btn{display:inline-flex;align-items:center;gap:.3rem;border-radius:8px;padding:.45rem 1rem;font-weight:700;text-decoration:none;border:1.5px solid var(--ok)}
+.btn.primary{background:var(--ok);color:var(--card)}
+.btn.ghost{background:transparent;color:var(--ok)}
+.status{font-size:.88rem;color:var(--ok);min-height:1.4em;margin-top:.4rem}
+.share{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1fr);gap:.7rem;align-items:center;margin:1rem 0 .4rem}
+.agent{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.8rem;text-align:center;min-width:0}
+.agent .k{font-weight:700}
+.agent .v{font-size:.82rem;color:var(--muted)}
+.arrow{font-size:.82rem;color:var(--ok);display:block}
+.folder{background:var(--gold-soft);border:2px solid var(--gold);border-radius:4px 14px 14px 14px;padding:.8rem 1rem;min-width:0}
+.folder .k{font-weight:700;margin-bottom:.3rem}
+.folder ul{margin:0;padding-left:1.1rem;font-size:.88rem}
+code{font-family:var(--font-mono);font-size:.86rem}
+.sync{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.4rem .6rem;margin:.8rem 0 1rem;font-size:.9rem}
+.sync .m{background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:.15rem .8rem}
+.sync .gh{background:var(--navy);color:var(--navy-ink);border-radius:999px;padding:.15rem .9rem;font-weight:700}
+.skills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;margin-top:1rem}
+.skill{perspective:900px;border:0;background:none;padding:0;text-align:left;color:inherit;min-width:0;display:grid}
+.skill .inner{position:relative;display:grid;min-height:13rem;transition:transform .5s;transform-style:preserve-3d}
+.skill[aria-pressed="true"] .inner{transform:rotateY(180deg)}
+.face{grid-area:1/1;position:relative;border-radius:14px;padding:1rem;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;background:var(--navy);color:var(--navy-ink);border:2px solid var(--gold)}
+.face.back{transform:rotateY(180deg);background:var(--card);color:var(--ink)}
+.face .no{font-size:2.2rem;font-weight:900;color:var(--gold);line-height:1;font-family:var(--font-mono)}
+.face .ttl{font-weight:900;font-size:1.05rem;margin:.5rem 0 .3rem}
+.face .one{font-size:.88rem;opacity:.9}
+.face .hint{margin-top:auto;font-size:.78rem;opacity:.75;text-align:right}
+.badge{position:absolute;top:.8rem;right:.8rem;font-size:.75rem;font-weight:700;border-radius:999px;padding:.05rem .6rem;background:var(--line);color:var(--ink)}
+.skill.on .badge{background:var(--gold);color:var(--navy)}
+.face.back .pts{display:block;margin-top:.2rem;font-size:.88rem;line-height:1.6}
+.face.back .pt{display:block;padding-left:1rem;position:relative}
+.face.back .pt::before{content:"・";position:absolute;left:0;color:var(--gold)}
+.skill:not(.on) .face.front{filter:saturate(.35);opacity:.85}
+.tip{font-size:1rem;font-weight:700;border-left:5px solid var(--gold);padding-left:.8rem;margin:1.2rem 0}
+.progress{display:flex;align-items:center;gap:.8rem;margin-top:1rem;font-size:.9rem;flex-wrap:wrap}
+.bar{flex:1;min-width:8rem;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+footer{padding-block:2rem 3rem;font-size:.85rem;color:var(--muted)}
+footer ul{padding-left:1.1rem;margin:.4rem 0}
+@media (max-width:720px){
+  h1{font-size:1.7rem}
+  .band .big{font-size:2.6rem}
+  .doors,.fields,.skills,.share{grid-template-columns:minmax(0,1fr)}
+  .prow{grid-template-columns:minmax(0,1fr);gap:.2rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+<style>
+/* 第三部分追加：比較表、分工示意、誰會用到的檔案表、步驟器、數字示範、預覽圖。其餘沿用第一部分的樣式。 */
+.vs td:first-child{font-weight:700;white-space:nowrap}
+.win{color:var(--ok);font-weight:700}
+.meh{color:var(--muted)}
+.flow3{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:.4rem;align-items:center;margin:1rem 0}
+.flow3 .box{background:var(--card);border:1.5px solid var(--line);border-top:5px solid var(--gold);border-radius:10px;padding:.6rem .7rem;text-align:center;min-width:0}
+.flow3 .box.you{background:var(--navy);color:var(--navy-ink);border-color:var(--navy);border-top-color:var(--gold)}
+.flow3 .k{font-weight:900}
+.flow3 .v{font-size:.82rem;opacity:.85}
+.flow3 .to{color:var(--gold);font-weight:900;font-size:1.2rem;text-align:center}
+.runby{display:inline-block;font-size:.75rem;font-weight:700;border-radius:999px;padding:.02rem .55rem;white-space:nowrap}
+.runby.ai{background:var(--ok-soft);color:var(--ok)}
+.runby.auto{background:var(--gold-soft);color:var(--ink)}
+.runby.you{background:var(--navy);color:var(--navy-ink)}
+.pipe{display:flex;flex-wrap:wrap;gap:.4rem;margin:.8rem 0}
+.pipe button{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:.4rem .75rem;font-weight:700;display:flex;align-items:center;gap:.4rem;font-size:.92rem}
+.pipe button .n{display:inline-grid;place-items:center;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--gold);color:var(--navy);font-size:.82rem}
+.pipe button[aria-selected="true"]{background:var(--navy);color:var(--navy-ink);border-color:var(--navy)}
+.stepcard{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:1rem 1.1rem}
+.stepcard h3{margin:0 0 .5rem;font-size:1.12rem}
+.stepcard .row{margin:.55rem 0}
+.stepcard .lab{font-weight:900;font-size:.88rem;display:block;margin-bottom:.15rem}
+.stepcard .lab.y{color:var(--ink)}
+.stepcard .lab.a{color:var(--ok)}
+.stepcard .lab.c{color:var(--warn)}
+.stepnav{display:flex;justify-content:space-between;gap:.5rem;margin-top:.8rem}
+.cmd{font-family:var(--font-mono);font-size:.82rem;background:var(--navy);color:var(--navy-ink);border-radius:8px;padding:.6rem .8rem;margin:.4rem 0;white-space:pre-wrap;word-break:break-word}
+.demo{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:1rem 1.1rem;margin-top:.6rem}
+.demo .sentence{font-family:Georgia,"Times New Roman",serif;font-size:1.02rem;line-height:1.8;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;margin:.6rem 0}
+.mval{background:var(--ok-soft);color:var(--ok);font-weight:700;border-radius:4px;padding:0 .25rem;transition:background .3s}
+.mval.flash{background:var(--gold);color:var(--navy)}
+.src{font-family:var(--font-mono);font-size:.8rem;color:var(--muted);word-break:break-word}
+.shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:.8rem 0}
+.shots figure{margin:0;min-width:0}
+.shots img{width:100%;height:auto;border:1.5px solid var(--line);border-radius:6px;background:#fff;display:block}
+.shots figcaption{font-size:.8rem;color:var(--muted);margin-top:.3rem}
+.routes{display:grid;gap:.7rem;margin:.6rem 0}
+.route{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.9rem 1rem;min-width:0}
+.route.best{border:2px solid var(--ok)}
+.route h3{margin:0 0 .3rem;font-size:1.02rem}
+.route .tag2{display:inline-block;font-size:.75rem;font-weight:700;border-radius:999px;padding:0 .6rem;background:var(--ok);color:var(--card);margin-left:.4rem}
+.route ol{margin:.3rem 0 0;padding-left:1.2rem;font-size:.93rem}
+.qa{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.9rem 1rem;margin:.6rem 0}
+.qa h3{margin:0 0 .3rem;font-size:1.02rem}
+@media (max-width:720px){
+  .flow3{grid-template-columns:minmax(0,1fr)}
+  .flow3 .to{transform:rotate(90deg)}
+  .shots{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+<style>
+/* 練習頁追加：數字的旅程、gnuplot 腳本逐行白話、原料與成品對照、練習卡、對照結果。顏色沿用系列的米色紙面＋深綠橫幅＋金色段名。 */
+.warnbox{background:var(--warn-soft);border-left:5px solid var(--warn);border-radius:8px;padding:.7rem 1rem;margin:1rem 0;font-size:.95rem}
+.warnbox b{color:var(--warn)}
+.prep{background:var(--card);border:2px solid var(--gold);border-radius:12px;padding:.8rem 1.1rem;margin:.6rem 0 1rem}
+.prep ol{margin:.4rem 0 0;padding-left:1.3rem}
+.prep li{margin:.35rem 0}
+.togglebar{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.6rem .8rem;margin:.8rem 0;font-size:.92rem}
+.togglebar .lbl{font-weight:700}
+.journey{list-style:none;margin:.8rem 0 0;padding:0;display:grid}
+.stop{display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:.8rem}
+.stop .rail{display:flex;flex-direction:column;align-items:center}
+.stop .dot{width:2.1rem;height:2.1rem;border-radius:50%;background:var(--gold);color:var(--navy);display:grid;place-items:center;font-weight:900;flex:none}
+.stop.out .dot{background:var(--navy);color:var(--navy-ink);border:2px solid var(--gold)}
+.stop .rail::after{content:"";flex:1;width:3px;background:var(--line);margin:.2rem 0}
+.stop:last-child .rail::after{display:none}
+.stop .body{padding-bottom:1.2rem;min-width:0}
+.stop .where{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;margin-bottom:.2rem}
+.stop .what{font-size:.95rem;margin:.2rem 0 .4rem}
+.kind{font-size:.72rem;font-weight:700;border-radius:999px;padding:.02rem .55rem;white-space:nowrap}
+.kind.src{background:var(--gold-soft);color:var(--ink)}
+.kind.out{background:var(--navy);color:var(--navy-ink)}
+.snip{font-family:var(--font-mono);font-size:.82rem;line-height:1.6;background:var(--card);border:1.5px solid var(--line);border-radius:8px;padding:.6rem .8rem;overflow-x:auto;white-space:pre}
+.snip.prose{font-family:Georgia,"Times New Roman",serif;font-size:.98rem;white-space:normal}
+.snip .hl{background:var(--ok-soft);color:var(--ok);font-weight:700;border-radius:3px;padding:0 .15rem;transition:background .3s,color .3s}
+.snip .hl.flash{background:var(--gold);color:var(--navy)}
+.snip .gone{text-decoration:line-through;opacity:.45}
+.snip .dim{color:var(--muted)}
+.changed{background:var(--card);border:2px solid var(--gold);border-radius:12px;padding:.8rem 1rem;margin:.4rem 0 1rem}
+.changed h3{margin:0 0 .3rem;font-size:1rem}
+.changed ul{margin:0;padding-left:1.1rem;font-size:.93rem}
+.changed .same{color:var(--muted)}
+.annot{display:grid;gap:.4rem;margin:.6rem 0}
+.aline{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:.7rem;align-items:start;background:var(--card);border:1.5px solid var(--line);border-radius:8px;padding:.5rem .7rem}
+.aline > code{display:block;font-size:.78rem;background:var(--navy);color:var(--navy-ink);border-radius:6px;padding:.4rem .55rem;white-space:pre-wrap;word-break:break-all}
+.aline span{font-size:.92rem}
+.figswap{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.8rem;margin:.6rem 0}
+.figswap img{display:block;width:100%;height:auto;background:#fff;border-radius:6px}
+.figswap .cap{font-size:.85rem;color:var(--muted);margin:.4rem 0 0}
+.mini{border-collapse:collapse;font-family:var(--font-mono);font-size:.82rem;width:auto;min-width:100%}
+.mini th,.mini td{padding:.35rem .6rem;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.mini th{font-family:var(--font-body);text-align:right}
+.mini td:first-child,.mini th:first-child{text-align:left}
+.split{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:.6rem;align-items:stretch;margin:.8rem 0}
+.side{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:.8rem 1rem;min-width:0}
+.side.src{border-color:var(--gold)}
+.side.out{border-color:var(--navy)}
+.side h3{margin:0 0 .4rem;font-size:1.05rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.side dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:.3rem .6rem;font-size:.9rem}
+.side dt{font-family:var(--font-mono);font-size:.82rem;font-weight:700;white-space:nowrap}
+.side dd{margin:0;min-width:0}
+.split .mid{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;color:var(--ok);font-weight:900;text-align:center;font-size:.85rem}
+.split .mid .big2{font-size:1.8rem;line-height:1;color:var(--gold)}
+.rule{font-size:1.05rem;font-weight:700;border-left:5px solid var(--gold);padding-left:.8rem;margin:1rem 0}
+.exs{list-style:none;margin:.6rem 0 0;padding:0;display:grid;gap:.9rem}
+.ex{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:1rem 1.1rem;min-width:0}
+.ex.isdone{border-color:var(--ok)}
+.ex h3{margin:0 0 .4rem;font-size:1.08rem;display:flex;gap:.5rem;align-items:baseline;flex-wrap:wrap}
+.ex .row{margin:.45rem 0}
+.ex .lab{font-weight:900;font-size:.86rem;display:block;margin-bottom:.1rem}
+.ex .lab.y{color:var(--ink)}
+.ex .lab.a{color:var(--ok)}
+.ex .lab.c{color:var(--warn)}
+.ex .fin{display:flex;gap:.5rem;align-items:center;margin-top:.6rem;font-size:.92rem;font-weight:700}
+.ex .fin input{width:1.15rem;height:1.15rem;accent-color:var(--ok)}
+.score{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin:.6rem 0}
+.score .box{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.8rem .9rem;min-width:0}
+.score h3{margin:0 0 .4rem;font-size:1rem}
+.ok{color:var(--ok);font-weight:700}
+.near{color:var(--ink);font-weight:700;background:var(--gold-soft)}
+.walks{display:grid;gap:.6rem;margin:.8rem 0}
+.walk{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.2rem 1rem;min-width:0}
+.walk[open]{border-color:var(--gold);padding-bottom:.6rem}
+.walk summary{cursor:pointer;font-weight:700;padding:.6rem 0;display:flex;gap:.6rem;align-items:baseline;flex-wrap:wrap}
+.walk summary .t{margin-left:auto;font-size:.8rem;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
+.walk blockquote{margin:.4rem 0;padding:.6rem .8rem;background:var(--paper);border-left:4px solid var(--ok);border-radius:0 8px 8px 0;font-size:.92rem;word-break:break-word}
+.walk blockquote code{font-size:.8rem;word-break:break-all}
+.walk .you,.walk .mean{font-size:.93rem;margin:.4rem 0}
+.facts{display:grid;gap:.6rem;margin:.6rem 0}
+.fact{display:grid;grid-template-columns:6.4rem minmax(0,1fr);gap:.7rem;align-items:baseline;background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:.7rem .9rem}
+.fact .n{font-size:1.45rem;font-weight:900;white-space:nowrap;color:var(--ok);font-variant-numeric:tabular-nums;line-height:1.1}
+.fact .n.no{color:var(--warn)}
+@media (max-width:720px){
+  .aline{grid-template-columns:minmax(0,1fr)}
+  .split{grid-template-columns:minmax(0,1fr)}
+  .split .mid{flex-direction:row}
+  .split .mid .big2{transform:rotate(90deg)}
+  .score{grid-template-columns:minmax(0,1fr)}
+}
+</style>
+<style>.sitenav{background:var(--navy,#1C2B3A);font-size:.88rem;position:relative;z-index:5}.sitenav .wrap{display:flex;flex-wrap:wrap;gap:.2rem .9rem;padding-block:.5rem}.sitenav a{color:var(--navy-ink,#EEF1F4);text-decoration:none;opacity:.8}.sitenav a[aria-current=page]{opacity:1;font-weight:700;color:var(--gold,#C99A2E)}</style>
+</head>
+<body>
+<nav class="sitenav" aria-label="工作坊各頁"><div class="wrap"><a href="index.html">行前準備</a><a href="setup.html">第一部分</a><a href="part2.html">第二部分</a><a href="part3.html">第三部分</a><a href="practice.html" aria-current="page">第三部分練習</a></div></nav>
+<header class="top wrap">
+  <div class="eyebrow">慈濟大學長期照護研究所・AI 工作坊 2026-10-28・第三部分練習</div>
+  <h1>數字由程式寫，圖由 gnuplot 畫</h1>
+  <p class="lede">用所長團隊 2021 年發表的論文當例子，看一個數字、一張圖，怎麼從資料走進論文。看懂之後，照第 04 段做六個練習：你只跟 AI 說話，大約 30 分鐘。第 07 段是研究模擬：只給資料和文獻，看 AI 十步寫完一篇論文。</p>
+  <div class="meta">
+    <span>例子：Su、Koo、Lee、Sung、Lee、Liu（2021），<a href="https://doi.org/10.1186/s12877-021-02075-3" target="_blank" rel="noopener"><i>BMC Geriatrics</i> 21:126</a></span>
+    <span>140 位居服員，兩組，DKAS／ADQ／SCIDS 三個時間點</span>
+  </div>
+  <div class="warnbox"><b>練習資料不是原始資料。</b>論文沒有公開原始資料，範本裡的 140 筆是依論文表 1、表 2 重建的：平均、標準差、檢定結果對得上論文，每個人的分數是假的，不能拿來下研究結論。</div>
+  <div class="tools">
+    <button class="chip" id="projBtn" type="button" aria-pressed="false">投影大字</button>
+    <a class="chip" href="#do">直接去做練習 ↓</a>
+  </div>
+</header>
+
+<div class="band" id="b1"><div class="wrap"><div class="tag">01・一個數字的旅程</div><p class="big">追得到</p><p class="sub">論文裡的 37.04，是從哪裡來的</p></div></div>
+<main>
+<section class="blk wrap" id="number">
+  <p>用 Word 寫論文，數字是從統計軟體抄進去的。這條流程裡，<b>論文沒有一個結果數字是手打的</b>：程式算好、取一個名字（代號），論文裡只寫代號，排版時才換成數字。下面跟著「介入組第 12 週的知識分數平均」走一次。</p>
+  <div class="togglebar" role="group" aria-label="切換資料">
+    <span class="lbl">資料：</span>
+    <button class="chip" type="button" data-mode="all" aria-pressed="true">全部 140 人</button>
+    <button class="chip" type="button" data-mode="excl" aria-pressed="false">排除 I048（練習 4）</button>
+  </div>
+  <ol class="journey">
+    <li class="stop">
+      <div class="rail"><div class="dot">1</div></div>
+      <div class="body">
+        <div class="where"><span class="path">source/data/study_data.csv</span><span class="kind src">原料</span></div>
+        <p class="what">一列一個人。<code>dkas_t1</code> 是第 12 週的知識分數（0–50）。程式只讀這個檔，不改它。</p>
+        <div class="snip">id    group         dkas_t1
+I001  intervention  37
+I002  intervention  44
+I003  intervention  43
+<span class="dim">…</span>
+<span data-row="I048">I048  intervention  12</span>
+<span class="dim">…（介入組共 <span class="hl" data-k="nint">70</span> 人）</span></div>
+      </div>
+    </li>
+    <li class="stop">
+      <div class="rail"><div class="dot">2</div></div>
+      <div class="body">
+        <div class="where"><span class="path">source/scripts/analyze.py</span><span class="kind src">原料（程式）</span></div>
+        <p class="what">分析程式算介入組 <code>dkas_t1</code> 的平均，照 SPSS、Excel 的方式四捨五入到小數兩位，再給這個數字取名叫 <code>DKASIntTOneMean</code>（DKAS、介入組 Int、第 12 週 TOne、平均 Mean）。</p>
+        <div class="snip"><span class="dim"># 排除名單：老師決定，寫在程式最上面</span>
+EXCLUDE_IDS = <span class="hl" data-k="excl">[]</span>
+<span class="dim"># 每個量表、每一組、每個時間點，都算平均並取名</span>
+macros[f"{scale}{gk}{tname}Mean"] = fmt(s.mean(), 2)</div>
+      </div>
+    </li>
+    <li class="stop out">
+      <div class="rail"><div class="dot">3</div></div>
+      <div class="body">
+        <div class="where"><span class="path">output/numbers.tex</span><span class="kind out">成品</span></div>
+        <p class="what">程式把每個數字寫成一行：代號＝數字。這個檔每次 build 都重做，不要手改。</p>
+        <div class="snip">\newcommand{\NTotal}{<span class="hl" data-k="n">140</span>}
+\newcommand{\DKASIntTOneMean}{<span class="hl" data-k="mean">37.04</span>}
+\newcommand{\DKASTOneD}{<span class="hl" data-k="d">0.92</span>}</div>
+      </div>
+    </li>
+    <li class="stop">
+      <div class="rail"><div class="dot">4</div></div>
+      <div class="body">
+        <div class="where"><span class="path">source/paper/main.tex</span><span class="kind src">原料（論文本文）</span></div>
+        <p class="what">論文本文裡寫的是<b>代號</b>，不是數字。換資料時，這一句一個字都不用改。</p>
+        <div class="snip prose">At week 12, DKAS scores were <span class="hl">\DKASIntTOneMean{}</span> in the intervention group and \DKASCtlTOneMean{} in the control group (\DKASTOnePstat{})…</div>
+      </div>
+    </li>
+    <li class="stop out">
+      <div class="rail"><div class="dot">5</div></div>
+      <div class="body">
+        <div class="where"><span class="path">output/main.pdf</span><span class="kind out">成品</span></div>
+        <p class="what">排版時，LaTeX 把代號換成 <code>numbers.tex</code> 裡的數字。你看到的論文長這樣：</p>
+        <div class="snip prose">At week 12, DKAS scores were <span class="hl" data-k="mean">37.04</span> in the intervention group and 30.43 in the control group (<i>p</i> &lt; 0.001)…</div>
+      </div>
+    </li>
+  </ol>
+  <div class="changed" id="changed" aria-live="polite">
+    <h3 id="changedTitle">按上面的「排除 I048」，看哪些數字一起變</h3>
+    <ul id="changedList"><li class="same">現在用的是全部 140 人，數字跟論文對得上。</li></ul>
+  </div>
+  <p class="why">數字會自動更新，<b>句子的解讀不會</b>。例如排除一個人之後，Discussion 裡「結果跟論文對得上」那句就不再成立：數字變了，用到它的句子要你重讀一次。</p>
+</section>
+
+<div class="band" id="b2"><div class="wrap"><div class="tag">02・一張圖的旅程</div><p class="big">畫得出</p><p class="sub">程式做小表，gnuplot 照表畫圖</p></div></div>
+<section class="blk wrap" id="figure">
+  <p>圖也一樣不是手畫的。分析程式先把畫圖要的數字整理成一張小表，gnuplot 腳本讀這張表、照腳本的指示畫出來。資料變了，表跟著變，圖也跟著重畫。</p>
+  <h3 class="app">① 小表 <small><span class="path">output/figdata/fig1_dkas.csv</span>（Excel 打得開）</small></h3>
+  <div class="tablewrap"><table class="mini" aria-label="圖 1 DKAS 小圖用的資料表">
+    <thead><tr><th>time</th><th>int_mean</th><th>int_sd</th><th>ctl_mean</th><th>ctl_sd</th></tr></thead>
+    <tbody>
+      <tr><td>0（前測）</td><td><span class="hl" data-k="f0m">26.686</span></td><td><span class="hl" data-k="f0s">6.719</span></td><td>25.543</td><td>8.140</td></tr>
+      <tr><td>1（第 12 週）</td><td><span class="hl" data-k="f1m">37.043</span></td><td><span class="hl" data-k="f1s">7.930</span></td><td>30.429</td><td>6.439</td></tr>
+      <tr><td>2（第 24 週）</td><td><span class="hl" data-k="f2m">36.200</span></td><td><span class="hl" data-k="f2s">5.550</span></td><td>29.943</td><td>7.539</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">int＝介入組、ctl＝對照組；mean＝平均、sd＝標準差。這張小表跟著第 01 段的「資料」切換一起變。</p>
+
+  <h3 class="app">② 腳本 <small><span class="path">source/gnuplot/fig1_outcomes.gp</span>：每一行在做什麼</small></h3>
+  <div class="annot">
+    <div class="aline"><code>set terminal cairolatex pdf size 12cm,6cm</code><span>畫成 12 公分寬（論文版面的寬度）。圖上的字交給 LaTeX 排，跟內文同一套字型；放大也不會糊。</span></div>
+    <div class="aline"><code>set output 'figures/fig1.tex'</code><span>畫好存到 <code>output/figures/</code>。Word 版另外存一份 PNG。</span></div>
+    <div class="aline"><code>set datafile separator comma</code><span>小表是 CSV，用逗號分欄。</span></div>
+    <div class="aline"><code>set style line 1 lc rgb '#0072B2' lw 2 pt 7</code><span>介入組：藍色實線、圓點。藍和橘是色盲也分得出來的配色。</span></div>
+    <div class="aline"><code>set xtics ('0' 0, '12' 1, '24' 2)</code><span>橫軸的三個點標成第 0、12、24 週。</span></div>
+    <div class="aline"><code>set autoscale y</code><span>縱軸範圍跟著資料走。換資料不會把點切掉。</span></div>
+    <div class="aline"><code>set multiplot layout 1,3</code><span>一張圖裡並排三張小圖：DKAS、ADQ、SCIDS。</span></div>
+    <div class="aline"><code>plot 'figdata/fig1_dkas.csv' every ::1 using ($1-0.04):2:3 with yerrorlines ls 1</code><span>讀小表，跳過第一列欄名；第 1 欄當橫軸，第 2 欄（平均）當縱軸，第 3 欄（標準差）畫成誤差線。</span></div>
+    <div class="aline"><code>''  every ::1 using ($1+0.04):4:5 with yerrorlines ls 2</code><span>同一張表的第 4、5 欄是對照組；往右挪一點，兩組的誤差線才不會疊在一起。</span></div>
+  </div>
+  <p class="note">這些你不用背，也不用自己寫：跟 AI 說要什麼圖，它會改腳本。看得懂每一行在做什麼，就能檢查它改得對不對。</p>
+
+  <h3 class="app">③ 畫出來的圖 <small><span class="path">output/figures/fig1</span></small></h3>
+  <div class="togglebar" role="group" aria-label="切換圖的畫法">
+    <span class="lbl">畫法：</span>
+    <button class="chip" type="button" data-fig="line" aria-pressed="true">折線圖（範本現在的樣子）</button>
+    <button class="chip" type="button" data-fig="bar" aria-pressed="false">長條圖（練習 5 之後）</button>
+  </div>
+  <div class="figswap">
+    <img id="figImg" src="img/practice/fig1-line.png" alt="圖 1：兩組在三個時間點的 DKAS、ADQ、SCIDS 平均與標準差，折線圖" width="1500" height="560">
+    <p class="cap" id="figCap">同一張小表，用折線畫。藍色實線是介入組，橘色虛線是對照組；誤差線是標準差。</p>
+  </div>
+</section>
+
+<div class="band" id="b3"><div class="wrap"><div class="tag">03・資料夾怎麼分</div><p class="big">分得開</p><p class="sub">原料放 source，成品在 output</p></div></div>
+<section class="blk wrap" id="folders">
+  <div class="split">
+    <div class="side src">
+      <h3>source/ <span class="kind src">原料：要改，就改這裡</span></h3>
+      <dl>
+        <dt>data/</dt><dd>研究資料（CSV）。你放，AI 只讀</dd>
+        <dt>refs/</dt><dd>書目 refs.bib，Zotero 自動匯出</dd>
+        <dt>scripts/</dt><dd>分析程式 analyze.py，AI 改</dd>
+        <dt>gnuplot/</dt><dd>畫圖腳本，一張圖一個，AI 改</dd>
+        <dt>paper/</dt><dd>論文本文 main.tex，AI 寫</dd>
+      </dl>
+    </div>
+    <div class="mid"><span class="big2">→</span><span>跑一次<br>build</span></div>
+    <div class="side out">
+      <h3>output/ <span class="kind out">成品：不要手改</span></h3>
+      <dl>
+        <dt>numbers.tex</dt><dd>內文數字，一個數字一個代號</dd>
+        <dt>tables/</dt><dd>表：.tex 進 PDF，.csv 給 Excel</dd>
+        <dt>figdata/</dt><dd>畫圖用的小表（CSV）</dd>
+        <dt>figures/</dt><dd>gnuplot 畫好的圖</dd>
+        <dt>main.pdf</dt><dd><b>論文：你要看的就是這個</b></dd>
+      </dl>
+    </div>
+  </div>
+  <p class="rule">要改結果，改 source；output 不用顧，跟 AI 說「再跑一次 build」就會重新長出來。</p>
+  <p class="why">為什麼要分開：原料是你的研究，要好好保存；成品隨時能重做，所以不推上 GitHub，也不怕被改壞。真的研究資料能不能交給 AI、能不能推上 GitHub，先照主頁第 07 段〈研究倫理〉的四個條件確認；Private 本身不代表可以上傳。核對數字時，用 Excel 打開 <code>output/tables</code> 資料夾裡的 .csv 檔就好；看完關掉時按「不要儲存」。</p>
+</section>
+
+<div class="band" id="do"><div class="wrap"><div class="tag">04・六個練習</div><p class="big">動手做</p><p class="sub">你只跟 AI 說話，大約 30 分鐘</p></div></div>
+<section class="blk wrap" id="exercises">
+  <div class="prep"><b>開始前（回家自己做也照這張）</b>
+    <ol>
+      <li><b>範本資料夾已經在電腦裡</b>（資料夾名稱 <code>ai-paper-kit</code>；範本從哪裡拿，當天講師會說）。還沒有的話，照<a href="part3.html">第三部分主頁</a>第 04 段第 1 步。</li>
+      <li><b>工具裝好了</b>：照主頁第 03 段那句話請 AI 幫你裝，AI 列出四個版本號、沒有「找不到」才算。</li>
+      <li><b>打開「看得到你電腦資料夾」的那一面 AI</b>：ChatGPT 桌面版裡的 Codex，或 Claude 桌面版裡的 Code（第一部分設定課教過；網頁上的一般對話看不到你電腦裡的資料夾）。權限照第一部分設定：Codex 選「要求核准」，Claude 的 Code 選 Manual。</li>
+      <li><b>範本是用 ZIP 下載解壓縮的</b>：報到之前先跟 AI 說「請先檢查這台電腦有沒有 git；有的話幫這個資料夾存一版（commit），存好告訴我」。存好了才做下面的報到。用 git 下載（clone）的不用做這步。</li>
+    </ol>
+  </div>
+  <div class="ask"><b>AI 問你「可不可以」的時候</b>　權限設成「要求核准」，AI 每次要跑程式或改檔都會先跳出確認（常是英文）。跑 build、改 analyze.py、改 .gp、改 main.tex：這些是練習本來就要做的，按同意。要刪檔、裝東西、動 <code>source/data/</code>、上網：先別按，問它「這一步在做什麼」。一個練習可能會問好幾次，正常。</div>
+  <p>下面是報到加六個練習再加收尾，共 8 步。每一步有三種標籤：<b>「你自己做」</b>是你動手的，<b>「跟 AI 說」</b>的框按「複製」貼給 AI，<b>「你會看到」</b>是做對時會出現的結果。做完打勾，進度只存在這台電腦的瀏覽器裡。想先看別人做一次，看第 05 段。</p>
+  <div class="progress" aria-live="polite"><span id="exProg">已完成 0 / 8</span><div class="bar"><span id="exBar"></span></div><button class="chip" id="exReset" type="button">全部重來</button></div>
+  <ol class="exs" id="exList"></ol>
+</section>
+
+<div class="band" id="walk"><div class="wrap"><div class="tag">05・看一位老師走一遍</div><p class="big">看得到</p><p class="sub">句子一字不改貼給 AI，它真的回了什麼</p></div></div>
+<section class="blk wrap" id="walkthrough">
+  <p>2026-10-22，我們用「不會寫程式、只用過 LINE 和 Word」的老師視角，把第 04 段的句子<b>一字不改</b>貼給 AI，從頭做到尾（報到那句後來加了「先確認 source/」，那一步另外實跑了一次；當時跑 build 的句子寫的是 python build.py，範本改用 uv 之後換成 uv run build.py，AI 回覆的內容一樣）。下面是 AI 真正回的話（摘錄；資料夾路徑用「…」代替）和每一步的白話說明。環境是 Windows、Codex 桌面版內附的 Codex，同一段對話做到底；9 次回覆 AI 一共花了大約 7 分半鐘。為了把過程自動錄下來，實跑時 AI 用的是「不問、直接做」的設定，所以紀錄裡看不到「可不可以」的確認；你的 AI 設成「要求核准」，會多跳出這些確認。這是當次的紀錄，AI 下次的說法、行號可能不一樣，照每一步「你要檢查」核對就好。（上一版的句子也用 Claude 做過一次，每一步一樣 BUILD OK。）</p>
+  <div class="walks">
+    <details class="walk"><summary><span class="sn">0</span>報到<span class="t">約 20 秒</span></summary>
+      <p class="you"><b>老師貼：</b>請先讀 AGENTS.md 和 WORKFLOW.md，再跟我報到。今天是練習。開始前先確認 source/ 有沒有還沒存版的修改或新增檔；有的話先列給我、停下來。</p>
+      <blockquote>領隊 · …\ai-paper-kit<br>已讀完 AGENTS.md、WORKFLOW.md、領隊規則及 team.md。source/ 沒有尚未存版的修改或新增檔。未設定 Git 遠端，無須 pull；目前未修改任何檔案。今天採單人練習模式：不寫紙條、不寫變更報告、不 commit。已準備好。</blockquote>
+      <p class="mean"><b>這是什麼意思：</b>先看第一行的路徑是不是你打開的範本資料夾，再看它有沒有把練習規則講出來：這一行是報到的格式，內容還是要對。commit＝存一版；練習時不存，收尾才退得回去。「沒有遠端，無須 pull」代表這個資料夾還沒接上 GitHub，練習時不影響。</p>
+      <p class="mean"><b>如果資料夾裡有你以前改過、還沒存版的檔</b>（我們故意弄了一份測試），AI 會回：「source/ 有尚未存版的檔案：已修改 source/paper/main.tex；新增、尚未追蹤 source/data/我的筆記.csv。依你的指示停在這裡，未改檔、未 pull、未 build。」這時先別讓它刪或還原，那些可能是你的東西。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">2</span>跑一次 build<span class="t">33 秒</span></summary>
+      <blockquote>build 成功，最後一行是：<code>BUILD OK pages=9 undefined_cites=0 undefined_refs=0 refs=7 refs_without_doi=0 bib_warnings=0</code>。output/ 新增 28 個檔案（main.pdf 9 頁、numbers.tex、figdata/、figures/、tables/、latex-log/）……已在 workspace/log.md 記錄這次練習，沒有 commit。build 另提醒：論文中的 AI 使用聲明仍是範例文字。</blockquote>
+      <p class="mean"><b>這是什麼意思：</b>「build」＝一次做完分析、畫圖、檢查文獻、編 PDF。最後一行是 BUILD OK 就成功；三個「要是 0」的都是 0。latex-log 是排版過程的紀錄，出錯時才要看。最後那個提醒是範本故意留的：寫自己的論文時，AI 使用聲明要改成你自己真的做過的事。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">3</span>追一個數字<span class="t">43 秒</span></summary>
+      <blockquote>37.04 是介入組第 12 週 DKAS 分數的平均值。資料欄位：study_data.csv 的 dkas_t1 欄，只取 group=intervention；計算位置：analyze.py 第 211 行；數字代號：numbers.tex 第 24 行 \DKASIntTOneMean；本文使用：main.tex 第 78 行，3.2 節第一句。我另外用 Python 重算介入組 70 筆 dkas_t1，得到 37.042857142857144，四捨五入後確實是 37.04。</blockquote>
+      <p class="mean"><b>這是什麼意思：</b>「代號」就是數字的名字：論文裡寫名字，排版時才換成數字，所以資料一改，論文的數字跟著改。它還另外寫一小段程式重算平均，跟分析程式的結果核對。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">4</span>排除 I048<span class="t">102 秒</span></summary>
+      <blockquote>已將 analyze.py 第 33 行改成 EXCLUDE_IDS = ["I048"]，並完成 build。分析人數由 140 → 139，介入組由 70 → 69；原始資料未改動。……DKAS／第 12 週　37.04 → 37.41……摘要 Results：基線 p 值符合原文 8/8 → 3/8；結果 p 值符合原文 9/9 → 3/9……2.4 節：排除 1 人（I048），但理由仍顯示 [state the reason here]。<br><b>需要重讀的文字</b>：摘要 Methods、2.3 節與表 2 圖說仍宣稱數值符合原文……Methods 也仍需填入您指定的排除理由：不符合收案條件。</blockquote>
+      <p class="mean"><b>這是什麼意思：</b>你只改了「要排除誰」這一行，表、圖、摘要、內文全部自動重算。AI 主動列出「要重讀的句子」：數字會自己變，句子的意思要你重讀。[state the reason here] 是範本故意印出來的，提醒你補排除理由。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">4</span>改回來<span class="t">36 秒</span></summary>
+      <blockquote>已將 EXCLUDE_IDS 改回 []，並完成 build。分析人數恢復為 140 人，3.2 節的 DKAS 平均數恢復為 37.04。</blockquote>
+    </details>
+    <details class="walk"><summary><span class="sn">5</span>圖 1 改長條圖<span class="t">94 秒</span></summary>
+      <blockquote>已將圖 1 改成兩組並排長條，誤差線為平均值 ± 標準差。已檢視 PDF 第 6 頁，誤差線完整、圖例未遮住資料。只修改 fig1_outcomes.gp……另依練習規則更新紀錄、保留預覽圖，未 commit。</blockquote>
+      <p class="mean"><b>這是什麼意思：</b>它自己打開 PDF 看過圖有沒有被切掉才回報。數字沒動，只換了畫法。它看圖時存的預覽圖放在 workspace/preview/，不影響論文。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">6</span>加一張表<span class="t">73 秒</span></summary>
+      <blockquote>已新增表 4，放入 Results 的 3.4 節。計算方式是先算每人第 12 週減前測，再計算各組平均值與樣本標準差。DKAS　介入組 10.36（6.38）、控制組（即對照組）4.89（8.62）……表說已註明：這是重建練習資料，改變量 SD 受前後測相關假設影響，不能代表原研究的改變變異。</blockquote>
+      <p class="mean"><b>這是什麼意思：</b>程式加算、表格、論文段落一起長出來。它主動把限制寫進論文，這種句子你要留著。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">7</span>收尾：列清單<span class="t">17 秒</span></summary>
+      <blockquote>練習改過的 source/ 檔共有 3 個：fig1_outcomes.gp、analyze.py、main.tex。新增的 source/ 檔：無。EXCLUDE_IDS 已恢復為空清單。請確認是否將上述 3 個檔案用 git restore 還原。……收到確認後才執行。</blockquote>
+      <p class="mean"><b>這是什麼意思：</b>它照你的話先列、不動手，等你點頭。git restore＝把檔案還原成上一次存的版本；練習期間沒有存版，還原回去就是練習前的樣子。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">7</span>收尾：確認還原<span class="t">28 秒</span></summary>
+      <p class="you"><b>老師貼：</b>確認，請還原。</p>
+      <blockquote>已用 git restore 還原確認的 3 個檔案，source/ 已無修改或新增檔案。其他檔案未動，並已重新 build：BUILD OK pages=9 ……圖 1 已恢復折線圖，Results 新增的 3.4 節與表 4 已移除。</blockquote>
+      <p class="mean"><b>這是什麼意思：</b>論文回到練習前。留下來的只有 workspace/log.md 的練習紀錄和 workspace/preview/ 的預覽圖，都不影響論文。</p>
+    </details>
+  </div>
+  <p class="note">卡片左邊的數字對應第 04 段的練習編號（0＝報到、7＝收尾）。走一遍之後照實改了的地方（這頁已經是改好的）：Windows 版 gnuplot 會讓 PDF 編不出來（畫圖腳本加了一行）；用 winget 裝的 gnuplot 可能叫不動（範本 README 第三節的句子已改）；Excel 會把「3-6」這種類別顯示成日期（資料改寫成「3-6 h」）；Excel 或 PDF 閱讀器開著 output 裡的檔時 build 會當掉（現在會印出「先關掉…再跑一次」）；排除一個人時論文印出文法錯的句子（改成提醒你補理由）；上一版練習時 AI 會一直寫紙條、存版，收尾退不乾淨（加了「今天是練習」的規則）。</p>
+</section>
+
+<div class="band" id="b5"><div class="wrap"><div class="tag">06・跟論文對照</div><p class="big">對得上</p><p class="sub">重算的數字，跟所長論文印的一樣嗎</p></div></div>
+<section class="blk wrap" id="compare">
+  <p>範例論文把所長論文的三張表重算一次，逐一對照。這些比對結果本身，也是程式算出來、寫進論文的。<b>對得上是預期中的事</b>：t 檢定和效果量只看人數、平均和標準差，練習資料本來就是照論文的這些數字做的。這個對照示範的是：程式算出的數字，怎麼一格一格接回論文。它不是在審這篇論文，也不是重新驗證研究結果。</p>
+  <div class="facts">
+    <div class="fact"><div class="n">8 / 8</div><div><b>表 1（基本資料）的 8 個 p 值全部相同。</b>年齡、年資是重建資料時對齊的；性別、婚姻、工作型態、在職訓練用 Fisher 精確檢定，教育程度、失智症訓練時數用概似比卡方（SPSS 交叉表裡「概似比」那一列），都跟論文寫的「卡方或 Fisher 精確檢定，視情況使用」一致。論文沒寫哪一列用哪一種，範例是為了對照已發表的數字才逐一試；自己的研究要像第 07 段那樣，先定好用哪個檢定再看結果。</div></div>
+    <div class="fact"><div class="n">9 / 9</div><div><b>表 2（三個量表、三個時間點）的 p 值全部相同。</b>ADQ 第 24 週重算是 0.000566，印到小數三位就是論文的 0.001。</div></div>
+    <div class="fact"><div class="n">≤ 0.01</div><div><b>原論文表 4（範例論文裡是表 3）的效果量 Cohen's d，6 個裡 3 個完全相同，其他差 0.01</b>，信賴區間也最多差 0.01，都在四捨五入的範圍內：練習資料是從論文印到小數兩位的平均和標準差重建的，差這一點來自用四捨五入後的數字重建練習資料。</div></div>
+    <div class="fact"><div class="n no">不重算</div><div><b>論文表 3 的 GEE。</b>GEE（一種分析重複測量的統計方法）要用到每個人三次測量之間怎麼變化，論文本來就不會附這種個人資料，所以這個只用論文表格的範例不做。<b>用自己的研究時</b>，資料能放在哪裡、能交給哪個 AI、能不能上雲端，先照主頁第 07 段〈研究倫理〉確認；確認之前，不要放進 AI 的工作資料夾。</div></div>
+  </div>
+  <div class="score">
+    <div class="box">
+      <h3>表 2 的 p 值</h3>
+      <div class="tablewrap"><table class="mini" aria-label="表 2 p 值：論文與重算">
+        <thead><tr><th>量表與時間</th><th>論文</th><th>重算</th></tr></thead>
+        <tbody>
+          <tr><td>DKAS 前測</td><td>0.367</td><td class="ok">0.367</td></tr>
+          <tr><td>DKAS 第 12 週</td><td>&lt;0.001</td><td class="ok">&lt;0.001</td></tr>
+          <tr><td>DKAS 第 24 週</td><td>&lt;0.001</td><td class="ok">&lt;0.001</td></tr>
+          <tr><td>ADQ 前測</td><td>0.817</td><td class="ok">0.817</td></tr>
+          <tr><td>ADQ 第 12 週</td><td>0.007</td><td class="ok">0.007</td></tr>
+          <tr><td>ADQ 第 24 週</td><td>0.001</td><td class="ok">0.001</td></tr>
+          <tr><td>SCIDS 前測</td><td>0.608</td><td class="ok">0.608</td></tr>
+          <tr><td>SCIDS 第 12 週</td><td>0.115</td><td class="ok">0.115</td></tr>
+          <tr><td>SCIDS 第 24 週</td><td>0.057</td><td class="ok">0.057</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="box">
+      <h3>原論文表 4 的效果量 Cohen's d</h3>
+      <div class="tablewrap"><table class="mini" aria-label="表 4 效果量：論文與重算">
+        <thead><tr><th>量表與時間</th><th>論文</th><th>重算</th></tr></thead>
+        <tbody>
+          <tr><td>DKAS 第 12 週</td><td>0.91</td><td class="near">0.92</td></tr>
+          <tr><td>DKAS 第 24 週</td><td>0.94</td><td class="near">0.95</td></tr>
+          <tr><td>ADQ 第 12 週</td><td>0.46</td><td class="near">0.47</td></tr>
+          <tr><td>ADQ 第 24 週</td><td>0.60</td><td class="ok">0.60</td></tr>
+          <tr><td>SCIDS 第 12 週</td><td>0.27</td><td class="ok">0.27</td></tr>
+          <tr><td>SCIDS 第 24 週</td><td>0.32</td><td class="ok">0.32</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">綠色＝完全相同；淡黃底＝差 0.01，在四捨五入範圍內。</p>
+    </div>
+  </div>
+  <div class="figswap">
+    <img src="img/practice/fig2.png" alt="圖 2：六個效果量的論文值（空心圓）與重算值（實心圓），附 95% 信賴區間" width="1000" height="620" loading="lazy">
+    <p class="cap">範例論文的圖 2：灰色空心是論文印的，藍色實心是重算的。這張也是 gnuplot 照小表 <code>output/figdata/fig2_effects.csv</code> 畫的。</p>
+  </div>
+</section>
+
+<div class="band" id="sim"><div class="wrap"><div class="tag">07・研究模擬</div><p class="big">寫得完</p><p class="sub">只給資料和文獻，AI 一步一步把論文寫出來</p></div></div>
+<section class="blk wrap" id="simulation">
+  <p>前面的練習是改一篇<b>已經寫好</b>的論文。這一段反過來：研究內容只靠三樣原料（另外 AI 也會看範本裡的規則、工具和收起來的範例程式）：練習資料（<code>source/data/</code>）、13 篇文獻的書目（<code>material/模擬/refs.bib</code>）和一份研究構想（<code>material/模擬/研究構想.md</code>）。老師一句一句說，AI 從開一篇新論文做到交稿前檢查，最後把原本的範例放回去。</p>
+  <p>2026-10-22，我們在範本的<b>複本</b>裡實跑一次（你手上那份範本沒有被動到）。AI 是 Claude（在雲端跑的 Claude Code），照下面十句話做，每一步錄下老師說的話、AI 原樣的回覆、改了哪些檔、build 最後一行。<b>十步全部 BUILD OK</b>，PDF 頁數依序是 1 → 1 → 1 → 4 → 4 → 8 → 12 → 13 → 13 → 8（最後一步把原本的範例放回來，所以回到 8 頁）。十步 AI 大約用了 85 次工具（讀一個檔、跑一次程式都算一次；你的 AI 設成「要求核准」的話，會問你好幾十次）。實跑時另外先給 AI 一段開場說明：扮演老師身邊的 AI 助手、這次會錄下來做成教材、照 AGENTS.md 的規矩做，並交代「這次模擬不用紙條，直接做」（研究模擬不是練習，所以用這句，不用「今天是練習」）。<b>這是 10/22 上午用當時的範本跑的</b>：之後範本改了 Fisher 檢定的算法、文獻回報要附摘要原句、AI 聲明的提醒、資料不再複製進 examples/，你現在照做，第 3、6、7 步的過程和頁數可能跟紀錄不一樣。下面引號裡是 AI 的原話（摘錄，資料夾路徑用「…」代替）。</p>
+  <div class="warnbox"><b>寫出來的論文只能練習，不能投稿。</b>資料是依所長論文的表格重建的練習資料，每個人的分數是假的。AI 在標題、註腳、Methods 和資料可得性聲明裡都寫明了這一點。</div>
+  <p class="note">想自己跑一次：照範本 README 第五節，十句話都在那裡。</p>
+  <div class="walks">
+    <details class="walk"><summary><span class="sn">0</span>開工、開一篇新論文<span class="t">BUILD OK・1 頁</span></summary>
+      <p class="you"><b>老師說：</b></p>
+      <div class="copybox"><pre>我們來做研究模擬：只給資料和文獻，請你一步一步把論文寫出來。先執行 uv run tools/new_paper.py --keep-data --refs material/模擬/refs.bib --name 所長論文重算，把範例收進 examples/、開一篇新論文；再跑一次 build，告訴我最後一行。</pre><button type="button" class="copybtn">複製</button></div>
+      <p class="mean"><b>AI 做了什麼：</b>先讀了 AGENTS.md、WORKFLOW.md，用單人模式。執行 <code>new_paper.py</code>（開新論文的小工具）：原本的範例整份收進 <code>examples/所長論文重算/</code>（examples＝收起來的舊論文，隨時能打開參考；那次的工具連資料一起收，模擬後已改成資料檔一律留在 <code>source/data/</code>、不複製）；新的 <code>source/</code> 留著練習資料，書目換成模擬用的 13 篇，分析程式只算人數，論文只有各節標題。</p>
+      <blockquote>PDF 編出來了、只有 1 頁（骨架而已）；書目有 13 篇，都有 DOI、沒有缺欄位；論文還沒引用任何一篇……分析程式目前只算了人數：N = 140。<br><code>BUILD OK pages=1 undefined_cites=0 undefined_refs=0 refs=13 refs_without_doi=0 bib_warnings=0</code></blockquote>
+      <p class="mean"><b>你要看什麼：</b>最後一行是 BUILD OK，<code>refs=13</code> 代表書目換成模擬用的 13 篇了。原本的範例沒有被刪，收在 <code>examples/所長論文重算/</code>，第 9 步會放回來。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">1</span>先讀懂原料<span class="t">沒改檔・1 頁</span></summary>
+      <p class="you"><b>老師說：</b></p>
+      <div class="copybox"><pre>請讀 material/模擬/研究構想.md、source/data/README.md 和 source/refs/refs.bib，告訴我：資料有幾筆、有哪些欄位、書目有幾篇、每一篇一句話講它在做什麼（只能根據摘要）。先不要改任何檔。</pre><button type="button" class="copybtn">複製</button></div>
+      <p class="mean"><b>AI 做了什麼：</b>只讀、不改。回報資料 140 筆（介入組 70、對照組 70）、19 個欄位、沒有缺值；書目 13 篇（12 篇期刊論文、1 本書），每篇用一句話講它在做什麼，只根據摘要。它也說出哪兩篇沒有摘要（一篇是 GEE 的方法論文、一本是效果量的書），只能當「方法出處」引用，不能寫它們說了什麼；另外三篇摘要不完整。最重要的是它先舉手：</p>
+      <blockquote>ADQ 量表在 refs.bib 裡沒有出處。……到第 5 步寫 Methods 時，ADQ 的英文全名和出處我會標「待老師補」，不會憑記憶寫。</blockquote>
+      <p class="mean"><b>你要看什麼：</b>數字跟你知道的對不對得上（140 人、13 篇）。挑一兩篇，用 DOI 打開摘要，對 AI 那句一句話。先讓 AI 說它看懂了什麼，你才知道它等一下會怎麼寫。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">2</span>提分析計畫，等你同意<span class="t">沒改檔・1 頁</span></summary>
+      <p class="you"><b>老師說：</b></p>
+      <div class="copybox"><pre>請依研究構想提出分析計畫：表 1、表 2、表 3（GEE）各放什麼、用什麼檢定、效果量怎麼算、圖 1 怎麼畫，列出會產生的數字代號和檔名。先不要改，等我同意。</pre><button type="button" class="copybtn">複製</button></div>
+      <p class="mean"><b>AI 做了什麼：</b>只提計畫、不改檔；為了確認做得到，它在資料夾外面先試算過。表 1 比兩組的基本資料：類別變項（例如性別、婚姻）比兩組比例，檢定方法<b>事先定好規則</b>：每一格的期望人數都有 5 人以上，用卡方檢定；有一格不到 5 人，改用 Fisher 精確檢定（人數少時用的版本）；p &lt; 0.20 的變項自動當作表 3 要調整的變項。表 2 每個時間點比兩組，算效果量 Cohen's d（兩組差了幾個標準差）。表 3 用 GEE（廣義估計方程式，分析同一個人量了好幾次的統計方法）看「組別 × 時間」。圖 1 怎麼畫、配什麼顏色、所有數字代號和檔名也都列出來。</p>
+      <blockquote>規則先定，不看結果換檢定。<br>只有 2 家機構、以機構為單位分派：機構的影響跟組別完全分不開……這是設計本身的限制，我建議寫進限制，並請老師問統計顧問要不要另外處理。</blockquote>
+      <p class="mean"><b>你要看什麼：</b>這是整個模擬最要緊的關卡：<b>統計方法由你決定</b>，不是 AI。看檢定規則是不是先定好；調整變項怎麼挑、人數少的類別怎麼併、沒做多重比較校正，這些不確定的，帶去問統計顧問。你點頭了，才回「同意」。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">3</span>做表 1～3<span class="t">BUILD OK・4 頁</span></summary>
+      <p class="you"><b>老師說：</b></p>
+      <div class="copybox"><pre>同意。請照計畫改 source/scripts/analyze.py，先做表 1、表 2、表 3，結果數字寫成代號，表同時輸出 .tex 和 .csv。在 main.tex 的 Results 放進三張表（先不用寫說明文字）。跑一次 build，告訴我最後一行，我會用 Excel 打開 output/tables/ 的 csv 核對。</pre><button type="button" class="copybtn">複製</button></div>
+      <p class="mean"><b>AI 做了什麼：</b>把分析程式從骨架改成完整的表 1～3，三張表放進論文。csv 存成 Excel 打開不會亂碼的格式。它另外寫一段<b>不用 analyze.py</b> 的程式，從資料重算幾個數字核對，例如 DKAS 第 12 週介入組 37.04、對照組 30.43，跟表上一樣。過程中它自己修掉兩個 build 不會擋的問題（SciPy 是 Python 的統計工具包）：</p>
+      <blockquote>SciPy 的 Fisher 檢定，超過 2×2 時預設用亂數模擬，每跑一次 p 值都不一樣（婚姻的 p 在 0.617 到 0.628 之間跳）。這樣每次 build 數字都會變，所以我改成自己寫的「完整列舉」版本……結果每次都一樣（婚姻 0.624、在職訓練 0.098，跟原論文一樣）。<br>表 1 第一版太寬（超出版面 79 pt），我把列名縮短……<br><code>BUILD OK pages=4 undefined_cites=0 undefined_refs=0 refs=13 refs_without_doi=0 bib_warnings=0</code></blockquote>
+      <p class="mean"><b>你要看什麼：</b>用 Excel 打開 <code>output/tables/</code> 的 table1～3.csv，挑幾格跟 PDF 的表對（只看，關掉時按「不要儲存」）。這次實跑 AI 沒有真的開 Excel，是另寫程式重算；<b>你自己對過，才算你核對過</b>，第 7 步的 AI 使用聲明會用到這一點。另外打開 PDF 看表有沒有超出版面：BUILD OK 不代表版面沒問題。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">4</span>畫圖 1<span class="t">BUILD OK・4 頁</span></summary>
+      <p class="you"><b>老師說：</b></p>
+      <div class="copybox"><pre>請畫圖 1：三個量表在三個時間點的平均和標準差，兩組各一條線。analyze.py 產生小表，source/gnuplot/ 寫一支腳本，main.tex 放進 Results。跑一次 build。</pre><button type="button" class="copybtn">複製</button></div>
+      <p class="mean"><b>AI 做了什麼：</b>分析程式多產生三張小表（<code>output/figdata/fig1_dkas.csv</code> 等），新增一支 gnuplot 腳本 <code>fig1_means.gp</code>（照收起來的範例腳本改），圖放進論文。它打開 PDF 看過點和誤差線沒被切掉、圖例沒蓋到資料。頁數還是 4 頁：圖跟表 2 排在同一頁。</p>
+      <blockquote>圖上的點跟表 2 對得上：例如 DKAS 第 12 週介入組 37.04、對照組 30.43。<br>欄位號碼錯了 build 還是會 OK，只是畫錯資料，所以要打開 PDF 跟表 2 對。</blockquote>
+      <p class="mean"><b>你要看什麼：</b>打開 PDF 的圖 1，挑一兩個點跟表 2 的平均對。圖說有沒有寫清楚誤差線是標準差。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">5</span>寫 Methods 和 Results<span class="t">BUILD OK・8 頁</span></summary>
+      <p class="you"><b>老師說：</b></p>
+      <div class="copybox"><pre>請依研究構想和 output/numbers.tex 起草 Methods 和 Results。數字一律用代號，表和圖都要在內文提到，Methods 的量表要引用 refs.bib 裡的出處。跑一次 build。</pre><button type="button" class="copybtn">複製</button></div>
+      <p class="mean"><b>AI 做了什麼：</b>Methods 寫了四小節（其中一段寫明這是重建的練習資料），Results 三小節，表 1～3、圖 1 都在內文提到。它用程式把 Methods、Results 裡直接打出來的數字全部列出來檢查：只剩 12 週、0–50 分這類設計上的固定值，<b>沒有手打的結果</b>。DKAS、SCIDS 兩個量表各引用一篇，回報時附上那篇摘要的原句。要老師補的地方，它印成<b>紅字方括號</b>，共 3 處：IRB 名稱和編號、課程內容和導師資格、ADQ 的全名和出處。它也列出「數字會自動更新、句子要重讀」的地方，在 main.tex 用註解標出來。</p>
+      <blockquote>研究構想沒寫 ADQ 的英文全名；範例 main.tex 有寫，但 refs.bib 沒有出處，所以照規矩標紅字，不從範例或記憶補。<br><code>BUILD OK pages=8 undefined_cites=0 undefined_refs=0 refs=13 refs_without_doi=0 bib_warnings=0</code></blockquote>
+      <p class="mean"><b>你要看什麼：</b>PDF 裡的紅字＝AI 不知道、也不該自己編的東西，要你補；交稿前要全部清掉，build 不會檢查紅字。挑一句 Results 跟表 2 對。AI 列的「要重讀的句子」清單留著，換成真資料時用得到。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">6</span>寫 Introduction 和 Discussion<span class="t">BUILD OK・12 頁</span></summary>
+      <p class="you"><b>老師說：</b></p>
+      <div class="copybox"><pre>請用 refs.bib 的文獻起草 Introduction 和 Discussion。每一句講到文獻的，只寫該篇摘要真的有寫的內容；回報時列出每一句根據哪一篇。結論說到多強，先在回報裡列兩三種寫法給我選，論文裡先用最保守的。跑一次 build。</pre><button type="button" class="copybtn">複製</button></div>
+      <p class="mean"><b>AI 做了什麼：</b>起草 Introduction、Discussion（含研究限制）和結論，13 篇用了 12 篇（沒用的那篇等老師決定）。回報列出 16 句講到文獻的句子，每一句附上那篇摘要的原句。結論給了三種強度 A、B、C，論文裡先用最保守的 A。</p>
+      <blockquote>初稿有 5 句寫得比摘要多，build 抓不到，是我逐句對摘要時改的……Mole2019 原本寫成「受訪者說自己需要訓練」，其實那是作者的結論，改成「the authors concluded」。<br><code>BUILD OK pages=12 undefined_cites=0 undefined_refs=0 refs=13 refs_without_doi=0 bib_warnings=0</code></blockquote>
+      <p class="mean"><b>你要看什麼：</b>抽查兩三句講到文獻的句子：用 DOI 打開那篇的摘要，對 AI 附的原句，確認論文那句沒有說得比摘要多。<code>undefined_cites=0</code> 只代表引用的代號存在，<b>不代表內容對</b>。結論要說到多強，A、B、C 由你選。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">7</span>標題、摘要、兩份聲明<span class="t">BUILD OK・13 頁</span></summary>
+      <p class="you"><b>老師說：</b></p>
+      <div class="copybox"><pre>請寫標題、結構式摘要（250 個英文單字以內）、關鍵字，補上 AI 使用聲明和資料可得性聲明：要寫清楚這是重建的練習資料、不能投稿。跑一次 build。</pre><button type="button" class="copybtn">複製</button></div>
+      <p class="mean"><b>AI 做了什麼：</b>標題直接寫出「reconstructed practice data」，第一頁加註腳寫明不能投稿。build 不會檢查摘要字數，它把 PDF 轉成純文字再數：摘要初稿 268 個英文單字，刪了三輪到 <b>241 個</b>。AI 使用聲明只寫這次真的做過的事；老師做過哪些檢查，留一處紅字給老師。資料可得性聲明寫明是練習資料、原始資料不在裡面。</p>
+      <blockquote>範本範例的聲明有「Each citation was checked against its DOI record」「The author reviewed and edited」，但這次老師還沒做這些事，照抄就變成假話。<br>老師還沒做的事我不能先寫成做了。<br><code>BUILD OK pages=13 undefined_cites=0 undefined_refs=0 refs=13 refs_without_doi=0 bib_warnings=0</code></blockquote>
+      <p class="mean"><b>你要看什麼：</b>AI 使用聲明逐句問自己「我真的做了嗎」，沒做的就刪掉，或者真的去做。紅字那處，填上你真的做過的檢查（例如用 Excel 對過表、用 DOI 抽查過文獻）。字數請 AI 用程式量，不要用估的；不同軟體算法不同，留一點餘裕。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">8</span>交稿前檢查<span class="t">沒改檔・13 頁</span></summary>
+      <p class="you"><b>老師說：</b></p>
+      <div class="copybox"><pre>請照 WORKFLOW.md 第 8 步的檢查清單逐條檢查，列出沒過的項目和建議怎麼改，先不要改。</pre><button type="button" class="copybtn">複製</button></div>
+      <p class="mean"><b>AI 做了什麼：</b>10 條逐條查，每一條寫怎麼查的。沒過的三條：AI 使用聲明還有紅字等老師確認、統計方法跟兩家機構的設計還沒問過統計顧問、資料還是練習資料。它也列出 build 抓不到的書目格式問題（例如量表名稱被排成小寫、兩篇缺文章編號），和三個可以直接帶去問統計顧問的問題。</p>
+      <blockquote>這份稿子能當練習稿看，不能投：練習資料（第 9 條）、統計顧問（第 7 條）、紅字（第 6 條和 Methods）三件事沒過。<br><code>BUILD OK pages=13 undefined_cites=0 undefined_refs=0 refs=13 refs_without_doi=0 bib_warnings=0</code></blockquote>
+      <p class="mean"><b>你要看什麼：</b>每一條沒過的，逐條決定怎麼處理；資料資格、倫理資訊、不實的聲明、還沒解決的方法問題，處理好之前不能投稿。<code>bib_warnings=0</code> 只代表書目欄位不缺，題目大小寫、文章編號對不對，要回 Zotero 看。</p>
+    </details>
+    <details class="walk"><summary><span class="sn">9</span>收起模擬論文，放回範例<span class="t">BUILD OK・8 頁</span></summary>
+      <p class="you"><b>老師說：</b></p>
+      <div class="copybox"><pre>模擬做完了。請執行 uv run tools/new_paper.py --name 模擬論文 --restore examples/所長論文重算，把這篇收進 examples/、把原本的範例搬回來，再跑一次 build。</pre><button type="button" class="copybtn">複製</button></div>
+      <p class="mean"><b>AI 做了什麼：</b>寫完的模擬論文整份收進 <code>examples/模擬論文/</code>，所長論文的範例放回 <code>source/</code>。它用 git 比對過：現在的 <code>source/</code> 跟模擬開始前<b>完全一樣</b>。build 回到原本的範例：8 頁、7 篇文獻。</p>
+      <blockquote>「搬回來」其實是複製回來：examples/所長論文重算/ 還在……不需要的話，老師可以自己刪掉，我不刪檔。<br><code>BUILD OK pages=8 undefined_cites=0 undefined_refs=0 refs=7 refs_without_doi=0 bib_warnings=0</code></blockquote>
+      <p class="mean"><b>你要看什麼：</b>頁數回到原本範例的頁數（現在的範本是 <code>pages=9</code>；這次實跑用的是 10/22 上午的範本，當時是 8 頁）、<code>refs=7</code>，就是原本的範例。如果 AI 貼出的檔案清單裡有 <code>\346\250\241…</code> 這種數字，那是 git 把中文資料夾名稱印成代碼，檔案沒有壞。</p>
+    </details>
+  </div>
+
+  <h3 class="app">AI 自己抓到的問題</h3>
+  <p>這幾件事沒有一件會讓 build 失敗，都是 AI 自己停下來說的。這就是「你跟 AI 說話」這條流程裡，你最想要它做的事。</p>
+  <div class="qa"><h3>文獻裡沒有的，它不編</h3><p>研究構想用了 ADQ 態度量表，可是 13 篇書目裡沒有它的原始文獻。AI 第 1 步就提醒，第 5 步在論文裡標紅字「待老師補」，沒有從範例或記憶補一個出處。</p></div>
+  <div class="qa"><h3>研究設計的限制，它先講</h3><p>研究構想是兩家機構、以機構為單位分派：一家當介入組，一家當對照組，機構本身的差別跟組別分不開。所長的原論文在限制段就談到兩家機構的差異；我們給 AI 的研究構想故意沒抄進這一點，AI 第 2 步還是自己提出來，建議寫進研究限制、請老師問統計顧問；第 8 步清單裡「統計方法跟研究設計相符」那一條也沒過。</p></div>
+  <div class="qa"><h3>結果跟原論文不一樣，它說得出原因</h3><p>GEE 的結果不會跟所長論文一樣：GEE 要用到同一個人三次分數之間的關係，練習資料裡這個關係是假設的（0.5），不是真的資料。AI 在第 2 步就說了，論文裡也寫明。</p></div>
+  <div class="qa"><h3>寫得比摘要多，它自己逐句對才抓到</h3><p>第 6 步的初稿有 5 句寫得比文獻摘要多，犯了三種錯：替「上面引用的研究」做的總結寫錯了；把作者的結論寫成受訪者說的話；寫了一句沒有引用、聽起來像結論的轉折句。這種錯 build 完全抓不到，是 AI 逐句對摘要才改掉的。你抽查時，也是找這三種。</p></div>
+  <div class="qa"><h3>AI 使用聲明，差點替你寫了還沒做的事</h3><p>範例論文的聲明寫著「每篇引用都對過 DOI」「作者看過、改過」。第 7 步 AI 發現，照抄就等於替老師寫了還沒做的事，所以拆成「AI 做了什麼」（真的做過的）和一處紅字「老師要確認的」。</p></div>
+
+  <h3 class="app">模擬之後我們改了什麼</h3>
+  <div class="changed"><ul>
+    <li><b>研究資料不再跟著複製進 examples/。</b>模擬時，開新論文和第 9 步都會把 <code>source/data/</code> 的資料檔一起複製進 <code>examples/</code>；換成真的研究資料，就可能跟著推上 GitHub。現在收進 examples/ 時只留欄位說明，資料檔不複製。</li>
+    <li><b>Fisher 精確檢定改成完整列舉。</b>SciPy 碰到超過 2×2 的表，預設用亂數模擬，每次 build 的 p 值都會差一點，build 也抓不到；現在範本改成把所有可能的分法一個一個算，每次結果都一樣。</li>
+    <li><b><code>new_paper.py --restore</code> 是「複製」回來，不是「搬」回來。</b>跑完之後 examples/ 裡那份還在，不需要的話再自己刪。</li>
+  </ul></div>
+</section>
+</main>
+
+<footer class="wrap">
+  <p><b>範例出處。</b>Su HF, Koo M, Lee WL, Sung HC, Lee RP, Liu WI. A dementia care training using mobile e-learning with mentoring support for home care workers: a controlled study. <i>BMC Geriatrics</i> 2021;21:126. <a href="https://doi.org/10.1186/s12877-021-02075-3" target="_blank" rel="noopener">doi:10.1186/s12877-021-02075-3</a>。開放取用，以 CC BY 4.0 授權；頁面與範本引用的數字取自該文的表 1、表 2、表 4。</p>
+  <p>練習資料由範本的 <code>tools/make_practice_data.py</code> 依上述表格重建，不是原始資料。這頁的數字都是 2026-10-22 實際跑範本得到的；工具和選單名稱會隨改版變動，跟你畫面不一樣時，以畫面為準。</p>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function set(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+
+  var pb=document.getElementById('projBtn');
+  function setProj(on){if(on){root.dataset.proj='on'}else{delete root.dataset.proj}pb.setAttribute('aria-pressed',String(on));set('ltc-proj',on?'1':'0')}
+  pb.addEventListener('click',function(){setProj(root.dataset.proj!=='on')});setProj(get('ltc-proj')==='1');
+
+  // 01、02：全部 140 人／排除 I048 兩組數字都是實際跑範本的結果
+  var VALS={
+    all:{nint:'70',excl:'[]',n:'140',mean:'37.04',d:'0.92',f0m:'26.686',f0s:'6.719',f1m:'37.043',f1s:'7.930',f2m:'36.200',f2s:'5.550'},
+    excl:{nint:'69',excl:'["I048"]',n:'139',mean:'37.41',d:'1.01',f0m:'26.812',f0s:'6.685',f1m:'37.406',f1s:'7.379',f2m:'36.290',f2s:'5.539'}
+  };
+  var CHANGED=[
+    '人數：140 → 139（介入組 70 → 69）',
+    '介入組第 12 週 DKAS 平均：37.04 → 37.41；標準差：7.93 → 7.38',
+    'DKAS 第 12 週的效果量 d：0.92 → 1.01',
+    '跟論文相同的 p 值：表 1 從 8/8 變 3/8，表 2 從 9/9 變 3/9',
+    'Methods 多一句「1 participant (I048) was excluded [state the reason here]」，提醒你補排除理由',
+    '表 1、表 2、表 3、圖 1、圖 2、摘要、內文的這些數字，全部一起更新；你沒有改任何一句'
+  ];
+  function setMode(m){
+    document.querySelectorAll('button[data-mode]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.mode===m))});
+    document.querySelectorAll('[data-k]').forEach(function(el){
+      var v=VALS[m][el.dataset.k]; if(v===undefined||el.textContent===v)return;
+      el.textContent=v; el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash')},700);
+    });
+    var row=document.querySelector('[data-row="I048"]'); row.classList.toggle('gone',m==='excl');
+    var list=document.getElementById('changedList'),title=document.getElementById('changedTitle');
+    list.innerHTML='';
+    if(m==='excl'){
+      title.textContent='排除 I048 之後，一起變的數字';
+      CHANGED.forEach(function(t){var li=document.createElement('li');li.textContent=t;list.appendChild(li)});
+    }else{
+      title.textContent='按上面的「排除 I048」，看哪些數字一起變';
+      var li=document.createElement('li');li.className='same';li.textContent='現在用的是全部 140 人，數字跟論文對得上。';list.appendChild(li);
+    }
+  }
+  document.querySelectorAll('button[data-mode]').forEach(function(b){b.addEventListener('click',function(){setMode(b.dataset.mode)})});
+
+  var FIG={
+    line:{src:'img/practice/fig1-line.png',alt:'圖 1：兩組在三個時間點的 DKAS、ADQ、SCIDS 平均與標準差，折線圖',cap:'同一張小表，用折線畫。藍色實線是介入組，橘色虛線是對照組；誤差線是標準差。'},
+    bar:{src:'img/practice/fig1-bar.png',alt:'圖 1 改成長條圖：兩組並排，誤差線是標準差',cap:'同一張小表，改用長條畫，像所長原論文的 Fig. 2。數字一個都沒變，只改了 .gp 腳本。'}
+  };
+  document.querySelectorAll('button[data-fig]').forEach(function(b){b.addEventListener('click',function(){
+    var f=FIG[b.dataset.fig],img=document.getElementById('figImg');
+    img.src=f.src;img.alt=f.alt;document.getElementById('figCap').textContent=f.cap;
+    document.querySelectorAll('button[data-fig]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});
+  })});
+
+  // 04：六個練習＋收尾（跟範本 README 第四節同一套句子）
+  var EX=[
+    {t:'報到',y:'在 Codex 或 Claude 的 Code 打開範本資料夾（ai-paper-kit）。',say:'請先讀 AGENTS.md 和 WORKFLOW.md，再跟我報到。今天是練習。開始前先確認 source/ 有沒有還沒存版的修改或新增檔；有的話先列給我、停下來。',c:'第一行是「領隊 ·」加上資料夾路徑；它會說 source/ 有沒有還沒存版的檔，再把練習規則複述一次（不寫紙條、不寫報告、不 commit）。它列出檔案、停下來的話，先別讓它刪或還原，問講師或請它說明那些檔是什麼。'},
+    {t:'看原料',y:'用 Excel 打開 source/data/study_data.csv：一列一個人，共 140 人（Excel 顯示到第 141 列，第一列是欄名）；dkas_t0、dkas_t1、dkas_t2 是三個時間點的知識分數（t0＝前測、t1＝第 12 週、t2＝第 24 週）。再打開 source/data/published_values.csv：這是從所長論文抄下來、拿來對照的數字。看完關掉時，Excel 問要不要儲存，一律按「不要儲存」。',c:'資料就是一張表。程式只讀它，不會改它。'},
+    {t:'跑一次 build，看成品長出來',say:'請跑一次 build（執行 uv run build.py），告訴我最後一行，再告訴我 output 資料夾裡多了哪些檔。',c:'最後一行是 BUILD OK pages=9 … bib_warnings=0。用 Excel 打開 output/tables/table2.csv：欄名有 published 的是論文印的數字，有 reproduced 的是程式重算的，兩欄一對並排。再打開 output/main.pdf。'},
+    {t:'追一個數字',say:'論文 3.2 節的 37.04 是從哪裡來的？請告訴我：資料檔的哪一欄、analyze.py 的哪一行算的、numbers.tex 裡的代號叫什麼、main.tex 哪一句用到它。',c:'AI 說得出第 01 段那五站：dkas_t1 欄 → analyze.py → 代號 \\DKASIntTOneMean → main.tex 那一句 → PDF 的 37.04。'},
+    {t:'排除一個人，看全部一起變',say:'練習：假設事後發現練習資料裡的 I048 不符合收案條件，請在 analyze.py 上面的 EXCLUDE_IDS 加上 "I048"，跑一次 build，告訴我表 2 哪些數字變了、論文哪幾句的數字跟著變。',c:'總人數 140 → 139（介入組 70 → 69），37.04 變 37.41，效果量 d 從 0.92 變 1.01，表、圖、摘要、內文一起更新（第 01 段按「排除 I048」看得到）；Methods 多一句要你補排除理由。句子的解讀要你自己重讀。I048 是練習資料的虛構代號，剛好是介入組分數偏低的人，排除後效果看起來變大：排除誰，要在看結果之前、照事先定好的理由決定。這句貼給 AI 就好，不用自己打開 analyze.py。做完再說：「請把 EXCLUDE_IDS 改回空的，再跑一次 build。」'},
+    {t:'圖從哪裡來',y:'用 Excel 打開 output/figdata/fig1_dkas.csv（三列小表），再打開 source/gnuplot/fig1_outcomes.gp：這是文字檔，按右鍵選「開啟檔案」→「記事本」（不要雙擊、不要用 Excel），每一行旁邊都有中文註解。看完關掉，問要不要儲存都按「不要儲存」。',say:'請把圖 1 改成長條圖，像所長原論文的 Fig. 2 那樣：兩組並排、誤差線是標準差。只改 gnuplot 腳本，跑一次 build，告訴我改了哪幾行。',c:'PDF 的圖 1 變成長條圖（第 02 段按「長條圖」看得到樣子）；數字一個都沒變。AI 會告訴你 source 裡只改了畫圖腳本（.gp），workspace/log.md 多一行紀錄是正常的。長條從 0 畫起，兩組差距看起來比折線圖小，數字其實一樣。'},
+    {t:'加一個新表',say:'請在分析程式加算兩組從前測到第 12 週的平均改變量（和標準差），做成新的表 4 放進論文的 Results，跑一次 build。',c:'output/tables/ 多了 table4.tex 和 table4.csv，PDF 多了表 4（範例論文原本有表 1 到表 3，這是第四張；不是所長原論文裡的表 4）。AI 會提醒：改變量的標準差受重建資料時假設的相關（0.5）影響，不能當成原研究的結果。'},
+    {t:'收尾：還原',say:'請列出練習改過和新增的 source 檔。我確認之後，改過的還原成練習前的樣子（git restore），新增的移到 workspace/練習留底/，其他檔都不要動，再跑一次 build。',c:'AI 先列清單等你；確認沒問題就回「確認，請還原。」。最後一行跟練習 2 一樣，PDF 回到練習前；練習新增的檔收在 workspace/練習留底/，不影響論文。'}
+  ];
+  var st={};try{st=JSON.parse(get('ltc-p3-practice-v2')||'{}')||{}}catch(e){st={}}
+  if(typeof st!=='object'||Array.isArray(st))st={};
+  function save(){set('ltc-p3-practice-v2',JSON.stringify(st))}
+  var isMac=/Mac/i.test(navigator.platform||'');
+  function copyText(text,onok,onfail){
+    function fallback(){var ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}document.body.removeChild(ta);ok?onok():onfail()}
+    try{navigator.clipboard.writeText(text).then(onok,fallback)}catch(e){fallback()}
+  }
+  // 07：研究模擬的「老師說」複製鈕（靜態寫在頁面上，跟練習的複製鈕同一套行為）
+  document.querySelectorAll('#simulation .copybtn').forEach(function(btn){
+    var pre=btn.parentNode.querySelector('pre');
+    btn.addEventListener('click',function(){copyText(pre.textContent,function(){btn.textContent='已複製';btn.classList.add('ok');setTimeout(function(){btn.textContent='複製';btn.classList.remove('ok')},1600)},function(){var rg=document.createRange();rg.selectNodeContents(pre);var s=getSelection();s.removeAllRanges();s.addRange(rg);btn.textContent=isMac?'已選取，請按 Command＋C':'已選取，請按 Ctrl＋C';setTimeout(function(){btn.textContent='複製'},4000)})});
+  });
+  var list=document.getElementById('exList');
+  EX.forEach(function(x,i){
+    var li=document.createElement('li');li.className='ex';li.id='ex'+(i+1);
+    var h=document.createElement('h3');var sn=document.createElement('span');sn.className='sn';sn.textContent=i===0?'第 0 步':(i<7?('練習 '+i):'收尾');h.appendChild(sn);h.appendChild(document.createTextNode(x.t));li.appendChild(h);
+    if(x.y){var r=document.createElement('div');r.className='row';r.innerHTML='<span class="lab y">你自己做</span>';r.appendChild(document.createTextNode(x.y));li.appendChild(r)}
+    if(x.say){
+      var r2=document.createElement('div');r2.className='row';r2.innerHTML='<span class="lab a">跟 AI 說</span>';
+      var box=document.createElement('div');box.className='copybox';var pre=document.createElement('pre');pre.id='say'+(i+1);pre.textContent=x.say;
+      var btn=document.createElement('button');btn.type='button';btn.className='copybtn';btn.textContent='複製';
+      btn.addEventListener('click',function(){copyText(pre.textContent,function(){btn.textContent='已複製';btn.classList.add('ok');setTimeout(function(){btn.textContent='複製';btn.classList.remove('ok')},1600)},function(){var rg=document.createRange();rg.selectNodeContents(pre);var s=getSelection();s.removeAllRanges();s.addRange(rg);btn.textContent=isMac?'已選取，請按 Command＋C':'已選取，請按 Ctrl＋C';setTimeout(function(){btn.textContent='複製'},4000)})});
+      box.appendChild(pre);box.appendChild(btn);r2.appendChild(box);li.appendChild(r2);
+    }
+    var r3=document.createElement('div');r3.className='row';r3.innerHTML='<span class="lab c">你會看到</span>';r3.appendChild(document.createTextNode(x.c));li.appendChild(r3);
+    var fin=document.createElement('label');fin.className='fin';var cb=document.createElement('input');cb.type='checkbox';cb.id='exdone'+(i+1);cb.checked=!!st[i+1];
+    cb.addEventListener('change',function(){st[i+1]=cb.checked;save();render()});
+    fin.appendChild(cb);fin.appendChild(document.createTextNode('做完了'));li.appendChild(fin);
+    list.appendChild(li);
+  });
+  function render(){
+    var n=0;EX.forEach(function(_,i){var on=!!st[i+1];if(on)n++;document.getElementById('ex'+(i+1)).classList.toggle('isdone',on);document.getElementById('exdone'+(i+1)).checked=on});
+    document.getElementById('exProg').textContent='已完成 '+n+' / '+EX.length;
+    document.getElementById('exBar').style.width=(100*n/EX.length)+'%';
+  }
+  document.getElementById('exReset').addEventListener('click',function(){st={};save();render()});
+  render();
+})();
+</script>
+</body>
+</html>

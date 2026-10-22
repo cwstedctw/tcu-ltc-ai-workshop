@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<title>長照所 AI 論文管線</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap">
+<style>
+/* 版面沿用第一部分：米色紙面＋深綠橫幅分段、金色大字當段名、深藍技能卡（Ted 10/21 給的範例方向）。第三部分的段名：看得懂／分得清／裝得好／照著做／接得穩／畫得美／守得住／帶得走。 */
+:root{
+  --paper:#F6EEDD; --card:#FFFBF2; --ink:#1B2420; --muted:#5B655F;
+  --green:#1F4A3A; --green-ink:#F6EEDD; --gold:#C99A2E; --gold-soft:#F2E3B8;
+  --navy:#1C2B3A; --navy-ink:#EEF1F4; --line:#E0D3B6;
+  --ok:#24704F; --ok-soft:#DCEFE3; --warn:#B23A2B; --warn-soft:#F7DDD7;
+  --font-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+  --base:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111A15; --card:#18241E; --ink:#ECE5D4; --muted:#A7B0A8;
+    --green:#0E2E22; --green-ink:#F1E9D6; --gold:#E2B85A; --gold-soft:#3A3120;
+    --navy:#0F1B27; --navy-ink:#E4E9EE; --line:#2C3D33;
+    --ok:#7FD0A6; --ok-soft:#1C3A2B; --warn:#F09A86; --warn-soft:#3D221D; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111A15; --card:#18241E; --ink:#ECE5D4; --muted:#A7B0A8;
+  --green:#0E2E22; --green-ink:#F1E9D6; --gold:#E2B85A; --gold-soft:#3A3120;
+  --navy:#0F1B27; --navy-ink:#E4E9EE; --line:#2C3D33;
+  --ok:#7FD0A6; --ok-soft:#1C3A2B; --warn:#F09A86; --warn-soft:#3D221D; color-scheme:dark;
+}
+:root[data-proj="on"]{--base:20px}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:1rem;line-height:1.75;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+a{color:var(--ok)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:48rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance}
+p{margin:0 0 .9rem}
+header.top{padding-block:2.4rem 1.6rem}
+.eyebrow{font-size:.82rem;letter-spacing:.1em;color:var(--ok);font-weight:700}
+h1{font-size:2.15rem;line-height:1.3;margin:.35rem 0 .7rem;font-weight:900}
+.lede{font-size:1.06rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.3rem 1.2rem;font-size:.88rem;color:var(--muted)}
+.tools{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.1rem;align-items:center}
+.chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:.3rem 1rem;font-size:.92rem}
+.chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--green-ink)}
+.mycards{display:inline-flex;align-items:center;gap:.6rem;background:var(--navy);color:var(--navy-ink);border:2px solid var(--gold);border-radius:999px;padding:.4rem 1.1rem;font-weight:700;text-decoration:none}
+.mycards .cnt{background:var(--gold);color:var(--navy);border-radius:999px;padding:0 .55rem;font-size:.85rem;font-variant-numeric:tabular-nums}
+.band{background:var(--green);color:var(--green-ink);margin-top:2.2rem;scroll-margin-top:0}
+.band .wrap{padding-block:1.6rem 1.4rem}
+.band .big{font-size:3.4rem;line-height:1.1;font-weight:900;color:var(--gold);letter-spacing:.04em;margin:0}
+.band .sub{font-size:1.25rem;font-weight:700;margin:.4rem 0 0}
+.band .tag{font-family:var(--font-mono);font-size:.8rem;color:var(--gold);opacity:.9;letter-spacing:.12em}
+section.blk{padding-block:1.8rem 1rem}
+.ask{background:var(--ok-soft);border-radius:12px;padding:1rem 1.1rem;margin:.6rem 0 1rem}
+.ask b{color:var(--ok)}
+.doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:1rem 0 .4rem}
+.door{background:var(--card);border:1.5px solid var(--line);border-top:5px solid var(--gold);border-radius:10px;padding:.8rem .9rem;min-width:0}
+.door .k{font-weight:700}
+.door .v{font-size:.85rem;color:var(--muted);word-break:break-all}
+.account{text-align:center;font-size:.92rem;color:var(--muted);margin:.2rem 0 1rem}
+.account b{color:var(--ink)}
+.tabs{display:flex;gap:.4rem;margin:.6rem 0;flex-wrap:wrap}
+.tab{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:.35rem 1rem}
+.tab[aria-selected="true"]{background:var(--navy);color:var(--navy-ink);border-color:var(--navy)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;vertical-align:top;padding:.55rem .6rem;border-bottom:1px solid var(--line)}
+th{font-size:.82rem;letter-spacing:.06em;color:var(--muted)}
+.pill{display:inline-block;font-size:.78rem;padding:.05rem .55rem;border-radius:999px;font-weight:700;white-space:nowrap}
+.pill.go{background:var(--ok-soft);color:var(--ok)}
+.pill.stay{background:var(--gold-soft);color:var(--ink)}
+.pill.sep{background:var(--warn-soft);color:var(--warn)}
+.note{font-size:.85rem;color:var(--muted)}
+.claim{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin:1rem 0 .4rem;padding:.8rem 1rem;border:2px dashed var(--gold);border-radius:12px}
+.claim button{background:var(--navy);color:var(--navy-ink);border:0;border-radius:999px;padding:.35rem 1.1rem;font-weight:700}
+.claim button[aria-pressed="true"]{background:var(--gold);color:var(--navy)}
+.claim span{font-size:.9rem;color:var(--muted)}
+.app{font-size:1.3rem;font-weight:900;margin:1.4rem 0 .4rem;display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+.app small{font-size:.85rem;font-weight:500;color:var(--muted)}
+.steps{list-style:none;margin:.6rem 0 0;padding:0;display:grid;gap:.8rem}
+.step{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:1rem 1.1rem;min-width:0}
+.step h3{margin:0 0 .35rem;font-size:1.05rem;display:flex;gap:.5rem;align-items:baseline}
+.sn{font-family:var(--font-mono);color:var(--gold);font-weight:700}
+.step > p:last-child{margin-bottom:0}
+.path{font-family:var(--font-mono);font-size:.84rem;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:.08rem .45rem;display:inline-block;margin:.1rem 0;word-break:break-word}
+.why{font-size:.9rem;color:var(--muted)}
+.done{font-size:.88rem;border-left:4px solid var(--ok);padding-left:.6rem;margin-top:.5rem}
+.os-win,.os-mac{display:none}
+:root[data-os="win"] .os-win{display:block}
+:root[data-os="mac"] .os-mac{display:block}
+.osbar{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:.9rem;margin:.4rem 0}
+.copybox{position:relative;background:var(--paper);border:1.5px dashed var(--ok);border-radius:10px;margin:.6rem 0;min-width:0}
+.copybox pre{margin:0;padding:.8rem .9rem 2.5rem;white-space:pre-wrap;word-break:break-word;font-family:var(--font-body);font-size:.93rem;line-height:1.7}
+.copybtn{position:absolute;right:.5rem;bottom:.5rem;border:0;background:var(--ok);color:var(--card);border-radius:8px;padding:.2rem .8rem;font-size:.85rem;max-width:calc(100% - 1rem)}
+.copybtn.ok{background:var(--gold);color:var(--navy)}
+.minichk{margin-top:1rem;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.8rem 1rem}
+.minichk .hd{font-weight:700;margin-bottom:.2rem}
+.minichk label{display:flex;gap:.5rem;align-items:flex-start;padding:.25rem 0;font-size:.95rem}
+.minichk input{margin-top:.45rem;accent-color:var(--ok);width:1.05rem;height:1.05rem;flex:none}
+.lines{display:grid;gap:.8rem}
+.line{display:grid;grid-template-columns:2.6rem minmax(0,1fr);gap:.7rem;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:1rem}
+.line .num{font-size:2rem;font-weight:900;color:var(--warn);line-height:1}
+.line h3{margin:0 0 .3rem;font-size:1.1rem}
+.builder{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:1rem 1.1rem;margin-top:.6rem}
+.bstep{display:grid;grid-template-columns:2rem minmax(0,1fr);gap:.6rem;align-items:start;padding:.7rem 0;border-bottom:1px dashed var(--line)}
+.bstep:last-child{border-bottom:0}
+.circ{width:1.8rem;height:1.8rem;border-radius:50%;background:var(--gold);color:var(--navy);display:grid;place-items:center;font-weight:900;font-size:.95rem}
+.bstep .lbl{font-weight:700;margin-bottom:.4rem}
+.taskchips{display:flex;flex-wrap:wrap;gap:.45rem}
+.taskchips .chip[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--card)}
+.fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem}
+.fields label{display:flex;flex-direction:column;gap:.25rem;font-size:.85rem;color:var(--muted);min-width:0}
+.fields input{font:inherit;font-size:.95rem;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:.45rem .6rem;min-width:0;width:100%}
+.fields input:focus{border-color:var(--ok);outline:none}
+.ptcf{border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--paper)}
+.prow{display:grid;grid-template-columns:5.5rem minmax(0,1fr);gap:.6rem;padding:.6rem .8rem;border-bottom:1px solid var(--line)}
+.prow:last-child{border-bottom:0}
+.prow .k{font-weight:700;display:flex;gap:.4rem;align-items:baseline}
+.prow .k b{display:inline-grid;place-items:center;width:1.4rem;height:1.4rem;border-radius:4px;background:var(--navy);color:var(--navy-ink);font-size:.8rem;font-family:var(--font-mono)}
+.prow .v{font-size:.93rem;min-width:0;word-break:break-word}
+.fill{background:var(--ok-soft);color:var(--ok);font-weight:700;border-radius:4px;padding:0 .2rem}
+.miss{color:var(--warn);font-weight:700}
+.legend{font-size:.82rem;color:var(--muted);margin:.4rem 0 0}
+.actions{display:flex;flex-wrap:wrap;gap:.5rem}
+.btn{display:inline-flex;align-items:center;gap:.3rem;border-radius:8px;padding:.45rem 1rem;font-weight:700;text-decoration:none;border:1.5px solid var(--ok)}
+.btn.primary{background:var(--ok);color:var(--card)}
+.btn.ghost{background:transparent;color:var(--ok)}
+.status{font-size:.88rem;color:var(--ok);min-height:1.4em;margin-top:.4rem}
+.share{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1fr);gap:.7rem;align-items:center;margin:1rem 0 .4rem}
+.agent{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.8rem;text-align:center;min-width:0}
+.agent .k{font-weight:700}
+.agent .v{font-size:.82rem;color:var(--muted)}
+.arrow{font-size:.82rem;color:var(--ok);display:block}
+.folder{background:var(--gold-soft);border:2px solid var(--gold);border-radius:4px 14px 14px 14px;padding:.8rem 1rem;min-width:0}
+.folder .k{font-weight:700;margin-bottom:.3rem}
+.folder ul{margin:0;padding-left:1.1rem;font-size:.88rem}
+code{font-family:var(--font-mono);font-size:.86rem}
+.sync{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.4rem .6rem;margin:.8rem 0 1rem;font-size:.9rem}
+.sync .m{background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:.15rem .8rem}
+.sync .gh{background:var(--navy);color:var(--navy-ink);border-radius:999px;padding:.15rem .9rem;font-weight:700}
+.skills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;margin-top:1rem}
+.skill{perspective:900px;border:0;background:none;padding:0;text-align:left;color:inherit;min-width:0;display:grid}
+.skill .inner{position:relative;display:grid;min-height:13rem;transition:transform .5s;transform-style:preserve-3d}
+.skill[aria-pressed="true"] .inner{transform:rotateY(180deg)}
+.face{grid-area:1/1;position:relative;border-radius:14px;padding:1rem;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;background:var(--navy);color:var(--navy-ink);border:2px solid var(--gold)}
+.face.back{transform:rotateY(180deg);background:var(--card);color:var(--ink)}
+.face .no{font-size:2.2rem;font-weight:900;color:var(--gold);line-height:1;font-family:var(--font-mono)}
+.face .ttl{font-weight:900;font-size:1.05rem;margin:.5rem 0 .3rem}
+.face .one{font-size:.88rem;opacity:.9}
+.face .hint{margin-top:auto;font-size:.78rem;opacity:.75;text-align:right}
+.badge{position:absolute;top:.8rem;right:.8rem;font-size:.75rem;font-weight:700;border-radius:999px;padding:.05rem .6rem;background:var(--line);color:var(--ink)}
+.skill.on .badge{background:var(--gold);color:var(--navy)}
+.face.back .pts{display:block;margin-top:.2rem;font-size:.88rem;line-height:1.6}
+.face.back .pt{display:block;padding-left:1rem;position:relative}
+.face.back .pt::before{content:"・";position:absolute;left:0;color:var(--gold)}
+.skill:not(.on) .face.front{filter:saturate(.35);opacity:.85}
+.tip{font-size:1rem;font-weight:700;border-left:5px solid var(--gold);padding-left:.8rem;margin:1.2rem 0}
+.progress{display:flex;align-items:center;gap:.8rem;margin-top:1rem;font-size:.9rem;flex-wrap:wrap}
+.bar{flex:1;min-width:8rem;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+footer{padding-block:2rem 3rem;font-size:.85rem;color:var(--muted)}
+footer ul{padding-left:1.1rem;margin:.4rem 0}
+@media (max-width:720px){
+  h1{font-size:1.7rem}
+  .band .big{font-size:2.6rem}
+  .doors,.fields,.skills,.share{grid-template-columns:minmax(0,1fr)}
+  .prow{grid-template-columns:minmax(0,1fr);gap:.2rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+<style>
+/* 第三部分追加：比較表、分工示意、誰會用到的檔案表、步驟器、數字示範、預覽圖。其餘沿用第一部分的樣式。 */
+.vs td:first-child{font-weight:700;white-space:nowrap}
+.win{color:var(--ok);font-weight:700}
+.meh{color:var(--muted)}
+.flow3{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:.4rem;align-items:center;margin:1rem 0}
+.flow3 .box{background:var(--card);border:1.5px solid var(--line);border-top:5px solid var(--gold);border-radius:10px;padding:.6rem .7rem;text-align:center;min-width:0}
+.flow3 .box.you{background:var(--navy);color:var(--navy-ink);border-color:var(--navy);border-top-color:var(--gold)}
+.flow3 .k{font-weight:900}
+.flow3 .v{font-size:.82rem;opacity:.85}
+.flow3 .to{color:var(--gold);font-weight:900;font-size:1.2rem;text-align:center}
+.runby{display:inline-block;font-size:.75rem;font-weight:700;border-radius:999px;padding:.02rem .55rem;white-space:nowrap}
+.runby.ai{background:var(--ok-soft);color:var(--ok)}
+.runby.auto{background:var(--gold-soft);color:var(--ink)}
+.runby.you{background:var(--navy);color:var(--navy-ink)}
+.pipe{display:flex;flex-wrap:wrap;gap:.4rem;margin:.8rem 0}
+.pipe button{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:.4rem .75rem;font-weight:700;display:flex;align-items:center;gap:.4rem;font-size:.92rem}
+.pipe button .n{display:inline-grid;place-items:center;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--gold);color:var(--navy);font-size:.82rem}
+.pipe button[aria-selected="true"]{background:var(--navy);color:var(--navy-ink);border-color:var(--navy)}
+.stepcard{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:1rem 1.1rem}
+.stepcard h3{margin:0 0 .5rem;font-size:1.12rem}
+.stepcard .row{margin:.55rem 0}
+.stepcard .lab{font-weight:900;font-size:.88rem;display:block;margin-bottom:.15rem}
+.stepcard .lab.y{color:var(--ink)}
+.stepcard .lab.a{color:var(--ok)}
+.stepcard .lab.c{color:var(--warn)}
+.stepnav{display:flex;justify-content:space-between;gap:.5rem;margin-top:.8rem}
+.cmd{font-family:var(--font-mono);font-size:.82rem;background:var(--navy);color:var(--navy-ink);border-radius:8px;padding:.6rem .8rem;margin:.4rem 0;white-space:pre-wrap;word-break:break-word}
+.demo{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:1rem 1.1rem;margin-top:.6rem}
+.demo .sentence{font-family:Georgia,"Times New Roman",serif;font-size:1.02rem;line-height:1.8;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;margin:.6rem 0}
+.mval{background:var(--ok-soft);color:var(--ok);font-weight:700;border-radius:4px;padding:0 .25rem;transition:background .3s}
+.mval.flash{background:var(--gold);color:var(--navy)}
+.src{font-family:var(--font-mono);font-size:.8rem;color:var(--muted);word-break:break-word}
+.shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:.8rem 0}
+.shots figure{margin:0;min-width:0}
+.shots img{width:100%;height:auto;border:1.5px solid var(--line);border-radius:6px;background:#fff;display:block}
+.shots figcaption{font-size:.8rem;color:var(--muted);margin-top:.3rem}
+.routes{display:grid;gap:.7rem;margin:.6rem 0}
+.route{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.9rem 1rem;min-width:0}
+.route.best{border:2px solid var(--ok)}
+.route h3{margin:0 0 .3rem;font-size:1.02rem}
+.route .tag2{display:inline-block;font-size:.75rem;font-weight:700;border-radius:999px;padding:0 .6rem;background:var(--ok);color:var(--card);margin-left:.4rem}
+.route ol{margin:.3rem 0 0;padding-left:1.2rem;font-size:.93rem}
+.qa{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.9rem 1rem;margin:.6rem 0}
+.qa h3{margin:0 0 .3rem;font-size:1.02rem}
+@media (max-width:720px){
+  .flow3{grid-template-columns:minmax(0,1fr)}
+  .flow3 .to{transform:rotate(90deg)}
+  .shots{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+<style>.sitenav{background:var(--navy,#1C2B3A);font-size:.88rem;position:relative;z-index:5}.sitenav .wrap{display:flex;flex-wrap:wrap;gap:.2rem .9rem;padding-block:.5rem}.sitenav a{color:var(--navy-ink,#EEF1F4);text-decoration:none;opacity:.8}.sitenav a[aria-current=page]{opacity:1;font-weight:700;color:var(--gold,#C99A2E)}</style>
+</head>
+<body>
+<nav class="sitenav" aria-label="工作坊各頁"><div class="wrap"><a href="index.html">行前準備</a><a href="setup.html">第一部分</a><a href="part2.html">第二部分</a><a href="part3.html" aria-current="page">第三部分</a><a href="practice.html">第三部分練習</a></div></nav>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">慈濟大學長期照護研究所・研究團隊工作坊・第三部分</div>
+  <h1>讓 AI 小隊陪你把論文做完</h1>
+  <p class="lede">第二部分的研究小隊，再加一條論文流程：找文獻、Zotero 管書目、分析資料、gnuplot 畫圖、LaTeX 寫稿，編出 PDF，要 Word 也有。</p>
+  <p class="lede"><b>先講結論：你不用打指令，也不用學 LaTeX。</b>你跟 AI 說話，AI 去改檔、跑程式；你看 PDF、做決定。這一頁每一步都附上「跟 AI 說的那句話」。</p>
+  <p class="lede">範例用的是所長團隊 2021 年發表的論文（Su 等，<i>BMC Geriatrics</i>）：用依論文表格重建的練習資料，把論文的表重算一次、逐一對照。<b>練習資料不是原始資料</b>；7 篇文獻是查證過的真文獻。動手練習在<a href="practice.html">練習頁</a>。前兩部分：<a href="setup.html">第一部分</a>、<a href="part2.html">第二部分</a>。</p>
+  <div class="meta"><span>2026-10-28（三）・電腦教室（一）</span><span>講師：陳文盛老師（國立東華大學通識教育中心）</span><span>查核與實測：2026-10-22</span></div>
+  <div class="tools">
+    <a class="mycards" href="#bring">我的技能卡 <span class="cnt" id="cardCount">0 / 5</span></a>
+    <button class="chip" id="projBtn" aria-pressed="false" type="button">投影大字</button>
+  </div>
+</header>
+</div>
+
+<div class="band" id="b1"><div class="wrap"><div class="tag">01・為什麼不用 Word</div><p class="big">看得懂</p><p class="sub">數字、文獻、圖都從源頭自動接上</p></div></div>
+<main>
+<section class="blk wrap" id="why">
+  <div class="ask"><b>Word 最常出事的地方：</b>改了一筆資料，內文、表格、摘要、圖要一處一處改，漏一處就前後不一致；文獻刪了一篇，編號要重排。<br><b>這條流程的做法：</b>數字由分析程式寫出來，文獻由 Zotero 匯出，圖由腳本畫。改源頭，請 AI 重跑一次，全部一起更新。</div>
+  <div class="tablewrap"><table class="vs">
+    <thead><tr><th></th><th>Word 手工</th><th>LaTeX＋AI 流程</th></tr></thead>
+    <tbody>
+      <tr><td>改一筆資料</td><td class="meh">內文、表、圖、摘要逐處改</td><td class="win">重跑一次，數字全部更新</td></tr>
+      <tr><td>引用文獻</td><td class="meh">插入、重排編號，容易漏</td><td class="win">連到 Zotero；引了書目裡沒有的文獻，產生 PDF 時會停下來告訴你是哪篇</td></tr>
+      <tr><td>圖</td><td class="meh">另外畫、貼上，字型跟內文不同</td><td class="win">gnuplot 腳本畫，圖上的字跟內文同一套字型</td></tr>
+      <tr><td>換期刊格式</td><td class="meh">重新排版</td><td class="win">換期刊範本，內容不動</td></tr>
+      <tr><td>AI 幫忙</td><td class="meh">複製貼上來回</td><td class="win">純文字，AI 讀得懂、改得動，改了什麼看得清楚</td></tr>
+      <tr><td>合作者只會 Word</td><td class="win">直接用</td><td>另外出一份 Word 給他（只收 Word 的期刊也是）</td></tr>
+    </tbody>
+  </table></div>
+  <div class="claim"><button type="button" data-claim="u1" aria-pressed="false">我懂了，收下技能卡 01</button><span>說得出為什麼「改源頭、重跑一次」比逐處改 Word 可靠。</span></div>
+</section>
+
+<div class="band" id="b2"><div class="wrap"><div class="tag">02・誰做什麼</div><p class="big">分得清</p><p class="sub">你說話、AI 動手、程式跑、你看 PDF</p></div></div>
+<section class="blk wrap" id="who">
+  <div class="flow3" aria-label="分工">
+    <div class="box you"><div class="k">你</div><div class="v">跟 AI 說要做什麼</div></div>
+    <div class="to" aria-hidden="true">→</div>
+    <div class="box"><div class="k">AI 助手</div><div class="v">Codex 或 Claude 的 Code：改檔、跑程式</div></div>
+    <div class="to" aria-hidden="true">→</div>
+    <div class="box"><div class="k">程式</div><div class="v">算數字、畫圖、編 PDF</div></div>
+    <div class="to" aria-hidden="true">→</div>
+    <div class="box you"><div class="k">你</div><div class="v">看 PDF，做決定</div></div>
+  </div>
+  <p>範本資料夾分兩半：<b>原料放 <code>source/</code>，成品在 <code>output/</code></b>。要改結果就改原料，再跑一次 build；成品每次重做，不要手改。每個檔案都標了<b>誰會用到</b>，你自己要打開的，只有 <code>README.md</code>、你的資料、Zotero，和 <code>output/main.pdf</code>。</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>檔案</th><th>做什麼</th><th>誰會用</th><th>什麼時候</th></tr></thead>
+    <tbody>
+      <tr><td><code>README.md</code></td><td>給你看的使用說明</td><td><span class="runby you">你</span></td><td>第一次打開時</td></tr>
+      <tr><td><code>build.py</code></td><td>一次跑完：分析 → 畫圖 → 檢查文獻 → 編 PDF</td><td><span class="runby ai">AI 執行</span></td><td>你說「跑一次 build」</td></tr>
+      <tr><td><code>source/data/</code></td><td>研究資料（範例是依所長論文重建的練習資料）</td><td><span class="runby you">你放進來</span></td><td>符合四個條件才放（見第 07 段）</td></tr>
+      <tr><td><code>source/refs/refs.bib</code></td><td>書目</td><td><span class="runby auto">Zotero 自動匯出</span></td><td>你在 Zotero 加文獻時自己更新</td></tr>
+      <tr><td><code>source/scripts/analyze.py</code></td><td>統計分析：算出論文裡的數字、表、畫圖用的小表</td><td><span class="runby auto">build 自動跑</span> <span class="runby ai">AI 修改</span></td><td>換資料、換統計方法時，AI 改它</td></tr>
+      <tr><td><code>source/gnuplot/*.gp</code></td><td>gnuplot 畫圖腳本，一張圖一個</td><td><span class="runby auto">build 自動跑</span> <span class="runby ai">AI 修改</span></td><td>要加圖、改圖時，AI 改它</td></tr>
+      <tr><td><code>source/paper/main.tex</code></td><td>論文本文（LaTeX）</td><td><span class="runby ai">AI 寫、改</span></td><td>寫作時；你看的是編出來的 PDF</td></tr>
+      <tr><td><code>output/</code></td><td>成品：內文數字、表（<code>.csv</code> 用 Excel 打得開）、畫圖用的小表、圖、<code>main.pdf</code></td><td><span class="runby auto">build 自動產生</span></td><td>不要手改；刪掉也能重做</td></tr>
+      <tr><td><code>tools/make_practice_data.py</code></td><td>重建練習資料</td><td><span class="runby ai">AI 執行</span></td><td>只有練習時；換成真資料就不用</td></tr>
+      <tr><td><code>tools/zotero_export.py</code></td><td>從 Zotero 匯出書目（不裝外掛的接法）</td><td><span class="runby ai">AI 執行</span></td><td>只有用第 05 段的接法 C 時</td></tr>
+      <tr><td><code>AGENTS.md</code>、<code>WORKFLOW.md</code></td><td>給 AI 看的規則和流程說明書</td><td><span class="runby ai">AI 開工先讀</span></td><td>每次；你不用背</td></tr>
+      <tr><td><code>.github/workflows/</code></td><td>推上 GitHub 後，雲端自動編一份 PDF</td><td><span class="runby auto">GitHub 自動跑</span></td><td>每次推上去</td></tr>
+    </tbody>
+  </table></div>
+  <p class="why">AI 每次要跑程式或改檔，會先問你可不可以（第一部分設定的「會先問」）。看得懂它要做什麼就同意；看不懂就問它「這一步在做什麼」。</p>
+  <div class="claim"><button type="button" data-claim="u2" aria-pressed="false">我懂了，收下技能卡 02</button><span>知道自己只要說話、看 PDF；程式由 AI 和 build 去跑。</span></div>
+</section>
+
+<div class="band" id="b3"><div class="wrap"><div class="tag">03・只要裝一次</div><p class="big">裝得好</p><p class="sub">TeX、gnuplot、pandoc、Python 套件，請 AI 幫你裝</p></div></div>
+<section class="blk wrap" id="install">
+  <div class="qa"><h3>TeX Live 是什麼？要裝哪一個？</h3>
+    <p style="margin:0">要把 LaTeX 編成 PDF，電腦裡要有一套「TeX 發行版」。最完整的一套叫 <b>TeX Live</b>，每年出一版；Mac 版的 TeX Live 叫 <b>MacTeX</b>。Windows 另有一套 <b>MiKTeX</b>，第一次裝比較小，缺什麼再自動補。我們在雲端實測、和 GitHub 自動編譯用的都是 TeX Live。三套都能用，範本不挑。</p>
+    <p style="margin:.4rem 0 0">論文或文獻有中文（例如引了台灣的中文期刊），跟 AI 說「論文裡有中文，請改用 xelatex」就好，中文字型已經設好。</p>
+  </div>
+  <div class="osbar" role="group" aria-label="選擇作業系統">你的電腦是：
+    <button class="chip" data-os="win" aria-pressed="true" type="button">Windows</button>
+    <button class="chip" data-os="mac" aria-pressed="false" type="button">Mac</button>
+  </div>
+  <div class="os-win">
+    <div class="tablewrap"><table>
+      <thead><tr><th>工具</th><th>用途</th><th>建議裝</th></tr></thead>
+      <tbody>
+        <tr><td>TeX</td><td>把 LaTeX 編成 PDF</td><td><b>MiKTeX</b>（比較小；要打開「缺套件時自動安裝」）。想一次裝齊也可以裝 TeX Live，但檔案很大</td></tr>
+        <tr><td>gnuplot</td><td>畫圖</td><td>gnuplot 官方安裝檔</td></tr>
+        <tr><td>uv（管 Python）</td><td>統計分析</td><td><b>uv</b>：它會自己裝好 Python 和 numpy、pandas、scipy 等套件，放在範本資料夾裡，不動電腦原本的 Python</td></tr>
+        <tr><td>pandoc</td><td>轉成 Word（需要時才裝）</td><td>pandoc 官方安裝檔</td></tr>
+      </tbody>
+    </table></div>
+    <p>在 AI 助手（打開範本資料夾的那個）貼：</p>
+    <div class="copybox"><pre id="inst-win">請幫我裝寫論文要用的工具。每裝一個之前，先告訴我要裝什麼、從哪裡裝，我同意再裝；要我輸入電腦密碼時先停下來，我自己輸入。
+1. TeX：用 winget 裝 MiKTeX（winget install -e --id MiKTeX.MiKTeX），裝好後把「缺套件時自動安裝」設成「是」（不要選每次問我），你在背景跑的時候才不會卡住。
+2. gnuplot：用 winget 裝（winget install -e --id gnuplot.gnuplot）。裝好後打 gnuplot --version；如果找不到、或沒有印出版本就結束（winget 建的捷徑可能缺檔），請找出 gnuplot.exe 所在的 bin 資料夾，先告訴我你打算把它加進「使用者」的 PATH、會影響什麼，我同意再加；加完請我把 Codex／Claude 關掉重開，再打一次 gnuplot --version。
+3. uv：用 winget 裝（winget install -e --id astral-sh.uv）。裝好後請我把 Codex／Claude 關掉重開，再到範本資料夾執行 uv sync（第一次會下載 Python 和套件，要幾分鐘）。
+4. pandoc：winget install -e --id JohnMacFarlane.Pandoc。
+全部裝完，請一一執行 pdflatex --version、gnuplot --version、uv run python --version、pandoc --version，把版本號列給我看。</pre><button class="copybtn" data-copy="inst-win" type="button">複製</button></div>
+  </div>
+  <div class="os-mac">
+    <div class="tablewrap"><table>
+      <thead><tr><th>工具</th><th>用途</th><th>建議裝</th></tr></thead>
+      <tbody>
+        <tr><td>TeX</td><td>把 LaTeX 編成 PDF</td><td><b>MacTeX</b>（Mac 版 TeX Live，約 6.4 GB，要 macOS 11 以上）。硬碟不夠就裝 BasicTeX（約 134 MB），缺的套件再補</td></tr>
+        <tr><td>gnuplot、pandoc、uv</td><td>畫圖、轉 Word、管 Python</td><td>用 Homebrew 裝；uv 會自己裝好 Python 和套件</td></tr>
+      </tbody>
+    </table></div>
+    <p>在 AI 助手（打開範本資料夾的那個）貼：</p>
+    <div class="copybox"><pre id="inst-mac">請幫我裝寫論文要用的工具。每裝一個之前，先告訴我要裝什麼、從哪裡裝，我同意再裝；要我輸入電腦密碼時先停下來，我自己輸入。
+1. TeX：裝 MacTeX（brew install --cask mactex，或到 tug.org/mactex 下載，約 6.4 GB）。我的硬碟空間不夠的話，先問我要不要改裝 BasicTeX。
+2. 用 Homebrew 裝 gnuplot、pandoc 和 uv（brew install gnuplot pandoc uv）；沒有 Homebrew 的話先告訴我。如果 brew 開始從原始碼編（訊息出現 Building from source、或跑超過 10 分鐘），先停下來告訴我，改用：pandoc 到 pandoc.org 下載官方安裝檔；gnuplot 用 micromamba 從 conda-forge 裝（只裝在使用者資料夾，不動系統）。
+3. 到範本資料夾執行 uv sync（第一次會下載 Python 和套件，要幾分鐘）。
+全部裝完，請一一執行 pdflatex --version、gnuplot --version、uv run python --version、pandoc --version，把版本號列給我看。</pre><button class="copybtn" data-copy="inst-mac" type="button">複製</button></div>
+    <p class="why">MacTeX 很大，下載要一段時間，建議前一天晚上裝。<b>Intel 晶片的 Mac</b>：新版 macOS 上 Homebrew 常沒有現成編好的 gnuplot、pandoc，會改從原始碼編，要好幾個小時（10/22 實測）；上面那句已經請 AI 遇到就停下來、改用官方安裝檔和 conda-forge，那次不到一分鐘就裝好。Apple 晶片（M1 以後）的 Mac 通常有現成編好的版本（這點還沒實測）。</p>
+  </div>
+  <div class="done">完成判準：AI 列出四個版本號，沒有「找不到」。</div>
+  <p class="why">不想在自己電腦裝 TeX 也可以：把資料夾推上 GitHub，雲端會自動編出 PDF（第 04 段第 10 步），只是每改一次都要推上去才看得到。<b>這條路只限練習資料，或資料符合第 07 段的四個條件</b>：推上去，資料就會在 GitHub 的雲端機器上被讀取。</p>
+  <div class="claim"><button type="button" data-claim="u3" aria-pressed="false">我懂了，收下技能卡 03</button><span>知道 TeX Live、MacTeX、MiKTeX 是什麼，也知道請 AI 幫忙裝。</span></div>
+</section>
+
+<div class="band" id="b4"><div class="wrap"><div class="tag">04・一篇論文怎麼走</div><p class="big">照著做</p><p class="sub">十步，每一步：你做什麼、跟 AI 說什麼、你要看什麼</p></div></div>
+<section class="blk wrap" id="steps">
+  <p>點下面的步驟。每一步有四種標籤：<b>「你自己做」</b>是你動手的，<b>「跟 AI 說」</b>是要貼給 AI 的那句話（按複製），<b>「AI 會做什麼」</b>讓你知道它在忙什麼，<b>「你要檢查」</b>是你要看的地方。第 1～3 步今天由講師示範，回家照著走。</p>
+  <div class="pipe" role="tablist" aria-label="論文步驟" id="pipe"></div>
+  <div class="stepcard" id="stepcard" role="tabpanel" aria-live="polite"></div>
+  <div class="stepnav"><button class="chip" type="button" id="prevStep">← 上一步</button><button class="chip" type="button" id="nextStep">下一步 →</button></div>
+  <p style="margin-top:1rem"><b>第 3 步跑出來的範例論文</b>（點圖看大圖）：</p>
+  <div class="shots">
+    <figure><a href="img/part3/page1.png" target="_blank" rel="noopener"><img src="img/part3/page1.png" alt="範例論文第 1 頁：標題與結構式摘要" loading="lazy"></a><figcaption>第 1 頁：摘要裡的數字全由程式產生</figcaption></figure>
+    <figure><a href="img/part3/page4.png" target="_blank" rel="noopener"><img src="img/part3/page4.png" alt="範例論文第 4 頁：表 1，八個 p 值論文印的和重算的並排" loading="lazy"></a><figcaption>第 4 頁：表 1，八個 p 值論文印的和重算的並排</figcaption></figure>
+    <figure><a href="img/part3/page6.png" target="_blank" rel="noopener"><img src="img/part3/page6.png" alt="範例論文第 6 頁：gnuplot 畫的圖 1 與效果量的表 3" loading="lazy"></a><figcaption>第 6 頁：gnuplot 畫的圖 1 和表 3</figcaption></figure>
+  </div>
+  <div class="qa"><h3>出錯了怎麼辦？</h3>
+    <p style="margin:0">build 失敗時，最後一行會寫 <code>BUILD FAILED</code> 和原因（例如缺哪個工具、哪篇文獻沒有 DOI、去看哪個檔）。把那段整個貼給 AI：</p>
+    <div class="copybox"><pre id="fix">build 失敗了，訊息如上。請照它說的去看，告訴我是什麼問題、你打算怎麼修；我同意之後再修，修好再跑一次 build，把最後一行給我看。</pre><button class="copybtn" data-copy="fix" type="button">複製</button></div>
+  </div>
+</section>
+
+<div class="band" id="b5"><div class="wrap"><div class="tag">05・Zotero</div><p class="big">接得穩</p><p class="sub">文獻放 Zotero，書目檔自己更新</p></div></div>
+<section class="blk wrap" id="zotero">
+  <p>論文用的書目檔是 <code>source/refs/refs.bib</code>。三種接法，挑一種就好，第一種最穩：</p>
+  <div class="routes">
+    <div class="route best"><h3>A. 自動匯出<span class="tag2">推薦</span></h3>
+      <ol>
+        <li>把 Zotero 更新到最新版。到 <a href="https://retorque.re/zotero-better-bibtex/installation/" target="_blank" rel="noopener">Better BibTeX 官網</a>下載 <code>.xpi</code> 檔（用 Firefox 下載要按右鍵另存），在 Zotero 選「工具 → 外掛（Tools → Plugins）」→ 齒輪 →「從檔案安裝（Install Plugin From File）」。</li>
+        <li>把這篇論文要用的文獻放進一個文獻集，例如「VP 論文」。</li>
+        <li>對文獻集按右鍵 →「匯出文獻集（Export Collection）」，格式選 <b>Better BibTeX</b>，勾「<b>保持更新</b>（Keep updated）」，存成範本裡的 <code>source/refs/refs.bib</code>（蓋掉範例那份）。</li>
+        <li>之後在 Zotero 加一篇，refs.bib 就自己更新。</li>
+      </ol>
+    </div>
+    <div class="route"><h3>B. 讓 AI 操作 Zotero</h3>
+      <p class="why" style="margin:.2rem 0 0">請 AI 幫你裝一個讓它能操作 Zotero 的小工具 zotero-mcp（要先裝 uv，再 <code>uv tool install zotero-mcp-server</code>），接到 Claude 或 Codex。之後 AI 能搜你的文獻庫。要讓它用 DOI 把文獻<b>加進</b> Zotero，Zotero 要開著，而且要照 zotero-mcp 的說明另外授權。版本與設定以它的官方說明為準。適合熟一點之後再試。</p>
+    </div>
+    <div class="route"><h3>C. 不裝外掛</h3>
+      <p class="why" style="margin:.2rem 0 0">Zotero 開著，跟 AI 說「請用 tools/zotero_export.py 把 Zotero 的『VP 論文』文獻集匯出成 source/refs/refs.bib」。</p>
+    </div>
+  </div>
+  <p class="why">B 和 C 都要先在 Zotero：設定 → 進階，勾「允許此電腦上的其他應用程式與 Zotero 通訊（Allow other applications on this computer to communicate with Zotero）」。三種接法給每篇文獻取的引用代號（cite key）格式不一樣，中途換接法，請 AI 把 main.tex 的引用一起改。</p>
+  <p><b>沒有 DOI 的文獻</b>（例如有些台灣的中文期刊）：在 Zotero 給那一篇加一個標籤 <code>nodoi</code>。產生 PDF 時就會放行，並列出來提醒你自己對一次書目。不要讓 AI 替它編 DOI。</p>
+  <p><b>工具的書目也會錯。</b>這次範例用 Scite 查到 7 篇真文獻，它匯出的書目有兩個錯：把文章種類標成排版程式看不懂的寫法；作者名字裡的連字號（例如 Hsin-Feng）用了一個長得一樣、排版程式卻不認得的特殊符號。所以每篇都要用 DOI 打開原文對一次。</p>
+  <div class="claim"><button type="button" data-claim="u4" aria-pressed="false">我懂了，收下技能卡 04</button><span>知道 refs.bib 從哪裡來，也知道工具匯出的書目要回原文核對。</span></div>
+</section>
+
+<div class="band" id="b6"><div class="wrap"><div class="tag">06・數字與圖</div><p class="big">畫得美</p><p class="sub">數字由程式寫，圖由 gnuplot 畫</p></div></div>
+<section class="blk wrap" id="figs">
+  <p><b>論文裡沒有一個結果數字是手打的，圖也不是手畫的。</b>原料放在 <code>source/</code>，程式和 gnuplot 照順序把它變成 <code>output/</code> 裡的成品：</p>
+  <ol class="steps">
+    <li class="step"><h3><span class="sn">1</span>資料 <span class="path">source/data/study_data.csv</span></h3><p>一列一個人，例如 <code>dkas_t1</code> 是第 12 週的知識分數。程式只讀，不改。</p></li>
+    <li class="step"><h3><span class="sn">2</span>分析程式 <span class="path">source/scripts/analyze.py</span></h3><p>算出平均、標準差、p 值、效果量，每個數字取一個代號；同時把表做成 <code>.tex</code>（給 PDF）和 <code>.csv</code>（給 Excel），把畫圖要的數字做成小表。</p></li>
+    <li class="step"><h3><span class="sn">3</span>成品 <span class="path">output/numbers.tex</span>、<span class="path">tables/</span>、<span class="path">figdata/</span></h3><p>例如 <code>\newcommand{\DKASIntTOneMean}{37.04}</code>：代號＝數字。</p></li>
+    <li class="step"><h3><span class="sn">4</span>畫圖腳本 <span class="path">source/gnuplot/*.gp</span></h3><p>讀 <code>figdata/</code> 的小表，畫到 <code>output/figures/</code>。</p></li>
+    <li class="step"><h3><span class="sn">5</span>論文 <span class="path">source/paper/main.tex</span> → <span class="path">output/main.pdf</span></h3><p>本文寫代號、放表放圖；排版時代號換成數字。</p></li>
+  </ol>
+  <p style="margin-top:1rem">按下面的按鈕，模擬「事後發現有一位不符合收案條件、要排除」：同一句話裡的數字自己跟著變，你一個字都不用改。</p>
+  <div class="demo">
+    <div class="actions" role="group" aria-label="選資料">
+      <button class="chip" type="button" data-set="a" aria-pressed="true">全部 140 人</button>
+      <button class="chip" type="button" data-set="b" aria-pressed="false">排除 I048</button>
+    </div>
+    <div class="sentence" id="sentence"></div>
+    <p class="src">main.tex 裡實際寫的是：At week 12, DKAS scores were \DKASIntTOneMean{} in the intervention group and \DKASCtlTOneMean{} in the control group (\DKASTOnePstat{}). For DKAS, $d$ was \DKASTOneD{} at week 12 and \DKASTTwoD{} at week 24.</p>
+    <p class="note" style="margin:0">兩組數字都是 10/22 實際跑範本得到的。數字會自動更新，句子的解讀不會：數字變了，用到它的句子要你重讀。</p>
+  </div>
+  <p style="margin-top:1rem"><b>為什麼用 gnuplot？</b>圖放大不會糊，圖上的字交給 LaTeX 排，所以字型、大小跟內文一致（技術上是用 <code>cairolatex</code> 輸出）。每張圖是一個小腳本，資料改了重跑就重畫；同一張小表，換一支腳本就能從折線圖變長條圖。你不用自己寫腳本，跟 AI 說要什麼圖就好（第 04 段第 7 步）。</p>
+  <div class="cmd"># source/gnuplot/fig1_outcomes.gp（節錄，AI 寫的、build 會自動跑）
+set terminal cairolatex pdf size 12cm,6cm
+set datafile separator comma
+set xtics ('0' 0, '12' 1, '24' 2)
+plot 'figdata/fig1_dkas.csv' every ::1 using ($1-0.04):2:3 with yerrorlines ls 1, \
+     ''                      every ::1 using ($1+0.04):4:5 with yerrorlines ls 2</div>
+  <div class="ask"><b>想一步一步做一次？</b>打開<a href="practice.html">練習頁</a>：看原料、跑一次 build、追一個數字、排除一個人看全部一起變、把圖改成長條圖、加一個新表，六個練習加一個收尾，大約 30 分鐘，用的就是所長的論文。練習頁也放了一位老師照著貼、AI 真正回了什麼的實跑紀錄。練習頁第 07 段還有研究模擬：只給資料和文獻，AI 十步寫出一篇論文的實跑紀錄。</div>
+</section>
+
+<div class="band" id="b7"><div class="wrap"><div class="tag">07・研究倫理</div><p class="big">守得住</p><p class="sub">流程再快，這四件事還是你的</p></div></div>
+<section class="blk wrap" id="guard">
+  <div class="lines">
+    <div class="line"><div class="num">一</div><div><h3>研究資料：四個條件都符合才放</h3><p>去識別化；IRB 允許用每一家會碰到資料的 AI 工具，而且實際用的帳號、方案與設定符合核准條件（例如關掉「用我的資料改進模型」；不能只看是不是「學校／企業方案」）；資料管理計畫允許存放在 GitHub 這種境外雲端；儲存庫是 Private。<b>Private 不等於可以放受試者資料。</b>推上 GitHub 後，自動編譯也會在它的雲端機器上讀資料。有一條不確定，就先不要放。</p></div></div>
+    <div class="line"><div class="num">二</div><div><h3>每篇文獻都用 DOI 回原文</h3><p>build 通過只代表「引用的文獻存在於書目檔」，不代表書目資訊正確，也不代表 AI 對它的描述正確。作者、年份、卷期，還是要用 DOI 回原文對一次。</p></div></div>
+    <div class="line"><div class="num">三</div><div><h3>結論說到多強，由你決定</h3><p>AI 可以起草，但不能替你決定解讀。相關不寫成因果，效果不誇大，資料裡沒有的不寫。</p></div></div>
+    <div class="line"><div class="num">四</div><div><h3>照期刊規定聲明 AI 使用</h3><p>多數期刊要求寫出用了哪個 AI 工具、用在哪裡、你怎麼把關，作者為內容負責。以你要投的期刊規定為準；範本已放了一段聲明可以改。<b>聲明裡每一句都要是你真的做過的事</b>：沒有逐篇對過文獻，就不要寫「每篇都核對過」。</p></div></div>
+  </div>
+  <div class="claim"><button type="button" data-claim="u5" aria-pressed="false">我記住了，收下技能卡 05</button><span>四件事說得出來：資料四條件、DOI 回原文、結論自己定、聲明 AI 使用。</span></div>
+</section>
+
+<div class="band" id="bring"><div class="wrap"><div class="tag">08・技能卡</div><p class="big">帶得走</p><p class="sub">做完一段解鎖一張，回家隨時打開</p></div></div>
+<section class="blk wrap" id="cards">
+  <div class="progress" aria-live="polite"><span id="progText">已解鎖 0 / 5</span><div class="bar"><span id="progBar"></span></div><button class="chip" id="resetBtn" type="button">全部重來</button></div>
+  <div class="skills" id="skills"></div>
+  <p class="tip">沒解鎖也不擋內容，點卡片就能翻面看重點。</p>
+  <p class="note">勾選和解鎖只存在這台電腦的這個瀏覽器裡，不會傳給任何人；換瀏覽器、無痕視窗或清掉網站資料就不會跟著走。</p>
+</section>
+</main>
+
+<footer class="wrap">
+  <p><b>工具和選單名稱會隨改版變動。</b>這頁依 2026-10-22 查到的官方說明與實測寫成；跟你畫面不一樣時，以畫面為準。範例論文用的是依所長論文表格重建的練習資料，不是原始資料，數字不能當研究結果引用。</p>
+  <p>出處與工具：</p>
+  <ul>
+    <li>TeX：<a href="https://tug.org/texlive/" target="_blank" rel="noopener">TeX Live</a>、<a href="https://www.tug.org/mactex/" target="_blank" rel="noopener">MacTeX</a>、<a href="https://miktex.org/" target="_blank" rel="noopener">MiKTeX</a>；其他：<a href="http://www.gnuplot.info/" target="_blank" rel="noopener">gnuplot</a>、<a href="https://pandoc.org/installing.html" target="_blank" rel="noopener">pandoc</a></li>
+    <li>Zotero：<a href="https://retorque.re/zotero-better-bibtex/installation/" target="_blank" rel="noopener">Better BibTeX 安裝</a>、<a href="https://retorque.re/zotero-better-bibtex/exporting/auto/" target="_blank" rel="noopener">Better BibTeX 自動匯出</a>、<a href="https://github.com/54yyyu/zotero-mcp" target="_blank" rel="noopener">zotero-mcp</a>、<a href="https://www.zotero.org/support/dev/web_api/v3/local_api" target="_blank" rel="noopener">Zotero 本機介面</a></li>
+    <li>畫圖與排版：<a href="https://gnuplot.sourceforge.net/docs/latex_demo.pdf" target="_blank" rel="noopener">gnuplot 與 LaTeX</a>、<a href="https://www.elsevier.com/researcher/author/policies-and-guidelines/latex-instructions" target="_blank" rel="noopener">Elsevier LaTeX 說明</a></li>
+    <li>範例：<a href="https://doi.org/10.1186/s12877-021-02075-3" target="_blank" rel="noopener">Su、Koo、Lee、Sung、Lee、Liu（2021）<i>BMC Geriatrics</i> 21:126</a>（CC BY 4.0；頁面與範本引用的數字取自該文表 1、表 2、表 4）；可重現研究：<a href="https://doi.org/10.1126/science.1213847" target="_blank" rel="noopener">Peng（2011）<i>Science</i></a></li>
+  </ul>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function set(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  var st={};try{st=JSON.parse(get('ltc-p3')||'{}')||{}}catch(e){st={}}
+  function save(){set('ltc-p3',JSON.stringify(st))}
+
+  var os=get('ltc-os')||(/Mac/i.test(navigator.platform||'')?'mac':'win');
+  function setOS(v){root.dataset.os=v;document.querySelectorAll('button[data-os]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.os===v))});set('ltc-os',v)}
+  document.querySelectorAll('button[data-os]').forEach(function(b){b.addEventListener('click',function(){setOS(b.dataset.os)})});setOS(os);
+
+  var pb=document.getElementById('projBtn');
+  function setProj(on){if(on){root.dataset.proj='on'}else{delete root.dataset.proj}pb.setAttribute('aria-pressed',String(on));set('ltc-proj',on?'1':'0')}
+  pb.addEventListener('click',function(){setProj(root.dataset.proj!=='on')});setProj(get('ltc-proj')==='1');
+
+  var isMac=/Mac/i.test(navigator.platform||'');
+  function copyText(text,onok,onfail){
+    function fallback(){var ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}document.body.removeChild(ta);ok?onok():onfail()}
+    try{navigator.clipboard.writeText(text).then(onok,fallback)}catch(e){fallback()}
+  }
+  function wireCopy(btn){btn.addEventListener('click',function(){
+    var el=document.getElementById(btn.dataset.copy);
+    copyText(el.textContent,function(){btn.textContent='已複製';btn.classList.add('ok');setTimeout(function(){btn.textContent='複製';btn.classList.remove('ok')},1600)},
+      function(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent=isMac?'已選取，請按 Command＋C':'已選取，請按 Ctrl＋C';setTimeout(function(){btn.textContent='複製'},4000)});
+  })}
+  document.querySelectorAll('.copybtn').forEach(wireCopy);
+
+  // 十步：你做什麼（y）、跟 AI 說（say）、AI 會做什麼（a）、你要檢查（c）
+  var STEPS=[
+    {t:'建資料夾',y:'用範本在 GitHub 複製一份只有你看得到（Private）的資料夾，再下載（clone）到電腦，在 Codex 或 Claude 的 Code 打開它。做法跟第二部分一樣，範本換成 ai-paper-kit；下載這一步也可以請 AI 代勞。',say:'請先讀 AGENTS.md 和 WORKFLOW.md，再跟我報到。',a:'讀規則，第一行用「領隊 ·」報到，印出資料夾的完整路徑。',c:'路徑的結尾是你的論文資料夾；權限選單還是「會先問」。'},
+    {t:'裝工具',y:'沒有要自己做的，等 AI 問你時按同意；要密碼時自己輸入。',say:'（用第 03 段那一句，分 Windows 和 Mac）',a:'一個一個問你、裝好，再列出四個版本號。',c:'四個版本號都有，沒有「找不到」。'},
+    {t:'先跑範例',y:'沒有要自己做的。',say:'請跑一次 build（執行 uv run build.py），告訴我最後一行，再告訴我 PDF 在哪裡。',a:'跑完整條流程：分析、畫圖、檢查文獻、編 PDF。',c:'最後一行是 BUILD OK pages=9 undefined_cites=0 undefined_refs=0 refs=7 refs_without_doi=0 bib_warnings=0。pages 是頁數、refs 是文獻篇數（換成你的論文就會不同）；undefined_cites（找不到的引用）、undefined_refs（找不到的圖表編號）、bib_warnings（書目缺欄位）都要是 0。打開 output/main.pdf，看起來跟下面的預覽一樣，就代表工具都好了。想看懂這些數字和圖怎麼來，去練習頁做一次。'},
+    {t:'放進你的資料',y:'先確認符合第 07 段的四個條件。把去識別化的資料用 Excel 另存新檔，存檔類型選「CSV UTF-8（逗號分隔）」，放進 source/data/，在 source/data/README.md 照範例寫每一欄是什麼。',say:'我把資料放在 source/data/（檔名＿＿），欄位說明寫在 source/data/README.md。請讀過之後，先列出你打算怎麼改 source/scripts/analyze.py：要做哪些統計、為什麼、會產生哪些數字、表和圖。先不要改，等我同意。',a:'讀資料和說明，提出分析計畫。你同意後才改程式，再跑 build。',c:'統計方法是你認可的、跟你的研究設計相符（不確定就先問統計顧問）；分析計畫裡沒有資料裡不存在的欄位。'},
+    {t:'接 Zotero',y:'照第 05 段接法 A：在 Zotero 建這篇論文的文獻集，用 Better BibTeX 匯出、勾「保持更新」，存成 source/refs/refs.bib。之後在 Zotero 加文獻就好。',say:'我已經把 Zotero 的文獻集匯出成 source/refs/refs.bib。請告訴我裡面有幾筆、每一筆的引用代號（cite key），以及哪幾筆沒有 DOI。',a:'讀 refs.bib，列出清單和缺 DOI 的文獻。',c:'筆數跟你 Zotero 文獻集一樣；缺 DOI 的回 Zotero 補，真的沒有 DOI 的加標籤 nodoi（見第 05 段）。'},
+    {t:'起草一節',y:'想好這一節要講什麼重點（可以先跟 AI 討論）。',say:'請照 WORKFLOW.md 第 5 步，用 refs.bib 裡的文獻起草 Introduction，大約三段。每一句講到文獻的，只寫該篇摘要真的有寫的內容，並在回報裡列出每句根據哪一篇；數字一律用代號。寫完跑一次 build，把最後一行給我看。',a:'在 main.tex 寫這一節，跑 build，列出每句的根據。',c:'挑兩三句，用 DOI 打開原文對一次；論點是你要的。'},
+    {t:'加一張圖',y:'想好要哪一張圖、要表達什麼。',say:'請照 WORKFLOW.md 第 4 步，加一張圖：兩組從前測到第 12 週的改變量，三個量表並排。分析程式要產生它需要的小表，main.tex 要放進去並加圖說。做完跑一次 build，告訴我最後一行。',a:'改 analyze.py 產生小表（output/figdata/）、寫一個新的 .gp 腳本、在 main.tex 放圖，跑 build。',c:'PDF 裡多了這張圖，數字跟表格對得上，點和誤差線沒有被切掉。'},
+    {t:'交稿前檢查',y:'讀一遍 PDF。',say:'請照 WORKFLOW.md 第 8 步的檢查清單逐條檢查，列出沒過的項目和建議怎麼改，先不要改。',a:'逐條檢查：BUILD OK、書目警告是 0、沒有手打的數字、文獻描述、統計方法跟研究設計相符、AI 使用聲明。',c:'每一條沒過的，你決定要不要改。'},
+    {t:'換期刊或出 Word',y:'把要投期刊的投稿須知存進 material/。',say:'我要投的期刊是＿＿，投稿須知在 material/。請列出 main.tex 要改的地方（期刊範本、字數、引用格式、圖表規定），先列給我看。期刊只收 Word 的話，請執行 uv run build.py --docx，告訴我 Word 檔在哪裡、哪裡要人工檢查。',a:'列出要改的地方；你同意後換期刊範本。需要 Word 就另外產生 main.docx。',c:'Word 版的排版、表格、圖、引用格式要人工看一次。每次產生都會蓋掉舊的 output/main.docx，要在 Word 裡改先另存到別的資料夾；PDF 是這條流程的排版基準，實際投稿交哪一種檔照期刊規定。論文是中文的，跟 AI 說「改用 xelatex」。'},
+    {t:'存一版、推上去',y:'確認 source/data/ 和 material/ 裡沒有不該上傳的檔。',say:'請把今天改的檔案列給我看，特別標出 source/data/ 和 material/ 裡新放的檔。我同意之後，存一版並推上 GitHub，再告訴我去哪裡下載雲端編好的 PDF。',a:'列出檔案，你同意後 commit、push。GitHub 會自動跑一次 build。',c:'GitHub 上的儲存庫是 Private；到 Actions 頁面下載 paper-pdf。output/ 不會推上去，雲端會自己重做一份。'}
+  ];
+  var pipe=document.getElementById('pipe'),card=document.getElementById('stepcard');
+  var cur=Math.min(st.step||0,STEPS.length-1);
+  function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  STEPS.forEach(function(s,i){var b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.innerHTML='<span class="n">'+(i+1)+'</span>'+s.t;b.addEventListener('click',function(){go(i)});pipe.appendChild(b)});
+  function go(i){cur=i;st.step=i;save();renderStep()}
+  function renderStep(){
+    [].forEach.call(pipe.children,function(b,i){b.setAttribute('aria-selected',String(i===cur))});
+    var s=STEPS[cur];
+    var sayHtml=s.say.charAt(0)==='（'?'<p style="margin:0">'+esc(s.say)+'</p>':'<div class="copybox"><pre id="say-step">'+esc(s.say)+'</pre><button class="copybtn" data-copy="say-step" type="button">複製</button></div>';
+    card.innerHTML='<h3>第 '+(cur+1)+' 步：'+esc(s.t)+'</h3>'+
+      '<div class="row"><span class="lab y">你自己做</span>'+esc(s.y)+'</div>'+
+      '<div class="row"><span class="lab a">跟 AI 說</span>'+sayHtml+'</div>'+
+      '<div class="row"><span class="lab">AI 會做什麼</span>'+esc(s.a)+'</div>'+
+      '<div class="row"><span class="lab c">你要檢查</span>'+esc(s.c)+'</div>'+
+      (s.say.indexOf('＿＿')>=0?'<p class="why" style="margin:.3rem 0 0">貼上之後，把「＿＿」換成你的情況。</p>':'');
+    var b=card.querySelector('.copybtn');if(b)wireCopy(b);
+    document.getElementById('prevStep').disabled=cur===0;
+    document.getElementById('nextStep').disabled=cur===STEPS.length-1;
+  }
+  document.getElementById('prevStep').addEventListener('click',function(){if(cur>0)go(cur-1)});
+  document.getElementById('nextStep').addEventListener('click',function(){if(cur<STEPS.length-1)go(cur+1)});
+  renderStep();
+
+  // 數字示範：兩組都是實際跑範本的結果（全部 140 人；排除 I048）
+  var SETS={
+    a:{DKASIntTOneMean:'37.04',DKASCtlTOneMean:'30.43',DKASTOnePstat:'p < 0.001',DKASTOneD:'0.92',DKASTTwoD:'0.95'},
+    b:{DKASIntTOneMean:'37.41',DKASCtlTOneMean:'30.43',DKASTOnePstat:'p < 0.001',DKASTOneD:'1.01',DKASTTwoD:'0.96'}
+  };
+  var TPL='At week 12, DKAS scores were {DKASIntTOneMean} in the intervention group and {DKASCtlTOneMean} in the control group ({DKASTOnePstat}). For DKAS, d was {DKASTOneD} at week 12 and {DKASTTwoD} at week 24.';
+  var sent=document.getElementById('sentence');
+  function renderSet(k,flash){
+    var v=SETS[k];
+    sent.innerHTML=TPL.replace(/\{(\w+)\}/g,function(_,m){return '<span class="mval'+(flash?' flash':'')+'" title="\\'+m+'">'+v[m]+'</span>'});
+    document.querySelectorAll('[data-set]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.set===k))});
+    if(flash)setTimeout(function(){sent.querySelectorAll('.mval').forEach(function(x){x.classList.remove('flash')})},500);
+  }
+  document.querySelectorAll('[data-set]').forEach(function(b){b.addEventListener('click',function(){renderSet(b.dataset.set,true)})});
+  renderSet('a',false);
+
+  var CARDS=[
+    {u:'u1',n:'01',ttl:'為什麼不用 Word',one:'改源頭、重跑一次，全部一起更新',back:['數字由分析程式寫','文獻由 Zotero 匯出','圖由 gnuplot 腳本畫','要 Word 另外出一份']},
+    {u:'u2',n:'02',ttl:'誰做什麼',one:'你說話、AI 動手、程式跑、你看 PDF',back:['不用打指令、不用學 LaTeX','build.py 由 AI 執行','分析和畫圖由 build 自動跑','refs.bib 由 Zotero 自動更新']},
+    {u:'u3',n:'03',ttl:'裝一次就好',one:'TeX、gnuplot、Python 套件、pandoc',back:['Windows：MiKTeX','Mac：MacTeX（Mac 版 TeX Live）','請 AI 幫你裝，它會先問','看到四個版本號就好了']},
+    {u:'u4',n:'04',ttl:'Zotero 接得穩',one:'Better BibTeX「保持更新」最穩',back:['文獻集匯出成 source/refs/refs.bib','在 Zotero 加一篇就自動更新','想讓 AI 代勞：zotero-mcp','書目也會錯，用 DOI 回原文']},
+    {u:'u5',n:'05',ttl:'守得住',one:'四件事還是你的',back:['資料四條件，Private 不夠','每篇文獻 DOI 回原文','結論說到多強你決定','照期刊規定聲明 AI 使用']}
+  ];
+  var grid=document.getElementById('skills');
+  CARDS.forEach(function(c){
+    var b=document.createElement('button');b.type='button';b.className='skill';b.id='card-'+c.u;b.setAttribute('aria-pressed','false');
+    b.innerHTML='<span class="inner"><span class="face front"><span class="badge">未解鎖</span><span class="no">'+c.n+'</span><span class="ttl">'+c.ttl+'</span><span class="one">'+c.one+'</span><span class="hint">點我翻面</span></span><span class="face back"><span class="ttl">'+c.ttl+'</span><span class="pts">'+c.back.map(function(x){return '<span class="pt">'+x+'</span>'}).join('')+'</span><span class="hint">再點一下翻回來</span></span></span>';
+    b.addEventListener('click',function(){b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'))});
+    grid.appendChild(b);
+  });
+  function updateCards(){
+    var n=0;CARDS.forEach(function(c){var on=!!st[c.u];var el=document.getElementById('card-'+c.u);el.classList.toggle('on',on);el.querySelector('.badge').textContent=on?'已解鎖':'未解鎖';if(on)n++});
+    document.getElementById('progText').textContent='已解鎖 '+n+' / 5';document.getElementById('progBar').style.width=(n/5*100)+'%';
+    document.getElementById('cardCount').textContent=n+' / 5';
+  }
+  function claimLabel(b){var on=b.getAttribute('aria-pressed')==='true';b.textContent=on?'已收下技能卡 '+b.dataset.claim.slice(1).padStart(2,'0')+' ✓':b.dataset.label}
+  document.querySelectorAll('[data-claim]').forEach(function(b){var u=b.dataset.claim;b.dataset.label=b.textContent;b.setAttribute('aria-pressed',String(!!st[u]));claimLabel(b);
+    b.addEventListener('click',function(){st[u]=!st[u];b.setAttribute('aria-pressed',String(st[u]));claimLabel(b);save();updateCards()})});
+  document.getElementById('resetBtn').addEventListener('click',function(){st={};save();document.querySelectorAll('[data-claim]').forEach(function(b){b.setAttribute('aria-pressed','false');claimLabel(b)});go(0);renderSet('a',false);updateCards()});
+  updateCards();
+})();
+</script>
+</body>
+</html>
