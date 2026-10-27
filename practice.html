@@ -516,23 +516,23 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
   <p class="why">核對數字時，用 Excel 打開 <code>output/tables</code> 資料夾裡的 .csv 檔就好；看完關掉時按「不要儲存」。下次跑 build 之前要關掉，Excel 開著，build 會失敗。</p>
 
   <h3 class="app">我手上有這個檔，要放哪裡？</h3>
-  <p>寫自己的論文時，先照這張表把檔案放進論文資料夾，再跟 AI 說要怎麼用。</p>
+  <p>寫自己的論文時，先照主頁第 04 段第 4 步的第一句開一篇新論文（只做一次），再照這張表把檔案放進論文資料夾，跟 AI 說要怎麼用。</p>
   <div class="tablewrap"><table>
     <thead><tr><th>你手上有</th><th>放哪裡</th><th>誰放</th><th>放好之後跟 AI 說</th></tr></thead>
     <tbody>
-      <tr><td><b>研究資料</b>（去識別化、Excel 打得開）</td><td>另存成 CSV UTF-8，放 <code>source/data/</code>；欄位說明寫在同一夾的 <code>README.md</code></td><td>你自己放</td><td>主頁第 04 段第 4 步那兩句（先開新論文，再請它提分析計畫）</td></tr>
-      <tr><td><b>新一批或更新過的資料</b></td><td><code>source/data/</code>，用新的檔名放（例如加日期），舊的先留著</td><td>你自己放</td><td>「我在 source/data/ 放了＿＿，請改用這個檔，先告訴我哪些數字會變，等我同意再跑 build。」</td></tr>
+      <tr><td><b>研究資料</b>（已去識別化、符合主頁第 07 段的四個條件）</td><td>另存成 CSV UTF-8，檔名用英文，放 <code>source/data/</code>；欄位說明寫在同一夾的 <code>README.md</code></td><td>你自己放</td><td>主頁第 04 段第 4 步的第二句（請它提分析計畫）</td></tr>
+      <tr><td><b>新一批或更新過的資料</b></td><td><code>source/data/</code>，用新的英文檔名放（例如加日期），舊的先留著</td><td>你自己放</td><td>「我在 source/data/ 放了＿＿（新的資料）。請先告訴我 analyze.py 要改哪裡、哪些表和數字可能會變；先不要改，等我同意再改、再跑 build。」</td></tr>
       <tr><td><b>自己用 Excel 做好的表</b></td><td>另存成 CSV UTF-8，放 <code>source/tables/</code></td><td>你自己放</td><td>下面〈想放一張自己在 Excel 做好的表〉那句</td></tr>
       <tr><td><b>想畫成圖的 Excel 資料</b></td><td>另存成 CSV UTF-8，放 <code>source/figdata/</code></td><td>你自己放</td><td>下面〈想用 Excel 的資料畫一張圖〉那句</td></tr>
-      <tr><td><b>流程圖、照片</b>（PNG、JPG）</td><td><code>source/images/</code>，檔名用英文</td><td>你自己放</td><td>下面〈想放一張現成的圖〉那句</td></tr>
+      <tr><td><b>流程圖、照片</b>（PNG、JPG）</td><td><code>source/images/</code>，檔名用英文；照片有人臉、姓名的，先遮掉</td><td>你自己放</td><td>下面〈想放一張現成的圖〉那句</td></tr>
       <tr><td><b>文獻</b></td><td>放進 Zotero 的文獻集，不放進論文資料夾；<code>source/refs/refs.bib</code> 由 Zotero 匯出</td><td>Zotero</td><td>主頁第 04 段第 5 步那句</td></tr>
-      <tr><td><b>計畫書、投稿須知、審查意見</b></td><td><code>material/</code></td><td>你自己放</td><td>「material/ 裡的＿＿是＿＿，請先讀，再告訴我論文要改哪裡，先不要改。」</td></tr>
-      <tr><td><b>有姓名、病歷號的原始檔</b></td><td><b>不放進論文資料夾</b>，留在你原本的地方；去識別化後的版本才放 <code>source/data/</code></td><td>—</td><td>—</td></tr>
+      <tr><td><b>計畫書、投稿須知、審查意見</b></td><td><code>material/</code>（網頁上的投稿須知，照主頁第 04 段第 9 步存成文字檔）</td><td>你自己放</td><td>「material/ 裡的＿＿是＿＿，請先讀，再告訴我論文要改哪裡，先不要改。」</td></tr>
+      <tr><td><b>有姓名、病歷號的原始檔</b></td><td><b>不放進論文資料夾，也不要交給 AI 處理</b>，留在你原本的地方；你自己去識別化、確認符合主頁第 07 段的四個條件，才放 <code>source/data/</code></td><td>—</td><td>—</td></tr>
     </tbody>
   </table></div>
-  <p class="why"><code>source/data/</code> 和 <code>material/</code> 要你自己放：範本規定 AI 在這兩個資料夾只讀不寫，研究資料才不會被 AI 改到。用<b>檔案總管</b>（Mac：Finder）複製貼上或拖進去就好。表上沒有的、不確定放哪裡的，貼這句問 AI：</p>
-  <div class="copybox"><pre>我有一個＿＿檔（內容是＿＿），要用在論文裡。請照 README.md 的資料夾說明，告訴我應該放進哪一個資料夾、為什麼、檔名要怎麼取。先不要搬、不要改任何檔案，等我放好再說。</pre><button type="button" class="copybtn">複製</button></div>
-  <p class="why">放錯也沒關係：跟 AI 說「＿＿這個檔我放錯地方了，應該放哪裡？」，照它說的搬過去，再跑一次 build。</p>
+  <p class="why"><code>source/data/</code> 和 <code>material/</code> 要你自己放：範本規定 AI 在這兩個資料夾只讀不寫，研究資料才不會被 AI 改到。用<b>檔案總管</b>（Mac：Finder）複製、貼上放進去就好（用拖的，原本的檔會被搬走）。表上沒有的、不確定放哪裡的，貼這句問 AI：</p>
+  <div class="copybox"><pre>我有一個＿＿檔（內容是＿＿），要用在論文裡。請照資料夾最外層 README.md 的資料夾說明，告訴我應該放進哪一個資料夾、為什麼、檔名要怎麼取。先不要搬、不要改任何檔案，等我放好再說。</pre><button type="button" class="copybtn">複製</button></div>
+  <p class="why">放錯也沒關係：跟 AI 說「＿＿這個檔我放錯地方了，應該放哪裡？」，照它說的搬過去，再跑一次 build。<b>只有一個例外</b>：有姓名、病歷號的檔放進來了，自己馬上把它移出論文資料夾，不要問 AI、不要存版或推上 GitHub；已經推上去的，先問講師。</p>
 
   <h3 class="app">一個數字、一張表、一張圖：各要三樣東西</h3>
   <p>論文裡每一個結果都是同一個公式：<b>① 原料（資料）＋ ② 做法（程式或腳本）→ ③ 成品（LaTeX 用的檔）</b>，論文本文再把成品放進來。</p>
@@ -559,19 +559,19 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
   <h3 class="app">想用 Excel 的資料畫一張圖</h3>
   <ol class="why">
     <li>在 Excel 做好資料：第一列是欄名（例如 month、intervention、control），下面一列一個點。</li>
-    <li>另存成「CSV UTF-8」，檔名用英文（例如 <code>my_data.csv</code>），存進 <code>source/figdata/</code>。</li>
+    <li>另存成「CSV UTF-8」，檔名用英文（例如 <code>my_data.csv</code>），存進 <code>source/figdata/</code>（沒有這個資料夾就新建一個）。</li>
     <li>跟 AI 說：「我在 source/figdata/ 放了 my_data.csv，第一欄是＿＿、第二欄是＿＿。請照 WORKFLOW.md 第 4 步寫一支 gnuplot 腳本畫成＿＿圖，放進論文的 Results，跑一次 build。」</li>
     <li>你會看到：<code>source/gnuplot/</code> 多一支 <code>.gp</code>，PDF 多一張圖。打開 PDF 看：點和線沒有被切掉，數字跟你的 Excel 一樣。</li>
   </ol>
   <h3 class="app">想放一張現成的圖（流程圖、照片）</h3>
+  <p class="why">照片裡有人臉、病歷、姓名的，先遮掉，並確認符合主頁第 07 段的四個條件，才放進來。</p>
   <ol class="why">
-    <li>圖存成 <b>PNG 或 JPG</b>（PDF 也可以，但 Word 版放不進去）。檔名只用英文、數字、<code>-</code>、<code>_</code>，例如 <code>flowchart.png</code>；不能有空白或中文。</li>
+    <li>圖存成 <b>PNG 或 JPG</b>（PDF 也可以，但 Word 版放不進去）。檔名只用英文、數字、<code>-</code>、<code>_</code>，例如 <code>flowchart.png</code>；不能有空白或中文。PowerPoint 畫的：選取整張圖，按右鍵「另存成圖片」，存成 PNG；預設檔名是中文，記得改成英文。</li>
     <li>放進 <code>source/images/</code>。</li>
-    <li>跟 AI 說：「我在 source/images/ 放了 flowchart.png，請照 WORKFLOW.md 第 4 步放進論文的 Methods，圖說寫＿＿，內文提到它，跑一次 build。」</li>
-    <li>你會看到：build 印出「flowchart.png → output/images/flowchart.png」，最後一行 BUILD OK，PDF 多了這張圖。檔名有空白或中文，build 會停下來請你改名；HEIC 這類格式會略過，提醒你另存成 PNG。要換圖：用同一個檔名蓋過去，再跑一次 build。</li>
+    <li>跟 AI 說（<code>flowchart.png</code> 換成你的檔名）：「我在 source/images/ 放了 flowchart.png，請照 WORKFLOW.md 第 4 步放進論文的 Methods，圖說寫＿＿，內文提到它，跑一次 build。」</li>
+    <li>你會看到：AI 回報最後一行 BUILD OK；打開 <code>output/main.pdf</code>，Methods 附近（可能在下一頁）多了這張圖。檔名有空白或中文，build 會停下來請你改名；HEIC（iPhone 照片常見的格式）會略過，提醒你另存成 PNG。要換圖：用同一個檔名蓋過去，再跑一次 build。</li>
   </ol>
-  <p class="why">照片裡有人臉、病歷、姓名，先去識別化再放（主頁第 07 段的四個條件）。</p>
-  <p class="note">表的數字是你手打進 Excel 的，不會跟著資料自動更新；程式算的表才會。2026-10-22 實測：照上面做，PDF 和 Word 版都有這張表和這張圖。2026-10-27 實測：一張 PNG 流程圖放進 Methods，PDF 和 Word 版都有。</p>
+  <p class="note">表的數字是你手打進 Excel 的，不會跟著資料自動更新；程式算的表才會。Word 版要另外用 <code>uv run build.py --docx</code> 產生（主頁第 04 段第 9 步）；一般的 build 只出 PDF，還會清掉舊的 Word 檔。2026-10-22 實測：照上面做，PDF 和用 <code>--docx</code> 產生的 Word 版都有這張表和這張圖。2026-10-27 實測：一張 PNG 流程圖放進 Methods，PDF 和 Word 版都有。</p>
 </section>
 
 <div class="band" id="do"><div class="wrap"><div class="tag">04・六個練習</div><p class="big">動手做</p><p class="sub">你主要跟 AI 說話，大約 30 分鐘</p></div></div>
