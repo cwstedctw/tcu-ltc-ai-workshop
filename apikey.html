@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<title>長照所工作坊 API 金鑰登入</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap">
+<style>
+/* API 金鑰登入頁（10/27 由行前準備頁複製版面）。版面：跟第一部分頁同一套——米色紙面＋深綠橫幅分段、金色大字當段名；每一項是在家實際的步驟順序，所以用數字標。 */
+:root{
+  --paper:#F6EEDD; --card:#FFFBF2; --ink:#1B2420; --muted:#5B655F;
+  --green:#1F4A3A; --green-ink:#F6EEDD; --gold:#C99A2E; --gold-soft:#F2E3B8;
+  --navy:#1C2B3A; --navy-ink:#EEF1F4; --line:#E0D3B6;
+  --ok:#24704F; --ok-soft:#DCEFE3; --warn:#B23A2B; --warn-soft:#F7DDD7;
+  --font-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+  --base:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111A15; --card:#18241E; --ink:#ECE5D4; --muted:#A7B0A8;
+    --green:#0E2E22; --green-ink:#F1E9D6; --gold:#E2B85A; --gold-soft:#3A3120;
+    --navy:#0F1B27; --navy-ink:#E4E9EE; --line:#2C3D33;
+    --ok:#7FD0A6; --ok-soft:#1C3A2B; --warn:#F09A86; --warn-soft:#3D221D; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111A15; --card:#18241E; --ink:#ECE5D4; --muted:#A7B0A8;
+  --green:#0E2E22; --green-ink:#F1E9D6; --gold:#E2B85A; --gold-soft:#3A3120;
+  --navy:#0F1B27; --navy-ink:#E4E9EE; --line:#2C3D33;
+  --ok:#7FD0A6; --ok-soft:#1C3A2B; --warn:#F09A86; --warn-soft:#3D221D; color-scheme:dark;
+}
+:root[data-proj="on"]{ --base:20px; }
+*{box-sizing:border-box}
+html{font-size:var(--base)}
+body{
+  background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:1rem; line-height:1.75; margin:0;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+a{color:var(--ok)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:46rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{padding-block:2.5rem 1.5rem}
+.eyebrow{font-size:.8rem;letter-spacing:.12em;color:var(--ok);font-weight:700}
+h1{font-size:2.15rem;line-height:1.3;margin:.35rem 0 .7rem;text-wrap:balance;font-weight:900}
+h2{font-size:1.45rem;line-height:1.4;margin:0 0 .8rem;text-wrap:balance;font-weight:900}
+h3{font-size:1.05rem;margin:1.4rem 0 .4rem}
+p{margin:0 0 .9rem}
+.lede{font-size:1.08rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;font-size:.88rem;color:var(--muted);margin-top:.8rem}
+.tools{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.1rem;align-items:center}
+button{font:inherit;cursor:pointer}
+.chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:.3rem .9rem;font-size:.9rem}
+.chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--green-ink)}
+section{padding-block:1.8rem 1rem}
+.band{background:var(--green);color:var(--green-ink);margin-top:2.2rem}
+.band .wrap{padding-block:1.6rem 1.4rem}
+.band .big{font-size:3.4rem;line-height:1.1;font-weight:900;color:var(--gold);letter-spacing:.04em;margin:0}
+.band .sub{font-size:1.25rem;font-weight:700;margin:.4rem 0 0}
+.band .tag{font-family:var(--font-mono);font-size:.8rem;color:var(--gold);opacity:.9;letter-spacing:.12em}
+.mine{display:inline-flex;align-items:center;gap:.6rem;background:var(--navy);color:var(--navy-ink);border:2px solid var(--gold);border-radius:999px;padding:.4rem 1.1rem;font-weight:700;text-decoration:none}
+.mine .cnt{background:var(--gold);color:var(--navy);border-radius:999px;padding:0 .55rem;font-size:.85rem;font-variant-numeric:tabular-nums}
+.secno{font-family:var(--font-mono);color:var(--gold);font-weight:500;font-size:.95rem;display:block;margin-bottom:.2rem}
+.ask{background:var(--ok-soft);border-radius:10px;padding:1rem 1.1rem;margin:1rem 0}
+.ask b{color:var(--ok)}
+/* 三扇門 */
+.doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:1.2rem 0 .6rem}
+.door{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--ok);border-radius:8px;padding:.8rem .9rem;min-width:0}
+.door .k{font-weight:700}
+.door .v{font-size:.85rem;color:var(--muted);word-break:break-all}
+.account{text-align:center;font-size:.92rem;color:var(--muted);margin-top:.3rem}
+.account b{color:var(--ink)}
+.tabs{display:flex;gap:.4rem;margin:1.4rem 0 .6rem;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:.35rem 1rem}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;vertical-align:top;padding:.55rem .6rem;border-bottom:1px solid var(--line)}
+th{font-size:.82rem;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.pill{display:inline-block;font-size:.78rem;padding:.05rem .55rem;border-radius:999px;font-weight:700;white-space:nowrap}
+.pill.go{background:var(--ok-soft);color:var(--ok)}
+.pill.stay{background:var(--gold-soft);color:var(--ink)}
+.pill.sep{background:var(--warn-soft);color:var(--warn)}
+/* 步驟 */
+.steps{list-style:none;margin:1rem 0 0;padding:0;display:grid;gap:.8rem}
+.step{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:1rem 1.1rem;min-width:0}
+.step h3{margin:0 0 .35rem;display:flex;flex-wrap:wrap;gap:.3rem .5rem;align-items:baseline}
+.lane{display:inline-block;font-size:.75rem;font-weight:700;border-radius:999px;padding:.05rem .65rem;margin-left:auto;white-space:nowrap}
+.lane.ln-web{background:var(--gold-soft);color:var(--ink);border:1.5px solid var(--gold)}
+.lane.ln-ag{background:var(--navy);color:var(--navy-ink);border:1.5px solid var(--navy)}
+.lanes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem;margin:.8rem 0}
+.lanes > div{border-radius:10px;padding:.7rem .9rem;min-width:0;font-size:.92rem}
+.lanes .ln-web{background:var(--gold-soft);border:1.5px solid var(--gold)}
+.lanes .ln-ag{background:var(--navy);color:var(--navy-ink);border:1.5px solid var(--navy)}
+.lanes .hd{font-weight:900;margin-bottom:.2rem}
+.step h3 .sn{font-family:var(--font-mono);color:var(--gold);font-size:.95rem;font-weight:700}
+.step > p:last-child{margin-bottom:0}
+.path{font-family:var(--font-mono);font-size:.85rem;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:.1rem .45rem;display:inline-block;margin:.1rem 0;word-break:break-word}
+.why{font-size:.9rem;color:var(--muted)}
+.done{font-size:.88rem;border-left:4px solid var(--ok);padding-left:.6rem;margin-top:.5rem}
+.note{font-size:.85rem;color:var(--muted)}
+.os-win,.os-mac{display:none}
+:root[data-os="win"] .os-win{display:block}
+:root[data-os="mac"] .os-mac{display:block}
+.osbar{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:.9rem;margin:.6rem 0}
+/* 可複製的文字 */
+.copybox{position:relative;background:var(--paper);border:1.5px dashed var(--ok);border-radius:10px;margin:.6rem 0;min-width:0}
+.copybox pre{margin:0;padding:.8rem .9rem 2.4rem;white-space:pre-wrap;word-break:break-word;font-family:var(--font-body);font-size:.93rem;line-height:1.7}
+.copybtn{position:absolute;right:.5rem;bottom:.5rem;border:0;background:var(--ok);color:var(--card);border-radius:8px;padding:.2rem .8rem;font-size:.85rem;max-width:calc(100% - 1rem)}
+.copybtn.ok{background:var(--gold);color:var(--navy)}
+/* 三條線 */
+.lines{display:grid;gap:.8rem;margin-top:1rem}
+.line{display:grid;grid-template-columns:2.2rem minmax(0,1fr);gap:.6rem;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem}
+.line .num{font-size:1.8rem;font-weight:900;color:var(--warn);line-height:1}
+.line h3{margin:0 0 .3rem}
+/* 練習卡 */
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin-top:1rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem;min-width:0;display:flex;flex-direction:column}
+.card h3{margin:0 0 .3rem}
+.card .use{font-size:.85rem;color:var(--muted);margin-bottom:.3rem}
+.card .copybox{margin-top:auto}
+/* 檢查清單 */
+.check{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem}
+.check fieldset{border:1px solid var(--line);border-radius:10px;background:var(--card);padding:.8rem 1rem;margin:0;min-width:0}
+.check legend{font-weight:700;padding:0 .3rem}
+.check label{display:flex;gap:.5rem;align-items:flex-start;padding:.3rem 0;font-size:.95rem}
+.check input{margin-top:.45rem;accent-color:var(--ok);width:1.05rem;height:1.05rem;flex:none}
+.progress{display:flex;align-items:center;gap:.8rem;margin-top:1rem;font-size:.9rem}
+.bar{flex:1;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+/* 共用資料夾示意 */
+.share{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1fr);gap:.7rem;align-items:center;margin:1.2rem 0 .4rem}
+.agent{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.8rem;text-align:center;min-width:0}
+.agent .k{font-weight:700}
+.agent .v{font-size:.82rem;color:var(--muted)}
+.folder{background:var(--gold-soft);border:2px solid var(--gold);border-radius:4px 12px 12px 12px;padding:.8rem 1rem;min-width:0}
+.folder .k{font-weight:700;margin-bottom:.3rem}
+.folder ul{margin:0;padding-left:1.1rem;font-size:.88rem}
+.folder code{font-family:var(--font-mono);font-size:.85rem}
+.arrow{font-size:.82rem;color:var(--ok);text-align:center;display:block}
+.sync{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.4rem .6rem;margin:.8rem 0 1rem;font-size:.9rem}
+.sync .m{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:.15rem .8rem}
+.sync .gh{background:var(--ink);color:var(--paper);border-radius:999px;padding:.15rem .9rem;font-weight:700}
+.sync .x{color:var(--ok)}
+@media (max-width:640px){.share{grid-template-columns:minmax(0,1fr)}}
+footer{padding-block:2rem 3rem;font-size:.85rem;color:var(--muted)}
+footer ul{padding-left:1.1rem;margin:.4rem 0}
+@media (max-width:640px){
+  h1{font-size:1.7rem}
+  .band .big{font-size:2.6rem}
+  .doors{grid-template-columns:minmax(0,1fr)}
+  .cards,.check,.lanes{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* 行前頁追加 */
+ul.plain{margin:.4rem 0 1rem;padding-left:1.2rem;display:grid;gap:.35rem}
+ol.sub{margin:.4rem 0 .6rem;padding-left:1.3rem;font-size:.95rem}
+.tick{display:flex;gap:.5rem;align-items:flex-start;margin-top:.7rem;padding-top:.6rem;border-top:1px dashed var(--line);font-weight:500}
+.tick input{margin-top:.45rem;accent-color:var(--ok);width:1.1rem;height:1.1rem;flex:none}
+details.stuck{margin-top:.5rem}
+details.stuck summary{cursor:pointer;color:var(--ok);font-size:.92rem}
+.step.is-done{border-color:var(--ok);box-shadow:inset 4px 0 0 var(--ok)}
+#items .progress{margin:0 0 .4rem}
+.shot{margin:.7rem 0 .5rem}
+.shot a{display:block;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#eef1f4}
+.shot img{display:block;width:100%;height:auto}
+.shot figcaption{font-size:.82rem;color:var(--muted);margin-top:.3rem}
+</style>
+<style>.sitenav{background:var(--navy,#1C2B3A);font-size:.88rem;position:relative;z-index:5}.sitenav .wrap{display:flex;flex-wrap:wrap;gap:.2rem .9rem;padding-block:.5rem}.sitenav a{color:var(--navy-ink,#EEF1F4);text-decoration:none;opacity:.8}.sitenav a[aria-current=page]{opacity:1;font-weight:700;color:var(--gold,#C99A2E)}</style>
+</head>
+<body>
+<nav class="sitenav" aria-label="工作坊各頁"><div class="wrap"><a href="index.html">行前準備</a><a href="setup.html">第一部分</a><a href="part2.html">第二部分</a><a href="part3.html">第三部分</a><a href="practice.html">第三部分練習</a><a href="apikey.html" aria-current="page">API 金鑰登入</a></div></nav>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">慈濟大學長期照護研究所・研究團隊工作坊・當天現場</div>
+  <h1>沒有 ChatGPT 付費方案：用工作坊的 API 金鑰登入 Codex</h1>
+  <p class="lede">這一頁給沒有 ChatGPT 付費方案、或平常只用 Claude 的老師。當天第二、三部分要用 ChatGPT 桌面版裡的 Codex 動手做；費用由工作坊統一支付，你不用買方案。做法是：陳老師邀請你加入工作坊，你自己建一把「API 金鑰」，用它登入桌面版。大約 15 分鐘，照下面 6 步做。</p>
+  <div class="meta"><span>2026-10-28（三）・電腦教室（一）</span><span>講師：陳文盛老師（國立東華大學通識教育中心）</span><span>查證日期：2026-10-27</span></div>
+  <div class="tools">
+    <a class="mine" href="#items">我的進度 <span class="cnt" id="prepCount">0 / 6</span></a>
+    <button class="chip" id="projBtn" aria-pressed="false" type="button">字放大</button>
+  </div>
+</header>
+</div>
+
+<main>
+<div class="band"><div class="wrap"><div class="tag">00・開始之前</div><h2 class="big">先知道</h2><p class="sub">誰要做、金鑰是什麼、能用什麼</p></div></div>
+<section id="first" class="wrap">
+  <ul class="plain">
+    <li><b>誰要做這一頁：</b>沒有 ChatGPT 付費方案的人，包括只有免費 ChatGPT 帳號、只用 Claude、或完全沒有 ChatGPT 帳號的人。<b>已經有 ChatGPT 付費方案的人不用做</b>，照原本的帳號用就好。</li>
+    <li><b>API 金鑰（API key）是什麼：</b>一長串以 <span class="path">sk-</span> 開頭的英數字，像一張「工作坊付費的通行證」。誰拿到它，誰就能花工作坊的錢，所以它<b>只會出現在兩個地方</b>：建立它的那個網頁，和 ChatGPT 桌面版的登入框。不要貼進任何對話框（包括 AI）、LINE、email，不要截圖、不要存成文字檔，也不要借給別人用。</li>
+    <li><b>登入後能用的是 Codex</b>（會打開資料夾、動手做事的那一面），這就是當天要用的。用金鑰登入時，ChatGPT 的一般聊天和雲端功能可能不能用（以你的畫面為準）；要聊天，用瀏覽器開 chatgpt.com 或 claude.ai。</li>
+    <li><b>你還是需要一個 OpenAI 帳號</b>（免費，跟 chatgpt.com 是同一套帳號），用來接受邀請、建自己的金鑰。沒有的話，第 2 步會順便註冊；可能要收信驗證或手機驗證，手機請帶在身上。</li>
+    <li><b>只用虛構或公開的資料練習。</b>不要輸入病歷、照護個案、姓名、聯絡方式或學生資料。</li>
+    <li><b>這一頁的勾選只存在你這台電腦的這個瀏覽器裡</b>，不會傳給任何人。</li>
+  </ul>
+</section>
+
+<div class="band"><div class="wrap"><div class="tag">01・六個步驟</div><h2 class="big">登得進</h2><p class="sub">邀請 → 加入 → 建金鑰 → 登入 → 試一次 → 下課收尾</p></div></div>
+<section id="items" class="wrap">
+  <div class="progress" aria-live="polite"><span id="progText">已完成 0 / 6</span><div class="bar"><span id="progBar"></span></div><button class="chip" id="resetBtn" type="button">清除勾選</button></div>
+  <ol class="steps">
+
+    <li class="step" id="s1">
+      <h3><span class="sn">1</span>把你的 email 給陳老師<span class="lane ln-web">你自己做</span></h3>
+      <p>照現場的說明，把你要拿來登入 OpenAI 的 email 給陳老師。已經有 ChatGPT 免費帳號的人，給<b>那個帳號的 email</b>；用 Google 或 Apple 登入 ChatGPT 的人，給那個 Google／Apple 帳號的 email。</p>
+      <p class="why">陳老師會用這個 email 寄邀請，把你加進工作坊的「組織」和專案 <span class="path">tzuchi-workshop-20261028</span>（專案就是工作坊統一付費的那個帳本）。加入之後，你看不到別人的對話，別人也看不到你的。</p>
+      <div class="done">完成判準：陳老師說邀請寄出了。</div>
+      <label class="tick"><input type="checkbox" id="k1">email 給陳老師了</label>
+    </li>
+
+    <li class="step" id="s2">
+      <h3><span class="sn">2</span>收邀請信，加入工作坊<span class="lane ln-web">你自己做・卡住舉手</span></h3>
+      <p>打開剛才那個 email 的信箱，找 OpenAI 寄來的邀請信（幾分鐘內會到；找不到就看垃圾郵件匣）。按信裡接受邀請的按鈕（按鈕字樣以你的畫面為準，可能是英文 Accept invite 或 Join）。</p>
+      <ul class="plain">
+        <li><b>已經有 OpenAI 帳號（用過 ChatGPT）：</b>用<b>原本同一種方式</b>登入（Google、Apple 或 email），不然可能變成兩個帳號。</li>
+        <li><b>還沒有帳號：</b>照畫面註冊，免費。畫面要你選方案或付款時，<b>不要付</b>，先舉手問。</li>
+      </ul>
+      <p class="why">只按信裡的按鈕。按之前看一眼網址列，要是 <span class="path">openai.com</span> 結尾的網址；長得像邀請、但網址怪怪的，先舉手。</p>
+      <p>登入後會到 <span class="path">platform.openai.com</span>（OpenAI 給開發者用的後台，跟 chatgpt.com 同一個帳號）。看畫面左上角：要選到<b>陳老師的組織</b>，專案選 <span class="path">tzuchi-workshop-20261028</span>。</p>
+      <p class="why">你自己的組織或專案（常叫 Personal 或 Default project）也會出現在清單裡。<b>不要在那裡建金鑰</b>：在那裡建，就會用你自己的錢付費。</p>
+      <div class="done">完成判準：platform.openai.com 左上角顯示的專案是 tzuchi-workshop-20261028。</div>
+      <label class="tick"><input type="checkbox" id="k2">左上角是 tzuchi-workshop-20261028</label>
+    </li>
+
+    <li class="step" id="s3">
+      <h3><span class="sn">3</span>建你自己的 API 金鑰<span class="lane ln-web">你自己做・卡住舉手</span></h3>
+      <ol class="sub">
+        <li>瀏覽器網址列打 <span class="path">platform.openai.com/api-keys</span>，按 Enter。先再看一次左上角：專案還是 tzuchi-workshop-20261028。</li>
+        <li>按 <b>Create new secret key</b>（建立新的金鑰）。</li>
+        <li>名稱（Name）打你的座位號，例如 <span class="path">ws-12</span>。<b>不要打姓名</b>：名稱陳老師後台看得到，用座位號就好。</li>
+        <li>擁有者選 <b>You</b>（你自己）；專案（Project）選 tzuchi-workshop-20261028；權限（Permissions）選 <b>All</b>。按 <b>Create secret key</b>。</li>
+        <li>畫面出現一長串 <span class="path">sk-</span> 開頭的字：<b>這是唯一一次看得到完整的金鑰</b>。按旁邊的 <b>Copy</b>（複製），<b>這個網頁先不要關</b>，直接做第 4 步。</li>
+      </ol>
+      <p class="why">按鈕字樣以你的畫面為準。Create 按鈕是灰的、按不下去：舉手請陳老師看一下你的權限，不要借別人的金鑰。不小心關掉、沒複製到：把那把刪掉（第 6 步的做法），重建一把就好。</p>
+      <div class="done">完成判準：金鑰清單裡有你剛取的名字（例如 ws-12），而且你已經按了 Copy。</div>
+      <label class="tick"><input type="checkbox" id="k3">金鑰建好、複製了</label>
+    </li>
+
+    <li class="step" id="s4">
+      <h3><span class="sn">4</span>ChatGPT 桌面版改用金鑰登入<span class="lane ln-web">你自己做・卡住舉手</span></h3>
+      <p>還沒裝 ChatGPT 桌面版的人，先到 <span class="path">chatgpt.com/download</span> 下載、照畫面裝好（跟行前準備第 2 項一樣）。</p>
+      <ol class="sub">
+        <li>打開 ChatGPT 桌面版。<b>已經用自己的帳號登入的人</b>：先點左下角的頭像（個人選單）→ <b>Log out</b>（登出），回到登入畫面。</li>
+        <li>在登入畫面選 <b>Sign in another way</b>（用其他方式登入）。</li>
+        <li>在金鑰的欄位按 <span class="path">Ctrl＋V</span>（Mac：<span class="path">Command＋V</span>）貼上剛才複製的金鑰，按 <b>Continue</b>。</li>
+        <li>再點一次左下角的個人選單，看得到「用 API key 登入」之類的字樣，就是登入成功。</li>
+      </ol>
+      <p class="why">找不到 Sign in another way：先確認真的登出了、開的是桌面版（不是瀏覽器的 chatgpt.com），再舉手。<b>不能把金鑰貼進對話框代替登入</b>，那樣金鑰會被當成一般訊息送出去。</p>
+      <p><b>登入成功後，把金鑰從剪貼簿趕走：</b>回到第 3 步那個網頁，按 Done 關掉金鑰視窗，再隨便複製一個字（例如這一頁的標題），把剪貼簿裡的金鑰蓋掉。</p>
+      <div class="os-win"><p class="why">Windows 如果開過「剪貼簿歷程記錄」（按 <span class="path">Win＋V</span> 會跳出一串之前複製過的東西），在那個清單裡找到 sk- 開頭那一筆，按旁邊的「⋯」→ 刪除。</p></div>
+      <div class="done">完成判準：桌面版個人選單顯示是用 API key 登入；剪貼簿裡已經不是金鑰。</div>
+      <label class="tick"><input type="checkbox" id="k4">用金鑰登入了，剪貼簿也清了</label>
+    </li>
+
+    <li class="step" id="s5">
+      <h3><span class="sn">5</span>切到 Codex，試一次<span class="lane ln-ag">AI 助手替你做</span></h3>
+      <ol class="sub">
+        <li>桌面版左上角切到 <b>Codex</b>，照行前準備第 6 項打開練習資料夾 <span class="path">AI-workshop</span>（還沒建的人，照第 6 項現在建）。</li>
+        <li>照行前準備第 7 項，權限選 <b>要求核准</b>（英文介面 Ask for approval）。不要選「完整存取權」（Full access），也不要選「代我核准」（Approve for me）。</li>
+        <li>貼下面這句，按 Enter 送出：</li>
+      </ol>
+      <div class="copybox"><pre id="t1">請在目前這個資料夾建立 workshop-test.txt，內容只有「慈濟工作坊測試成功」。完成後告訴我檔案的完整路徑。</pre><button class="copybtn" data-copy="t1" type="button">複製</button></div>
+      <p>跳出要你核准的框：看得懂、是你剛請它做的事（框裡寫的是建 workshop-test.txt），就按同意（只同意這一次）。看不懂，就按拒絕，拒絕不會弄壞東西；再問它「這一步要做什麼、為什麼要做」，或截圖問網頁版。</p>
+      <p class="why">然後自己去看：AI 說做完，不等於做完。用檔案總管（Mac：Finder）照它給的路徑打開 workshop-test.txt，看內容對不對。</p>
+      <div class="done">完成判準：你自己打開 workshop-test.txt，內容一字不差是「慈濟工作坊測試成功」。</div>
+      <label class="tick"><input type="checkbox" id="k5">Codex 真的建出檔案了</label>
+    </li>
+
+    <li class="step" id="s6">
+      <h3><span class="sn">6</span>下課前收尾：刪金鑰、登出<span class="lane ln-web">你自己做</span></h3>
+      <p>工作坊結束、陳老師說可以收的時候再做（做完 Codex 就不能用了）。<b>登出不等於刪掉金鑰</b>，兩件都要做：</p>
+      <ol class="sub">
+        <li><b>刪金鑰：</b>瀏覽器打開 <span class="path">platform.openai.com/api-keys</span>，找到你取的名字（例如 ws-12），按那一列最右邊的「⋯」或垃圾桶 → <b>Revoke key</b>（撤銷）→ 再確認一次。</li>
+        <li><b>登出桌面版：</b>個人選單 → Log out。要回到自己的 ChatGPT 帳號，就在登入畫面用原本的方式登入。</li>
+        <li>用學校或別人的電腦的話，連瀏覽器裡的 platform.openai.com 也登出。</li>
+      </ol>
+      <p class="why">練習做的檔案都在你的 AI-workshop 資料夾裡，刪金鑰、登出都不會刪到它們。之後想繼續用 Codex，可以買 ChatGPT 方案，或在自己的 OpenAI 組織建金鑰、自己付費。</p>
+      <div class="done">完成判準：platform.openai.com/api-keys 的清單裡，你那把金鑰不見了（或標示已撤銷）；桌面版回到登入畫面。</div>
+      <label class="tick"><input type="checkbox" id="k6">金鑰刪了，也登出了</label>
+    </li>
+
+  </ol>
+</section>
+
+<div class="band"><div class="wrap"><div class="tag">02・卡住</div><h2 class="big">怎麼辦</h2><p class="sub">先看這張表；不在表上的，舉手</p></div></div>
+<section id="stuck" class="wrap">
+  <div class="tablewrap"><table>
+    <thead><tr><th>你看到</th><th>怎麼辦</th></tr></thead>
+    <tbody>
+      <tr><td>收不到邀請信</td><td>先看垃圾郵件匣；還是沒有，跟陳老師核對你給的 email 有沒有打錯。</td></tr>
+      <tr><td>左上角找不到 tzuchi-workshop-20261028</td><td>先確認你登入的是收到邀請的那個帳號；再點左上角的組織名稱，切到陳老師的組織。還是沒有就舉手。</td></tr>
+      <tr><td>Create new secret key 按不下去</td><td>舉手，請陳老師看你的權限。不要借別人的金鑰。</td></tr>
+      <tr><td>登入時說金鑰錯誤（401、Invalid API key）</td><td>多半是少複製一個字或多了空白。回第 3 步刪掉那把，重建一把再登入。</td></tr>
+      <tr><td>出現 403、沒有權限使用某個模型</td><td>舉手。這是工作坊專案的設定，陳老師在後台處理，你不用改。</td></tr>
+      <tr><td>出現 429，或跟「額度」「付款」有關的字</td><td>停下來、舉手。<b>不要自己儲值或填信用卡</b>，可能是工作坊的總額度到了，或太多人同時送出。</td></tr>
+      <tr><td>一直叫你買 ChatGPT 方案</td><td>你可能切到一般聊天那一面了。左上角切回 Codex。</td></tr>
+    </tbody>
+  </table></div>
+  <p>要截圖問網頁版 AI 或給陳老師看時，<b>先確定畫面上沒有那串 sk- 金鑰</b>。截好圖，貼到網頁版 AI，再貼這句：</p>
+  <div class="copybox"><pre id="help">我在工作坊用 API 金鑰登入 ChatGPT 桌面版的 Codex，卡在第＿步「＿＿」，畫面如附圖。請先只看、不要動：告訴我畫面上發生什麼事，再一步一步帶我，每次只說一步。我的金鑰不會貼給你，需要的話請告訴我去哪裡、按什麼。</pre><button class="copybtn" data-copy="help" type="button">複製</button></div>
+  <p class="why">貼上之後，把畫底線（＿）的地方換成你的情況，再送出。</p>
+</section>
+
+</main>
+
+<footer class="wrap">
+  <p><b>選單名稱會隨改版變動，以你畫面上看到的為準。</b>這一頁依 2026-10-27 查到的官方說明寫成；用 API 金鑰登入桌面版、在 Codex 裡建檔案，講師 10/27 在 Windows 實測過。邀請信與加入組織這段畫面還沒找第二位老師實測，字樣以當天畫面為準。</p>
+  <p>出處：<a href="https://learn.chatgpt.com/docs/auth" target="_blank" rel="noopener">ChatGPT 桌面版登入方式（含 API key）</a>、<a href="https://learn.chatgpt.com/docs/windows/windows-app" target="_blank" rel="noopener">Windows 版說明</a>、<a href="https://developers.openai.com/api/docs/guides/production-best-practices" target="_blank" rel="noopener">OpenAI 組織、專案與金鑰管理</a>。</p>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function set(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  var os=get('ltc-os')||(/Mac/i.test(navigator.platform||'')?'mac':'win');
+  function setOS(v){root.dataset.os=v;document.querySelectorAll('button[data-os]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.os===v))});set('ltc-os',v)}
+  document.querySelectorAll('button[data-os]').forEach(function(b){b.addEventListener('click',function(){setOS(b.dataset.os)})});
+  setOS(os);
+  var pb=document.getElementById('projBtn');
+  function setProj(on){if(on){root.dataset.proj='on'}else{delete root.dataset.proj}pb.setAttribute('aria-pressed',String(on));set('ltc-proj',on?'1':'0')}
+  pb.addEventListener('click',function(){setProj(root.dataset.proj!=='on')});
+  setProj(get('ltc-proj')==='1');
+  document.querySelectorAll('.copybtn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var el=document.getElementById(btn.dataset.copy);var text=el.textContent;
+      function ok(){btn.textContent='已複製';btn.classList.add('ok');setTimeout(function(){btn.textContent='複製';btn.classList.remove('ok')},1600)}
+      function fallback(){var ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var done=false;try{done=document.execCommand('copy')}catch(e){}document.body.removeChild(ta);if(done){ok();return}var r=document.createRange();r.selectNodeContents(el);var s=window.getSelection();s.removeAllRanges();s.addRange(r);btn.textContent=/Mac/i.test(navigator.platform||'')?'已選取，請按 Command＋C':'已選取，請按 Ctrl＋C';setTimeout(function(){btn.textContent='複製'},4000)}
+      try{navigator.clipboard.writeText(text).then(ok,fallback)}catch(e){fallback()}
+    });
+  });
+  var boxes=[].slice.call(document.querySelectorAll('.tick input'));
+  var saved={};try{saved=JSON.parse(get('ltc-apikey')||'{}')||{}}catch(e){saved={}}
+  function update(){var n=0;boxes.forEach(function(b){var li=b.closest('.step');if(li)li.classList.toggle('is-done',b.checked);if(b.checked)n++});document.getElementById('progText').textContent='已完成 '+n+' / '+boxes.length;document.getElementById('prepCount').textContent=n+' / '+boxes.length;document.getElementById('progBar').style.width=(n/boxes.length*100)+'%'}
+  boxes.forEach(function(b){b.checked=!!saved[b.id];b.addEventListener('change',function(){saved[b.id]=b.checked;set('ltc-apikey',JSON.stringify(saved));update()})});
+  document.getElementById('resetBtn').addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});saved={};set('ltc-apikey','{}');update()});
+  update();
+})();
+</script>
+</body>
+</html>

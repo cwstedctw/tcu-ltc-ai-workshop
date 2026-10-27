@@ -4,6 +4,7 @@
 - [第一部分：ChatGPT 與 Claude，設定成你的研究助理](setup.html)
 - [第二部分：AI 研究小隊](part2.html)
 - [第三部分：AI 論文管線](part3.html)・[第三部分練習](practice.html)
+- [API 金鑰登入](apikey.html)：沒有 ChatGPT 付費方案的老師，當天用工作坊的 API 金鑰登入 Codex
 
 講師：陳文盛（國立東華大學通識教育中心）× AI 協作團隊。
 網頁由 `wailan_agent` 的 `projects/115-國科會-慈大失智虛擬病人/工作坊-1028-AI設定/build_site.py` 產生，請改那邊的正本再重建，不要直接改這裡。
