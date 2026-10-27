@@ -209,7 +209,7 @@ details.stuck summary{cursor:pointer;color:var(--ok);font-size:.92rem}
 
     <li class="step" id="s1">
       <h3><span class="sn">1</span>把你的 email 給陳老師<span class="lane ln-web">你自己做</span></h3>
-      <p>照現場的說明，把你要拿來登入 OpenAI 的 email 給陳老師。已經有 ChatGPT 免費帳號的人，給<b>那個帳號的 email</b>；用 Google 或 Apple 登入 ChatGPT 的人，給那個 Google／Apple 帳號的 email。</p>
+      <p>照現場的說明，把你要拿來登入 OpenAI 的 email 給陳老師。已經有 ChatGPT 免費帳號的人，給<b>那個帳號的 email</b>；用 Google 或 Apple 登入 ChatGPT 的人，給那個 Google／Apple 帳號的 email；<b>完全沒有帳號的人</b>，給一個你在這台筆電上收得到信的 email。</p>
       <p class="why">陳老師會用這個 email 寄邀請，把你加進工作坊的「組織」和專案 <span class="path">tzuchi-workshop-20261028</span>（專案就是工作坊統一付費的那個帳本）。加入之後，你看不到別人的對話，別人也看不到你的。</p>
       <div class="done">完成判準：陳老師說邀請寄出了。</div>
       <label class="tick"><input type="checkbox" id="k1">email 給陳老師了</label>
@@ -217,13 +217,13 @@ details.stuck summary{cursor:pointer;color:var(--ok);font-size:.92rem}
 
     <li class="step" id="s2">
       <h3><span class="sn">2</span>收邀請信，加入工作坊<span class="lane ln-web">你自己做・卡住舉手</span></h3>
-      <p>打開剛才那個 email 的信箱，找 OpenAI 寄來的邀請信（幾分鐘內會到；找不到就看垃圾郵件匣）。按信裡接受邀請的按鈕（按鈕字樣以你的畫面為準，可能是英文 Accept invite 或 Join）。</p>
+      <p><b>在這台筆電上</b>用瀏覽器打開剛才那個 email 的信箱，不要用手機收信、按按鈕：等一下金鑰要在這台筆電上貼進桌面版，金鑰不能用 LINE 或 email 傳過來。找 OpenAI 寄來的邀請信（幾分鐘內會到；找不到就看垃圾郵件匣）。按信裡接受邀請的按鈕（按鈕字樣以你的畫面為準，可能是英文 Accept invite 或 Join）。</p>
       <ul class="plain">
         <li><b>已經有 OpenAI 帳號（用過 ChatGPT）：</b>用<b>原本同一種方式</b>登入（Google、Apple 或 email），不然可能變成兩個帳號。</li>
         <li><b>還沒有帳號：</b>照畫面註冊，免費。畫面要你選方案或付款時，<b>不要付</b>，先舉手問。</li>
       </ul>
       <p class="why">只按信裡的按鈕。按之前看一眼網址列，要是 <span class="path">openai.com</span> 結尾的網址；長得像邀請、但網址怪怪的，先舉手。</p>
-      <p>登入後會到 <span class="path">platform.openai.com</span>（OpenAI 給開發者用的後台，跟 chatgpt.com 同一個帳號）。看畫面左上角：要選到<b>陳老師的組織</b>，專案選 <span class="path">tzuchi-workshop-20261028</span>。</p>
+      <p>登入後會到 <span class="path">platform.openai.com</span>（OpenAI 給開發者用的後台，跟 chatgpt.com 同一個帳號）。看畫面左上角：點開組織選單，選到<b>陳老師的組織</b>（名稱現場會寫在白板上；找不到就舉手），專案選 <span class="path">tzuchi-workshop-20261028</span>。</p>
       <p class="why">你自己的組織或專案（常叫 Personal 或 Default project）也會出現在清單裡。<b>不要在那裡建金鑰</b>：在那裡建，就會用你自己的錢付費。</p>
       <div class="done">完成判準：platform.openai.com 左上角顯示的專案是 tzuchi-workshop-20261028。</div>
       <label class="tick"><input type="checkbox" id="k2">左上角是 tzuchi-workshop-20261028</label>
@@ -262,12 +262,12 @@ details.stuck summary{cursor:pointer;color:var(--ok);font-size:.92rem}
     <li class="step" id="s5">
       <h3><span class="sn">5</span>切到 Codex，試一次<span class="lane ln-ag">AI 助手替你做</span></h3>
       <ol class="sub">
-        <li>桌面版左上角切到 <b>Codex</b>，照行前準備第 6 項打開練習資料夾 <span class="path">AI-workshop</span>（還沒建的人，照第 6 項現在建）。</li>
-        <li>照行前準備第 7 項，權限選 <b>要求核准</b>（英文介面 Ask for approval）。不要選「完整存取權」（Full access），也不要選「代我核准」（Approve for me）。</li>
+        <li>桌面版左上角切到 <b>Codex</b>，照行前準備第 6 項打開練習資料夾 <span class="path">AI-workshop</span>（還沒建的人，照行前準備第 6 項現在建）。</li>
+        <li>照行前準備第 7 項，點輸入框下方的權限按鈕，選 <b>要求核准</b>（英文介面 Ask for approval）。不要選「完整存取權」（Full access），也不要選「代我核准」（Approve for me）。</li>
         <li>貼下面這句，按 Enter 送出：</li>
       </ol>
       <div class="copybox"><pre id="t1">請在目前這個資料夾建立 workshop-test.txt，內容只有「慈濟工作坊測試成功」。完成後告訴我檔案的完整路徑。</pre><button class="copybtn" data-copy="t1" type="button">複製</button></div>
-      <p>跳出要你核准的框：看得懂、是你剛請它做的事（框裡寫的是建 workshop-test.txt），就按同意（只同意這一次）。看不懂，就按拒絕，拒絕不會弄壞東西；再問它「這一步要做什麼、為什麼要做」，或截圖問網頁版。</p>
+      <p>在練習資料夾裡建檔，Codex 通常會直接建好、不會跳框（行前準備第 7 項說的：在你打開的資料夾裡，它會直接建檔）。如果跳出要你核准的框：看得懂、是你剛請它做的事（框裡看得到 workshop-test.txt），就按同意（只同意這一次）。看不懂，就按拒絕，拒絕不會弄壞東西；再問它「這一步要做什麼、為什麼要做」，或截圖問網頁版。</p>
       <p class="why">然後自己去看：AI 說做完，不等於做完。用檔案總管（Mac：Finder）照它給的路徑打開 workshop-test.txt，看內容對不對。</p>
       <div class="done">完成判準：你自己打開 workshop-test.txt，內容一字不差是「慈濟工作坊測試成功」。</div>
       <label class="tick"><input type="checkbox" id="k5">Codex 真的建出檔案了</label>
@@ -277,7 +277,7 @@ details.stuck summary{cursor:pointer;color:var(--ok);font-size:.92rem}
       <h3><span class="sn">6</span>下課前收尾：刪金鑰、登出<span class="lane ln-web">你自己做</span></h3>
       <p>工作坊結束、陳老師說可以收的時候再做（做完 Codex 就不能用了）。<b>登出不等於刪掉金鑰</b>，兩件都要做：</p>
       <ol class="sub">
-        <li><b>刪金鑰：</b>瀏覽器打開 <span class="path">platform.openai.com/api-keys</span>，找到你取的名字（例如 ws-12），按那一列最右邊的「⋯」或垃圾桶 → <b>Revoke key</b>（撤銷）→ 再確認一次。</li>
+        <li><b>刪金鑰：</b>瀏覽器打開 <span class="path">platform.openai.com/api-keys</span>，<b>先看左上角的專案還是 tzuchi-workshop-20261028</b>（被切回 Personal 就看不到你的金鑰，不代表已經刪了），找到你取的名字（例如 ws-12），按那一列最右邊的「⋯」或垃圾桶 → <b>Revoke key</b>（撤銷）→ 再確認一次。</li>
         <li><b>登出桌面版：</b>個人選單 → Log out。要回到自己的 ChatGPT 帳號，就在登入畫面用原本的方式登入。</li>
         <li>用學校或別人的電腦的話，連瀏覽器裡的 platform.openai.com 也登出。</li>
       </ol>
@@ -303,7 +303,7 @@ details.stuck summary{cursor:pointer;color:var(--ok);font-size:.92rem}
       <tr><td>一直叫你買 ChatGPT 方案</td><td>你可能切到一般聊天那一面了。左上角切回 Codex。</td></tr>
     </tbody>
   </table></div>
-  <p>要截圖問網頁版 AI 或給陳老師看時，<b>先確定畫面上沒有那串 sk- 金鑰</b>。截好圖，貼到網頁版 AI，再貼這句：</p>
+  <p>要截圖問網頁版 AI 或給陳老師看時（截圖：Windows 按 <span class="path">Win＋Shift＋S</span>，Mac 按 <span class="path">Control＋Command＋Shift＋4</span>，跟行前準備第 1 項一樣），<b>先確定畫面上沒有那串 sk- 金鑰</b>。截好圖，貼到網頁版 AI，再貼這句：</p>
   <div class="copybox"><pre id="help">我在工作坊用 API 金鑰登入 ChatGPT 桌面版的 Codex，卡在第＿步「＿＿」，畫面如附圖。請先只看、不要動：告訴我畫面上發生什麼事，再一步一步帶我，每次只說一步。我的金鑰不會貼給你，需要的話請告訴我去哪裡、按什麼。</pre><button class="copybtn" data-copy="help" type="button">複製</button></div>
   <p class="why">貼上之後，把畫底線（＿）的地方換成你的情況，再送出。</p>
 </section>

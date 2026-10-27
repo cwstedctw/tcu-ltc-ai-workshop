@@ -492,6 +492,7 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
         <dt>gnuplot/</dt><dd>畫圖腳本，一張圖一支：<code>fig1_outcomes.gp</code>、<code>fig2_effects.gp</code>。AI 改</dd>
         <dt>tables/</dt><dd>（選用）你用 Excel 做好的表，存成 CSV UTF-8</dd>
         <dt>figdata/</dt><dd>（選用）你用 Excel 做好的畫圖資料，存成 CSV UTF-8</dd>
+        <dt>images/</dt><dd>（選用）現成的圖片檔：流程圖、照片（PNG、JPG）</dd>
         <dt>paper/</dt><dd>論文本文 <code>main.tex</code>，AI 寫；旁邊的 <code>sn-jnl.cls</code>、<code>sn-vancouver-num.bst</code> 是期刊範本檔（Springer Nature 官方版型，<i>BMC Geriatrics</i> 建議用的），不要改</dd>
       </dl>
     </div>
@@ -503,6 +504,7 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
         <dt>tables/</dt><dd>表：<code>table1.tex</code> 放進 PDF，<code>table1.csv</code> 用 Excel 核對</dd>
         <dt>figdata/</dt><dd>畫圖用的小表：<code>fig1_dkas.csv</code>…</dd>
         <dt>figures/</dt><dd>畫好的圖：<code>fig1.tex</code>＋<code>fig1.pdf</code>…</dd>
+        <dt>images/</dt><dd>你放的圖片檔，從 <code>source/images/</code> 原樣複製</dd>
         <dt>main.pdf</dt><dd><b>論文：你要看的就是這個</b></dd>
         <dt>latex-log/</dt><dd>排版過程的紀錄，出錯時才看</dd>
       </dl>
@@ -512,6 +514,25 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
   <p class="why">資料夾第一層還有：<code>README.md</code>（給你看的說明）、<code>AGENTS.md</code>／<code>WORKFLOW.md</code>（給 AI 看的規則和流程）、<code>build.py</code>（一個指令跑完整條流程）、<code>material/</code>（你的計畫書、投稿須知，AI 只讀）、<code>workspace/</code>（AI 的工作紀錄，想知道它做了什麼就看這裡）、<code>tools/</code>（小工具，AI 執行）。</p>
   <p class="why">為什麼要分開：原料是你的研究，要好好保存；成品隨時能重做，被改壞了只要再跑一次 build，所以成品不推上 GitHub。真的研究資料能不能交給 AI、能不能推上 GitHub，先照主頁第 07 段〈研究倫理〉的四個條件確認；Private 本身不代表可以上傳。</p>
   <p class="why">核對數字時，用 Excel 打開 <code>output/tables</code> 資料夾裡的 .csv 檔就好；看完關掉時按「不要儲存」。下次跑 build 之前要關掉，Excel 開著，build 會失敗。</p>
+
+  <h3 class="app">我手上有這個檔，要放哪裡？</h3>
+  <p>寫自己的論文時，先照這張表把檔案放進論文資料夾，再跟 AI 說要怎麼用。</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>你手上有</th><th>放哪裡</th><th>誰放</th><th>放好之後跟 AI 說</th></tr></thead>
+    <tbody>
+      <tr><td><b>研究資料</b>（去識別化、Excel 打得開）</td><td>另存成 CSV UTF-8，放 <code>source/data/</code>；欄位說明寫在同一夾的 <code>README.md</code></td><td>你自己放</td><td>主頁第 04 段第 4 步那兩句（先開新論文，再請它提分析計畫）</td></tr>
+      <tr><td><b>新一批或更新過的資料</b></td><td><code>source/data/</code>，用新的檔名放（例如加日期），舊的先留著</td><td>你自己放</td><td>「我在 source/data/ 放了＿＿，請改用這個檔，先告訴我哪些數字會變，等我同意再跑 build。」</td></tr>
+      <tr><td><b>自己用 Excel 做好的表</b></td><td>另存成 CSV UTF-8，放 <code>source/tables/</code></td><td>你自己放</td><td>下面〈想放一張自己在 Excel 做好的表〉那句</td></tr>
+      <tr><td><b>想畫成圖的 Excel 資料</b></td><td>另存成 CSV UTF-8，放 <code>source/figdata/</code></td><td>你自己放</td><td>下面〈想用 Excel 的資料畫一張圖〉那句</td></tr>
+      <tr><td><b>流程圖、照片</b>（PNG、JPG）</td><td><code>source/images/</code>，檔名用英文</td><td>你自己放</td><td>下面〈想放一張現成的圖〉那句</td></tr>
+      <tr><td><b>文獻</b></td><td>放進 Zotero 的文獻集，不放進論文資料夾；<code>source/refs/refs.bib</code> 由 Zotero 匯出</td><td>Zotero</td><td>主頁第 04 段第 5 步那句</td></tr>
+      <tr><td><b>計畫書、投稿須知、審查意見</b></td><td><code>material/</code></td><td>你自己放</td><td>「material/ 裡的＿＿是＿＿，請先讀，再告訴我論文要改哪裡，先不要改。」</td></tr>
+      <tr><td><b>有姓名、病歷號的原始檔</b></td><td><b>不放進論文資料夾</b>，留在你原本的地方；去識別化後的版本才放 <code>source/data/</code></td><td>—</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+  <p class="why"><code>source/data/</code> 和 <code>material/</code> 要你自己放：範本規定 AI 在這兩個資料夾只讀不寫，研究資料才不會被 AI 改到。用<b>檔案總管</b>（Mac：Finder）複製貼上或拖進去就好。表上沒有的、不確定放哪裡的，貼這句問 AI：</p>
+  <div class="copybox"><pre>我有一個＿＿檔（內容是＿＿），要用在論文裡。請照 README.md 的資料夾說明，告訴我應該放進哪一個資料夾、為什麼、檔名要怎麼取。先不要搬、不要改任何檔案，等我放好再說。</pre><button type="button" class="copybtn">複製</button></div>
+  <p class="why">放錯也沒關係：跟 AI 說「＿＿這個檔我放錯地方了，應該放哪裡？」，照它說的搬過去，再跑一次 build。</p>
 
   <h3 class="app">一個數字、一張表、一張圖：各要三樣東西</h3>
   <p>論文裡每一個結果都是同一個公式：<b>① 原料（資料）＋ ② 做法（程式或腳本）→ ③ 成品（LaTeX 用的檔）</b>，論文本文再把成品放進來。</p>
@@ -523,6 +544,7 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
       <tr><td><b>一張表</b>（你用 Excel 做的）</td><td><code>source/tables/my_table.csv</code></td><td><code>build.py</code> 自動轉成表格</td><td><code>output/tables/my_table.tex</code></td></tr>
       <tr><td><b>一張圖</b>（程式算的資料）</td><td><code>output/figdata/fig1_dkas.csv</code>（<code>analyze.py</code> 產生）</td><td><code>source/gnuplot/fig1_outcomes.gp</code> 照小表畫</td><td><code>output/figures/fig1.tex</code>＋<code>fig1.pdf</code></td></tr>
       <tr><td><b>一張圖</b>（你用 Excel 做的資料）</td><td><code>source/figdata/my_data.csv</code></td><td>一支新的 <code>.gp</code> 腳本（請 AI 寫）</td><td><code>output/figures/fig3.tex</code>＋<code>fig3.pdf</code></td></tr>
+      <tr><td><b>一張圖</b>（現成的流程圖、照片）</td><td><code>source/images/flowchart.png</code></td><td>不用做，<code>build.py</code> 原樣複製</td><td><code>output/images/flowchart.png</code></td></tr>
     </tbody>
   </table></div>
   <p class="why">成品怎麼放進論文（<code>\input{tables/table2.tex}</code> 這種），AI 會寫進 <code>main.tex</code>，你不用自己打。你要記得的是 ①：資料放對地方，其他交給 AI 和 build。</p>
@@ -541,7 +563,15 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
     <li>跟 AI 說：「我在 source/figdata/ 放了 my_data.csv，第一欄是＿＿、第二欄是＿＿。請照 WORKFLOW.md 第 4 步寫一支 gnuplot 腳本畫成＿＿圖，放進論文的 Results，跑一次 build。」</li>
     <li>你會看到：<code>source/gnuplot/</code> 多一支 <code>.gp</code>，PDF 多一張圖。打開 PDF 看：點和線沒有被切掉，數字跟你的 Excel 一樣。</li>
   </ol>
-  <p class="note">表的數字是你手打進 Excel 的，不會跟著資料自動更新；程式算的表才會。2026-10-22 實測：照上面做，PDF 和 Word 版都有這張表和這張圖。</p>
+  <h3 class="app">想放一張現成的圖（流程圖、照片）</h3>
+  <ol class="why">
+    <li>圖存成 <b>PNG 或 JPG</b>（PDF 也可以，但 Word 版放不進去）。檔名只用英文、數字、<code>-</code>、<code>_</code>，例如 <code>flowchart.png</code>；不能有空白或中文。</li>
+    <li>放進 <code>source/images/</code>。</li>
+    <li>跟 AI 說：「我在 source/images/ 放了 flowchart.png，請照 WORKFLOW.md 第 4 步放進論文的 Methods，圖說寫＿＿，內文提到它，跑一次 build。」</li>
+    <li>你會看到：build 印出「flowchart.png → output/images/flowchart.png」，最後一行 BUILD OK，PDF 多了這張圖。檔名有空白或中文，build 會停下來請你改名；HEIC 這類格式會略過，提醒你另存成 PNG。要換圖：用同一個檔名蓋過去，再跑一次 build。</li>
+  </ol>
+  <p class="why">照片裡有人臉、病歷、姓名，先去識別化再放（主頁第 07 段的四個條件）。</p>
+  <p class="note">表的數字是你手打進 Excel 的，不會跟著資料自動更新；程式算的表才會。2026-10-22 實測：照上面做，PDF 和 Word 版都有這張表和這張圖。2026-10-27 實測：一張 PNG 流程圖放進 Methods，PDF 和 Word 版都有。</p>
 </section>
 
 <div class="band" id="do"><div class="wrap"><div class="tag">04・六個練習</div><p class="big">動手做</p><p class="sub">你主要跟 AI 說話，大約 30 分鐘</p></div></div>
