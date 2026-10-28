@@ -432,12 +432,13 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
     </div>
     <div class="route"><h3>B. 讓 AI 操作 Zotero</h3>
       <p class="why" style="margin:.2rem 0 0">請 AI 幫你裝 zotero-mcp-server（一個讓 AI 能搜尋、新增你 Zotero 文獻的小工具；另有一個名字很像的 zotero-mcp，是別人做的，不是這個），可以跟它說「請照 WORKFLOW.md 第 2 步接法 B，幫我接上 zotero-mcp-server，每一步先告訴我要做什麼，等我說好再做」。之後 AI 能搜你的文獻庫。要讓它用 DOI 把文獻<b>加進</b> Zotero，Zotero 要開著，而且要照 zotero-mcp-server 的說明另外授權（Zotero 10 會跳出視窗，請你選「Always Allow」）。版本與設定以它的官方說明為準。<b>接法 B 只讓 AI 搜尋、新增 Zotero 裡的文獻；論文用的 refs.bib 還是要用 A 或 C 匯出。</b>適合熟一點之後再試。</p>
+      <p class="why" style="margin:.4rem 0 0">叫它加文獻時，請加一句「<b>不要附 PDF</b>」。它預設會自己到網路找 PDF 附上，10/28 實測附成另一篇論文，而且沒有任何警告；全文請你自己附。另外，授權之後它<b>也能刪除、修改</b>你 Zotero 裡的文獻（刪掉的會先進 Zotero 的垃圾桶，還找得回來）。只叫它搜尋和新增，不要叫它刪或改。</p>
     </div>
     <div class="route"><h3>C. 不裝外掛</h3>
       <p class="why" style="margin:.2rem 0 0">Zotero 開著，跟 AI 說「請用 tools/zotero_export.py 把 Zotero 的『虛擬病人論文』文獻集匯出成 source/refs/refs.bib」。這是匯出一次：之後文獻集有增減，再跟 AI 說一次同一句。</p>
     </div>
   </div>
-  <p class="why">B 和 C 都要先在 Zotero：設定 → 進階，勾「允許此電腦上的其他應用程式與 Zotero 通訊（Allow other applications on this computer to communicate with Zotero）」。每篇文獻的引用代號（cite key，原稿裡指某一篇文獻的短名字，例如範例的 Su2021），換了接法<b>可能</b>會變：裝了 Better BibTeX，A 和 C 匯出的代號一樣；沒裝的話，C 的代號是另一種寫法。中途換接法、build 說找不到代號，請 AI 把 main.tex 的引用一起改。（2026-10-27 在 Zotero 10 實測：A、C 都 BUILD OK，B 搜尋得到文獻。）</p>
+  <p class="why">B 和 C 都要先在 Zotero：設定 → 進階，勾「允許此電腦上的其他應用程式與 Zotero 通訊（Allow other applications on this computer to communicate with Zotero）」。每篇文獻的引用代號（cite key，原稿裡指某一篇文獻的短名字，例如範例的 Su2021），換了接法<b>可能</b>會變：裝了 Better BibTeX，A 和 C 匯出的代號一樣；沒裝的話，C 的代號是另一種寫法。中途換接法、build 說找不到代號，請 AI 把 main.tex 的引用一起改。（2026-10-27 在 Zotero 10 實測：A、C 都 BUILD OK，B 搜尋得到文獻；10/28 在 Mac 再測一次，B 用 DOI 新增文獻也成功。）</p>
   <p><b>沒有 DOI 的文獻</b>（例如有些台灣的中文期刊）：在 Zotero 給那一篇加一個標籤 <code>nodoi</code>。refs.bib 更新之後（接法 A 會自己更新；接法 C 請 AI 再匯出一次），跑 build 就會放行，並列出來提醒你自己對一次書目。不要讓 AI 替它編 DOI。</p>
   <p><b>工具的書目也會錯。</b>這次範例用 Scite（一個付費的文獻搜尋工具）查到 7 篇真文獻，匯出的書目還是有錯：文章種類標成排版程式看不懂的寫法、作者名字裡的連字號（例如 Hsin-Feng）用了排版程式不認得的特殊符號，這兩種在排版時就會出問題；可是還有兩篇作者多了幾個中間名縮寫、一篇少了文章編號，排版完全正常、build 抓不到，是用 DOI 查原始紀錄核對才發現的。所以每篇都要用 DOI 打開原文對一次。</p>
   <div class="claim"><button type="button" data-claim="u4" aria-pressed="false">我懂了，收下技能卡 04</button><span>知道 refs.bib 從哪裡來，也知道工具匯出的書目要回原文核對。</span></div>
