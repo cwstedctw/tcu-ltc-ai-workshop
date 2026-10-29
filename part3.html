@@ -5,289 +5,663 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
 <link rel="icon" href="data:,">
-<title>第三部分｜用 AI 製作論文：Word、LaTeX 與 Zotero</title>
-<meta name="description" content="給零基礎學員的 AI 論文實作指南。從安裝 Zotero、加入第一篇文獻、在 Word 插入引用，到理解 LaTeX、建立 AI 論文範本並產出 PDF 與 Word。">
+<title>長照所 AI 論文流程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap">
 <style>
-:root{--paper:#f6eedd;--card:#fffbf2;--ink:#1b2923;--muted:#56665e;--green:#204d3d;--green-ink:#fff9e9;--gold:#c99a2e;--navy:#1c2b3a;--navy-ink:#eef1f4;--line:#d7cdb6;--ok:#216347;--soft:#e5ede3;--warn:#923d28;--warn-soft:#f6e5d8;--base:17px;--mono:Consolas,"SFMono-Regular",monospace}
-:root[data-theme=dark]{--paper:#131d18;--card:#1c2b23;--ink:#f0ecdf;--muted:#b7c7bb;--green:#14382b;--green-ink:#fff5dd;--gold:#edc16a;--navy:#101f2b;--navy-ink:#f1f3f5;--line:#435347;--ok:#9cd6b6;--soft:#253d30;--warn:#ffbc9a;--warn-soft:#402b24;color-scheme:dark}
-:root[data-projection=on]{--base:20px}
-*{box-sizing:border-box}html{font-size:var(--base);scroll-behavior:smooth;scroll-padding-top:1rem}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;line-height:1.8}a{color:var(--ok);text-underline-offset:.18em;overflow-wrap:anywhere}button,input,select{font:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.55}button,a,input,select,summary{-webkit-tap-highlight-color:transparent}:focus-visible{outline:3px solid var(--gold);outline-offset:3px}p{margin:.4rem 0 1rem}h1,h2,h3,h4{line-height:1.4;text-wrap:balance}h1{font-size:clamp(2rem,5vw,3.25rem);margin:.6rem 0 1.1rem;max-width:21ch}h2{font-size:1.65rem;margin:.4rem 0 1rem}h3{font-size:1.13rem;margin:1.3rem 0 .5rem}h4{font-size:1rem;margin:.7rem 0}.wrap{max-width:1180px;margin:auto;padding-inline:24px}.hero{background:var(--green);color:var(--green-ink);padding:3.5rem 0 3rem}.hero a{color:var(--green-ink)}.eyebrow,.section-kicker{font-size:.8rem;letter-spacing:.12em;font-weight:700}.hero .eyebrow{color:var(--gold)}.hero .lede{max-width:44rem;font-size:1.08rem}.hero-meta{font-size:.83rem;opacity:.85}.hero-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:3rem;align-items:center}.hero-paper{background:var(--card);color:var(--ink);padding:1.5rem 1.8rem;border-radius:4px;box-shadow:10px 12px 0 #0002;transform:rotate(1.3deg)}.hero-paper h2{font-family:Georgia,serif;font-size:1.3rem;border-bottom:1px solid var(--line);padding-bottom:.7rem}.hero-paper .caption{font-size:.75rem;color:var(--muted)}.hero-paper .paper-line{height:7px;margin:12px 0;background:var(--line);border-radius:2px}.hero-paper .paper-line.short{width:70%}.hero-paper .paper-quote{font-size:.9rem;border-left:3px solid var(--gold);padding-left:1rem}.hero-actions,.toolbar,.row,.tabs{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}.hero-actions{margin-top:1.5rem}.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border:1px solid var(--line);border-radius:7px;padding:.55rem .95rem;background:var(--card);color:var(--ink);text-decoration:none;line-height:1.5;min-height:44px}.btn.primary{background:var(--green);color:var(--green-ink);border-color:var(--green)}.hero .btn{background:var(--gold);border-color:var(--gold);color:#1b2923;font-weight:700}.hero .btn.quiet{background:transparent;color:var(--green-ink);border-color:#fff7}.toolbar{justify-content:space-between;padding-block:.85rem;border-bottom:1px solid var(--line)}.toolbar .btn{font-size:.8rem;padding:.35rem .65rem}.layout{display:grid;grid-template-columns:205px minmax(0,1fr);gap:2.5rem;align-items:start}.toc{position:sticky;top:1rem;padding:1.5rem 0;font-size:.8rem;max-height:95vh;overflow-y:auto}.toc ol{padding:0;list-style:none;margin:.5rem 0}.toc a{display:block;padding:.4rem .55rem;text-decoration:none;border-radius:5px;color:var(--muted)}.toc a:hover,.toc a.active{background:var(--soft);color:var(--ink)}.toc strong{display:block;font-size:.85rem}.toc .small{font-size:.72rem}.progress-track{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:.7rem 0}.progress-track span{display:block;height:100%;background:var(--ok);width:0;transition:width .2s}.lesson{min-width:0;max-width:850px;padding-bottom:3rem}.module{padding:2.5rem 0 1.2rem;border-bottom:1px solid var(--line);scroll-margin-top:1rem}.section-kicker{color:var(--ok)}.intro{font-size:1.04rem}.small,.source-note{font-size:.8rem;color:var(--muted)}.callout{border-left:4px solid var(--gold);background:var(--card);padding:1rem 1.2rem;margin:1.2rem 0}.callout.warn{border-left-color:var(--warn);background:var(--warn-soft)}.callout p:last-child{margin-bottom:0}.outcome{padding:.75rem 1rem;background:var(--soft);border-radius:5px;font-size:.9rem;margin:1rem 0}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.panel{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:1.1rem;min-width:0}.panel h3:first-child{margin-top:0}.pill{display:inline-block;padding:.12rem .6rem;border-radius:99px;background:var(--soft);color:var(--ink);font-size:.74rem;font-weight:700}.flow{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.2rem 0}.flow>div{flex:1 1 115px;background:var(--card);padding:.8rem;border-top:3px solid var(--gold);min-width:0}.flow span{display:block;font:700 .75rem var(--mono);color:var(--ok)}.flow small{display:block;color:var(--muted);font-size:.75rem}.flow .arrow{flex:0 0 auto;align-self:center;padding:0;background:none;border:0}.table-wrap{overflow:auto;margin:1rem 0;border:1px solid var(--line);border-radius:7px}table{border-collapse:collapse;width:100%;font-size:.86rem}th,td{padding:.7rem .8rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:var(--soft);font-weight:700}tr:last-child td{border-bottom:0}.table-wrap table{min-width:480px}ul,ol{padding-left:1.4rem}li{margin:.3rem 0}code,pre{font-family:var(--mono);font-size:.85em}code{background:var(--soft);padding:.08rem .3rem;border-radius:3px;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;line-height:1.7;margin:0;background:var(--navy);color:var(--navy-ink);padding:1.15rem;border-radius:7px;font-size:.8rem;tab-size:2}.copybox{position:relative;margin:1rem 0;padding-top:2.5rem;background:var(--navy);border-radius:7px}.copybox pre{padding-top:.4rem}.copybox button{position:absolute;top:.35rem;right:.45rem;background:transparent;border:1px solid #aab9c8;color:var(--navy-ink);border-radius:4px;padding:.2rem .65rem;font-size:.75rem;min-height:32px}.copybox .copy-label{position:absolute;left:1rem;top:.5rem;font-size:.72rem;color:#d1dce7}.tabs{margin:.8rem 0 1rem}.tabs button{min-height:44px;padding:.5rem .9rem;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink)}.tabs button[aria-selected=true],.choice[aria-pressed=true]{background:var(--green);color:var(--green-ink);border-color:var(--green)}[hidden]{display:none!important}.check{display:flex;gap:.65rem;align-items:flex-start;background:var(--soft);border-radius:5px;padding:.8rem 1rem;margin:1.2rem 0;font-size:.87rem;cursor:pointer}.check input{width:20px;height:20px;flex:none;margin-top:.3rem;accent-color:var(--green)}details{border:1px solid var(--line);border-radius:7px;background:var(--card);margin:.7rem 0;padding:.8rem 1rem}summary{font-weight:700;cursor:pointer;line-height:1.6;min-height:30px}details[open]>summary{margin-bottom:.7rem}.step-no{display:inline-block;font:700 .78rem var(--mono);color:var(--ok);margin-right:.5rem}.where{display:block;color:var(--muted);font-size:.77rem;font-weight:400;margin-top:.2rem}.step-result{color:var(--ok);font-size:.86rem}.step-result::before{content:"完成時應看到：";font-weight:700}.lab{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.2rem;margin:1.2rem 0}.lab-title{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;margin-bottom:.6rem}.lab-title h3{margin:0}.lab label{font-size:.88rem}.lab input[type=text],.lab select{width:100%;max-width:100%;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:5px;min-height:44px;padding:.45rem .6rem;margin:.35rem 0 .8rem}.lab input[type=range]{width:100%;accent-color:var(--green);margin:1rem 0}.lab .note{font-size:.78rem;color:var(--muted);margin-top:.7rem}.mock-zotero{border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:1rem}.mock-toolbar{padding:.4rem .7rem;background:var(--soft);font-size:.75rem;font-weight:700}.mock-columns{display:grid;grid-template-columns:.8fr 1.15fr 1.5fr}.mock-columns>div{padding:.8rem;min-width:0;border-right:1px solid var(--line)}.mock-columns>div:last-child{border-right:0}.mock-columns .col-title{font-size:.68rem;color:var(--muted);margin-bottom:.7rem;letter-spacing:.03em}.mock-columns button{display:block;width:100%;text-align:left;border:0;border-radius:4px;padding:.5rem;background:transparent;color:var(--ink);font-size:.76rem}.mock-columns button[aria-pressed=true]{background:var(--soft);font-weight:700}.mock-columns .child{padding-left:1.4rem}.mock-fields{font-size:.76rem;overflow-wrap:anywhere}.mock-fields dt{font-size:.68rem;color:var(--muted)}.mock-fields dd{margin:0 0 .5rem}.citation-preview{border:1px solid var(--line);border-radius:5px;padding:1rem;margin:.8rem 0}.citation-preview .ref{font-size:.8rem;border-top:1px solid var(--line);padding-top:.7rem;overflow-wrap:anywhere}.mini-paper{background:var(--paper);padding:1rem;border:1px solid var(--line);border-radius:5px;min-height:200px}.mini-paper h4{font-family:Georgia,serif;font-size:1.15rem}.mini-paper p{font-size:.9rem}.quiz-choice{display:block;width:100%;text-align:left;margin:.5rem 0;border:1px solid var(--line);border-radius:5px;padding:.7rem;background:var(--paper);color:var(--ink);min-height:44px}.quiz-choice[aria-pressed=true]{border:2px solid var(--ok)}.feedback{font-size:.88rem;background:var(--soft);padding:.8rem;border-radius:5px;margin-top:.7rem}.score-output{font:700 1.8rem var(--mono)}.score-bar{height:16px;background:var(--line);border-radius:4px;overflow:hidden}.score-bar span{display:block;height:100%;background:var(--ok);width:74%;transition:width .3s}.status{font-size:.8rem;color:var(--muted);min-height:1.6em}.filetree{line-height:2;font-family:var(--mono);font-size:.8rem;background:var(--card);border:1px solid var(--line);padding:1rem;border-radius:7px;overflow-wrap:anywhere}.filetree button{display:block;border:0;background:transparent;color:var(--ink);font:inherit;text-align:left;width:100%;padding:.25rem .4rem;min-height:40px}.filetree button:hover,.filetree button[aria-pressed=true]{background:var(--soft)}.file-help{min-height:7rem}.resources{font-size:.82rem}.resources li{margin:.6rem 0}.footer{padding:2rem 0 3rem;color:var(--muted);font-size:.8rem}.backtop{display:block;text-align:right;margin-top:1rem}.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.skip{position:absolute;left:1rem;top:-100px;z-index:20;background:var(--card);padding:.6rem}.skip:focus{top:1rem}
-.hero-grid{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}.hero-grid>div{min-width:0}.hero .lede{max-width:100%}
-@media(max-width:950px){.layout{grid-template-columns:1fr;gap:0}.toc{position:static;max-height:none;padding:1.2rem 0 .4rem}.toc ol{display:flex;flex-wrap:wrap;gap:.2rem}.toc li{margin:0}.toc .progress-area{max-width:26rem}.hero-grid{grid-template-columns:1fr}.hero-paper{max-width:420px;transform:none}.lesson{max-width:none}.hero{padding:2.2rem 0}.hero-grid{gap:1.5rem}}
-@media(max-width:580px){:root{--base:16px}.wrap{padding-inline:16px}.hero-paper{padding:1.1rem}.grid2{grid-template-columns:1fr}.mock-columns{grid-template-columns:1fr}.mock-columns>div{border-right:0;border-bottom:1px solid var(--line)}.mock-columns>div:last-child{border-bottom:0}.flow>div{flex-basis:42%}.flow .arrow{display:none}.module{padding-top:2rem}.toolbar{align-items:flex-start}.lab{padding:.9rem}.toc a{padding:.3rem .5rem}.table-wrap table{min-width:450px}.hero-actions .btn{width:100%}.copybox pre{font-size:.77rem}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
-@media print{.hero-paper,.toolbar,.toc,.sitenav,.copybox button,.tabs,.lab .btn,.backtop,.check,.skip{display:none!important}.layout,.hero-grid,.grid2{display:block}.wrap{max-width:none;padding:0}.hero{background:none;color:#111;padding:0}.hero .eyebrow{color:#333}.hero-meta{opacity:1}.hero-actions{display:none}.module{padding:1rem 0;break-inside:auto}.panel,.lab,details{break-inside:avoid}.lesson{max-width:none}body{background:white;color:#111;font-size:11pt}pre{background:#eee;color:#111}.mock-columns{display:block}.footer{padding:1rem 0}}
+/* 版面沿用第一部分：米色紙面＋深綠橫幅分段、金色大字當段名、深藍技能卡（Ted 10/21 給的範例方向）。第三部分的段名：看得懂／分得清／裝得好／照著做／接得穩／畫得美／守得住／帶得走。 */
+:root{
+  --paper:#F6EEDD; --card:#FFFBF2; --ink:#1B2420; --muted:#5B655F;
+  --green:#1F4A3A; --green-ink:#F6EEDD; --gold:#C99A2E; --gold-soft:#F2E3B8;
+  --navy:#1C2B3A; --navy-ink:#EEF1F4; --line:#E0D3B6;
+  --ok:#24704F; --ok-soft:#DCEFE3; --warn:#B23A2B; --warn-soft:#F7DDD7;
+  --font-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+  --base:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111A15; --card:#18241E; --ink:#ECE5D4; --muted:#A7B0A8;
+    --green:#0E2E22; --green-ink:#F1E9D6; --gold:#E2B85A; --gold-soft:#3A3120;
+    --navy:#0F1B27; --navy-ink:#E4E9EE; --line:#2C3D33;
+    --ok:#7FD0A6; --ok-soft:#1C3A2B; --warn:#F09A86; --warn-soft:#3D221D; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111A15; --card:#18241E; --ink:#ECE5D4; --muted:#A7B0A8;
+  --green:#0E2E22; --green-ink:#F1E9D6; --gold:#E2B85A; --gold-soft:#3A3120;
+  --navy:#0F1B27; --navy-ink:#E4E9EE; --line:#2C3D33;
+  --ok:#7FD0A6; --ok-soft:#1C3A2B; --warn:#F09A86; --warn-soft:#3D221D; color-scheme:dark;
+}
+:root[data-proj="on"]{--base:20px}
+*{box-sizing:border-box}
+html{font-size:var(--base);scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:1rem;line-height:1.75;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+a{color:var(--ok)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:48rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance}
+p{margin:0 0 .9rem}
+header.top{padding-block:2.4rem 1.6rem}
+.eyebrow{font-size:.82rem;letter-spacing:.1em;color:var(--ok);font-weight:700}
+h1{font-size:2.15rem;line-height:1.3;margin:.35rem 0 .7rem;font-weight:900}
+.lede{font-size:1.06rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:.3rem 1.2rem;font-size:.88rem;color:var(--muted)}
+.tools{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.1rem;align-items:center}
+.chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:.3rem 1rem;font-size:.92rem}
+.chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--green-ink)}
+.mycards{display:inline-flex;align-items:center;gap:.6rem;background:var(--navy);color:var(--navy-ink);border:2px solid var(--gold);border-radius:999px;padding:.4rem 1.1rem;font-weight:700;text-decoration:none}
+.mycards .cnt{background:var(--gold);color:var(--navy);border-radius:999px;padding:0 .55rem;font-size:.85rem;font-variant-numeric:tabular-nums}
+.band{background:var(--green);color:var(--green-ink);margin-top:2.2rem;scroll-margin-top:0}
+.band .wrap{padding-block:1.6rem 1.4rem}
+.band .big{font-size:3.4rem;line-height:1.1;font-weight:900;color:var(--gold);letter-spacing:.04em;margin:0}
+.band .sub{font-size:1.25rem;font-weight:700;margin:.4rem 0 0}
+.band .tag{font-family:var(--font-mono);font-size:.8rem;color:var(--gold);opacity:.9;letter-spacing:.12em}
+section.blk{padding-block:1.8rem 1rem}
+.ask{background:var(--ok-soft);border-radius:12px;padding:1rem 1.1rem;margin:.6rem 0 1rem}
+.ask b{color:var(--ok)}
+.doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:1rem 0 .4rem}
+.door{background:var(--card);border:1.5px solid var(--line);border-top:5px solid var(--gold);border-radius:10px;padding:.8rem .9rem;min-width:0}
+.door .k{font-weight:700}
+.door .v{font-size:.85rem;color:var(--muted);word-break:break-all}
+.account{text-align:center;font-size:.92rem;color:var(--muted);margin:.2rem 0 1rem}
+.account b{color:var(--ink)}
+.tabs{display:flex;gap:.4rem;margin:.6rem 0;flex-wrap:wrap}
+.tab{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:.35rem 1rem}
+.tab[aria-selected="true"]{background:var(--navy);color:var(--navy-ink);border-color:var(--navy)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;vertical-align:top;padding:.55rem .6rem;border-bottom:1px solid var(--line)}
+th{font-size:.82rem;letter-spacing:.06em;color:var(--muted)}
+.pill{display:inline-block;font-size:.78rem;padding:.05rem .55rem;border-radius:999px;font-weight:700;white-space:nowrap}
+.pill.go{background:var(--ok-soft);color:var(--ok)}
+.pill.stay{background:var(--gold-soft);color:var(--ink)}
+.pill.sep{background:var(--warn-soft);color:var(--warn)}
+.note{font-size:.85rem;color:var(--muted)}
+.claim{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin:1rem 0 .4rem;padding:.8rem 1rem;border:2px dashed var(--gold);border-radius:12px}
+.claim button{background:var(--navy);color:var(--navy-ink);border:0;border-radius:999px;padding:.35rem 1.1rem;font-weight:700}
+.claim button[aria-pressed="true"]{background:var(--gold);color:var(--navy)}
+.claim span{font-size:.9rem;color:var(--muted)}
+.app{font-size:1.3rem;font-weight:900;margin:1.4rem 0 .4rem;display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+.app small{font-size:.85rem;font-weight:500;color:var(--muted)}
+.steps{list-style:none;margin:.6rem 0 0;padding:0;display:grid;gap:.8rem}
+.step{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:1rem 1.1rem;min-width:0}
+.step h3{margin:0 0 .35rem;font-size:1.05rem;display:flex;gap:.5rem;align-items:baseline}
+.sn{font-family:var(--font-mono);color:var(--gold);font-weight:700}
+.step > p:last-child{margin-bottom:0}
+.path{font-family:var(--font-mono);font-size:.84rem;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:.08rem .45rem;display:inline-block;margin:.1rem 0;word-break:break-word}
+.why{font-size:.9rem;color:var(--muted)}
+.done{font-size:.88rem;border-left:4px solid var(--ok);padding-left:.6rem;margin-top:.5rem}
+.os-win,.os-mac{display:none}
+:root[data-os="win"] .os-win{display:block}
+:root[data-os="mac"] .os-mac{display:block}
+.osbar{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:.9rem;margin:.4rem 0}
+.copybox{position:relative;background:var(--paper);border:1.5px dashed var(--ok);border-radius:10px;margin:.6rem 0;min-width:0}
+.copybox pre{margin:0;padding:.8rem .9rem 2.5rem;white-space:pre-wrap;word-break:break-word;font-family:var(--font-body);font-size:.93rem;line-height:1.7}
+.copybtn{position:absolute;right:.5rem;bottom:.5rem;border:0;background:var(--ok);color:var(--card);border-radius:8px;padding:.2rem .8rem;font-size:.85rem;max-width:calc(100% - 1rem)}
+.copybtn.ok{background:var(--gold);color:var(--navy)}
+.minichk{margin-top:1rem;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.8rem 1rem}
+.minichk .hd{font-weight:700;margin-bottom:.2rem}
+.minichk label{display:flex;gap:.5rem;align-items:flex-start;padding:.25rem 0;font-size:.95rem}
+.minichk input{margin-top:.45rem;accent-color:var(--ok);width:1.05rem;height:1.05rem;flex:none}
+.lines{display:grid;gap:.8rem}
+.line{display:grid;grid-template-columns:2.6rem minmax(0,1fr);gap:.7rem;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:1rem}
+.line .num{font-size:2rem;font-weight:900;color:var(--warn);line-height:1}
+.line h3{margin:0 0 .3rem;font-size:1.1rem}
+.builder{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:1rem 1.1rem;margin-top:.6rem}
+.bstep{display:grid;grid-template-columns:2rem minmax(0,1fr);gap:.6rem;align-items:start;padding:.7rem 0;border-bottom:1px dashed var(--line)}
+.bstep:last-child{border-bottom:0}
+.circ{width:1.8rem;height:1.8rem;border-radius:50%;background:var(--gold);color:var(--navy);display:grid;place-items:center;font-weight:900;font-size:.95rem}
+.bstep .lbl{font-weight:700;margin-bottom:.4rem}
+.taskchips{display:flex;flex-wrap:wrap;gap:.45rem}
+.taskchips .chip[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--card)}
+.fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem}
+.fields label{display:flex;flex-direction:column;gap:.25rem;font-size:.85rem;color:var(--muted);min-width:0}
+.fields input{font:inherit;font-size:.95rem;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:.45rem .6rem;min-width:0;width:100%}
+.fields input:focus{border-color:var(--ok);outline:none}
+.ptcf{border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--paper)}
+.prow{display:grid;grid-template-columns:5.5rem minmax(0,1fr);gap:.6rem;padding:.6rem .8rem;border-bottom:1px solid var(--line)}
+.prow:last-child{border-bottom:0}
+.prow .k{font-weight:700;display:flex;gap:.4rem;align-items:baseline}
+.prow .k b{display:inline-grid;place-items:center;width:1.4rem;height:1.4rem;border-radius:4px;background:var(--navy);color:var(--navy-ink);font-size:.8rem;font-family:var(--font-mono)}
+.prow .v{font-size:.93rem;min-width:0;word-break:break-word}
+.fill{background:var(--ok-soft);color:var(--ok);font-weight:700;border-radius:4px;padding:0 .2rem}
+.miss{color:var(--warn);font-weight:700}
+.legend{font-size:.82rem;color:var(--muted);margin:.4rem 0 0}
+.actions{display:flex;flex-wrap:wrap;gap:.5rem}
+.btn{display:inline-flex;align-items:center;gap:.3rem;border-radius:8px;padding:.45rem 1rem;font-weight:700;text-decoration:none;border:1.5px solid var(--ok)}
+.btn.primary{background:var(--ok);color:var(--card)}
+.btn.ghost{background:transparent;color:var(--ok)}
+.status{font-size:.88rem;color:var(--ok);min-height:1.4em;margin-top:.4rem}
+.share{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1fr);gap:.7rem;align-items:center;margin:1rem 0 .4rem}
+.agent{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.8rem;text-align:center;min-width:0}
+.agent .k{font-weight:700}
+.agent .v{font-size:.82rem;color:var(--muted)}
+.arrow{font-size:.82rem;color:var(--ok);display:block}
+.folder{background:var(--gold-soft);border:2px solid var(--gold);border-radius:4px 14px 14px 14px;padding:.8rem 1rem;min-width:0}
+.folder .k{font-weight:700;margin-bottom:.3rem}
+.folder ul{margin:0;padding-left:1.1rem;font-size:.88rem}
+code{font-family:var(--font-mono);font-size:.86rem}
+.sync{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.4rem .6rem;margin:.8rem 0 1rem;font-size:.9rem}
+.sync .m{background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:.15rem .8rem}
+.sync .gh{background:var(--navy);color:var(--navy-ink);border-radius:999px;padding:.15rem .9rem;font-weight:700}
+.skills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;margin-top:1rem}
+.skill{perspective:900px;border:0;background:none;padding:0;text-align:left;color:inherit;min-width:0;display:grid}
+.skill .inner{position:relative;display:grid;min-height:13rem;transition:transform .5s;transform-style:preserve-3d}
+.skill[aria-pressed="true"] .inner{transform:rotateY(180deg)}
+.face{grid-area:1/1;position:relative;border-radius:14px;padding:1rem;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;background:var(--navy);color:var(--navy-ink);border:2px solid var(--gold)}
+.face.back{transform:rotateY(180deg);background:var(--card);color:var(--ink)}
+.face .no{font-size:2.2rem;font-weight:900;color:var(--gold);line-height:1;font-family:var(--font-mono)}
+.face .ttl{font-weight:900;font-size:1.05rem;margin:.5rem 0 .3rem}
+.face .one{font-size:.88rem;opacity:.9}
+.face .hint{margin-top:auto;font-size:.78rem;opacity:.75;text-align:right}
+.badge{position:absolute;top:.8rem;right:.8rem;font-size:.75rem;font-weight:700;border-radius:999px;padding:.05rem .6rem;background:var(--line);color:var(--ink)}
+.skill.on .badge{background:var(--gold);color:var(--navy)}
+.face.back .pts{display:block;margin-top:.2rem;font-size:.88rem;line-height:1.6}
+.face.back .pt{display:block;padding-left:1rem;position:relative}
+.face.back .pt::before{content:"・";position:absolute;left:0;color:var(--gold)}
+.skill:not(.on) .face.front{filter:saturate(.35);opacity:.85}
+.tip{font-size:1rem;font-weight:700;border-left:5px solid var(--gold);padding-left:.8rem;margin:1.2rem 0}
+.progress{display:flex;align-items:center;gap:.8rem;margin-top:1rem;font-size:.9rem;flex-wrap:wrap}
+.bar{flex:1;min-width:8rem;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+footer{padding-block:2rem 3rem;font-size:.85rem;color:var(--muted)}
+footer ul{padding-left:1.1rem;margin:.4rem 0}
+@media (max-width:720px){
+  h1{font-size:1.7rem}
+  .band .big{font-size:2.6rem}
+  .doors,.fields,.skills,.share{grid-template-columns:minmax(0,1fr)}
+  .prow{grid-template-columns:minmax(0,1fr);gap:.2rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+<style>
+/* 第三部分追加：比較表、分工示意、誰會用到的檔案表、步驟器、數字示範、預覽圖。其餘沿用第一部分的樣式。 */
+.vs td:first-child{font-weight:700;white-space:nowrap}
+.win{color:var(--ok);font-weight:700}
+.meh{color:var(--muted)}
+.flow3{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:.4rem;align-items:center;margin:1rem 0}
+.flow3 .box{background:var(--card);border:1.5px solid var(--line);border-top:5px solid var(--gold);border-radius:10px;padding:.6rem .7rem;text-align:center;min-width:0}
+.flow3 .box.you{background:var(--navy);color:var(--navy-ink);border-color:var(--navy);border-top-color:var(--gold)}
+.flow3 .k{font-weight:900}
+.flow3 .v{font-size:.82rem;opacity:.85}
+.flow3 .to{color:var(--gold);font-weight:900;font-size:1.2rem;text-align:center}
+.runby{display:inline-block;font-size:.75rem;font-weight:700;border-radius:999px;padding:.02rem .55rem;white-space:nowrap}
+.runby.ai{background:var(--ok-soft);color:var(--ok)}
+.runby.auto{background:var(--gold-soft);color:var(--ink)}
+.runby.you{background:var(--navy);color:var(--navy-ink)}
+.pipe{display:flex;flex-wrap:wrap;gap:.4rem;margin:.8rem 0}
+.pipe button{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:.4rem .75rem;font-weight:700;display:flex;align-items:center;gap:.4rem;font-size:.92rem}
+.pipe button .n{display:inline-grid;place-items:center;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--gold);color:var(--navy);font-size:.82rem}
+.pipe button[aria-selected="true"]{background:var(--navy);color:var(--navy-ink);border-color:var(--navy)}
+.stepcard{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:1rem 1.1rem}
+.stepcard h3{margin:0 0 .5rem;font-size:1.12rem}
+.stepcard .row{margin:.55rem 0}
+.stepcard .lab{font-weight:900;font-size:.88rem;display:block;margin-bottom:.15rem}
+.stepcard .lab.y{color:var(--ink)}
+.stepcard .lab.a{color:var(--ok)}
+.stepcard .lab.c{color:var(--warn)}
+.stepnav{display:flex;justify-content:space-between;gap:.5rem;margin-top:.8rem}
+.cmd{font-family:var(--font-mono);font-size:.82rem;background:var(--navy);color:var(--navy-ink);border-radius:8px;padding:.6rem .8rem;margin:.4rem 0;white-space:pre-wrap;word-break:break-word}
+.demo{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:1rem 1.1rem;margin-top:.6rem}
+.demo .sentence{font-family:Georgia,"Times New Roman",serif;font-size:1.02rem;line-height:1.8;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;margin:.6rem 0}
+.mval{background:var(--ok-soft);color:var(--ok);font-weight:700;border-radius:4px;padding:0 .25rem;transition:background .3s}
+.mval.flash{background:var(--gold);color:var(--navy)}
+.src{font-family:var(--font-mono);font-size:.8rem;color:var(--muted);word-break:break-word}
+.shots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:.8rem 0}
+.shots figure{margin:0;min-width:0}
+.shots img{width:100%;height:auto;border:1.5px solid var(--line);border-radius:6px;background:#fff;display:block}
+.shots figcaption{font-size:.8rem;color:var(--muted);margin-top:.3rem}
+.routes{display:grid;gap:.7rem;margin:.6rem 0}
+.route{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.9rem 1rem;min-width:0}
+.route.best{border:2px solid var(--ok)}
+.route h3{margin:0 0 .3rem;font-size:1.02rem}
+.route .tag2{display:inline-block;font-size:.75rem;font-weight:700;border-radius:999px;padding:0 .6rem;background:var(--ok);color:var(--card);margin-left:.4rem}
+.route ol{margin:.3rem 0 0;padding-left:1.2rem;font-size:.93rem}
+.qa{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:.9rem 1rem;margin:.6rem 0}
+.qa h3{margin:0 0 .3rem;font-size:1.02rem}
+/* 10/22 易讀性總檢追加：頁首詞彙小框、示範的代號對照表、步驟卡裡的多句複製框 */
+.glossary{background:var(--card);border:1.5px solid var(--line);border-left:5px solid var(--gold);border-radius:10px;padding:.6rem 1rem;margin:1.1rem 0 0;font-size:.93rem}
+.glossary summary{cursor:pointer;font-weight:700}
+.glossary dl{margin:.4rem 0 0}
+.glossary dt{font-weight:700;margin-top:.5rem}
+.glossary dd{margin:0}
+.demo .sentence .ln{display:block}
+.demo .sentence .ln + .ln{margin-top:.4rem}
+.mval.chg{text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px}
+.maptab{margin:.6rem 0 .4rem}
+.maptab th,.maptab td{padding:.4rem .5rem}
+.maptab .cur{background:var(--gold-soft)}
+.chgtag{font-size:.8rem;font-weight:700;color:var(--warn)}
+.samtag{font-size:.8rem;color:var(--muted)}
+.srcbox{font-family:var(--font-mono);font-size:.8rem;color:var(--muted);word-break:break-word;margin:.5rem 0}
+.srcbox .ln{display:block;margin-top:.2rem}
+.saylead{margin:.2rem 0 0;font-size:.93rem}
+@media (max-width:720px){
+  .flow3{grid-template-columns:minmax(0,1fr)}
+  .flow3 .to{transform:rotate(90deg)}
+  .shots{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 </style>
 <style>.sitenav{background:var(--navy,#1C2B3A);font-size:.88rem;position:relative;z-index:5}.sitenav .wrap{display:flex;flex-wrap:wrap;gap:.2rem .9rem;padding-block:.5rem}.sitenav a{color:var(--navy-ink,#EEF1F4);text-decoration:none;opacity:.8}.sitenav a[aria-current=page]{opacity:1;font-weight:700;color:var(--gold,#C99A2E)}</style>
 </head>
 <body>
 <nav class="sitenav" aria-label="工作坊各頁"><div class="wrap"><a href="index.html">行前準備</a><a href="setup.html">第一部分</a><a href="part2.html">第二部分</a><a href="part3.html" aria-current="page">第三部分</a><a href="practice.html">第三部分練習</a><a href="apikey.html">API 金鑰登入</a></div></nav>
-<a class="skip" href="#start">跳到教材內容</a>
-<header class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <div class="eyebrow">第三部分 · AI 輔助論文實作</div>
-      <h1>從第一篇文獻，走到可以重算的論文</h1>
-      <p class="lede">沒用過 Zotero，也沒看過 LaTeX，可以從這裡開始。先學會收文獻、插引用，再比較 Word 與 LaTeX，最後跟著 AI 跑出一份有圖、表與參考文獻的論文範例。</p>
-      <p class="hero-meta">慈濟大學長照所 AI 工作坊 · 陳文盛 · 2026 年 10 月 28 日更新</p>
-      <div class="hero-actions"><a class="btn" href="#zotero">從 Zotero 開始</a><a class="btn quiet" href="#kit">已完成第 05 段，看建置步驟</a></div>
-    </div>
-    <div class="hero-paper" aria-label="本單元成果示意">
-      <span class="pill">你要帶走的成果</span>
-      <h2>一段有依據的文字</h2>
-      <p class="paper-quote">這句話根據哪篇文獻？<br>這個數字從哪張表算出來？<br>改了資料，哪些地方要跟著改？</p>
-      <div class="paper-line"></div><div class="paper-line short"></div>
-      <p class="caption">你決定內容與判讀；Zotero 管書目；AI 協助整理檔案、寫程式與排版。</p>
-    </div>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">慈濟大學長期照護研究所・研究團隊工作坊・第三部分</div>
+  <h1>讓 AI 小隊陪你把論文做完</h1>
+  <p class="lede">這一部分另外建一個論文資料夾 <code>ai-paper-kit</code>：裡面一樣有第二部分那種 AI 小隊，再加上一條寫論文的流程：用 Zotero 管書目、分析資料、用 gnuplot（畫圖的程式）畫圖、用 LaTeX（學術論文常用的排版工具）寫稿，最後排成 PDF；要 Word 也能另外產生一份。</p>
+  <p class="lede"><b>先講結論：你不用打指令，也不用學 LaTeX。</b>你跟 AI 說話，AI 去改檔、跑程式；你看 PDF、做決定。這一頁每一步都附上「跟 AI 說的那句話」。</p>
+  <p class="lede">範例用的是所長團隊 2021 年發表在 <i>BMC Geriatrics</i> 的論文（Su 等，以下叫<b>原論文</b>）。原始資料沒有公開，所以我們照原論文表 1、表 2 的人數、平均和標準差，用程式重建一份 140 人的練習資料（每個人的分數都是假的），把原論文的表重算一次、跟它印的數字逐一對照，寫成範本裡的<b>範例論文</b>：只拿來練習，不能投稿。7 篇文獻是查證過的真文獻。動手練習在<a href="practice.html">練習頁</a>。前兩部分：<a href="setup.html">第一部分</a>、<a href="part2.html">第二部分</a>。</p>
+  <div class="meta"><span>2026-10-28（三）・電腦教室（一）</span><span>講師：陳文盛老師（國立東華大學通識教育中心）</span><span>查核與實測：2026-10-22</span></div>
+  <details class="glossary">
+    <summary>這頁會一直看到的詞（點開看；不用背，忘了回來看）</summary>
+    <dl>
+      <dt>build</dt><dd>一個指令（<code>uv run build.py</code>），把資料算成數字、表、圖，再排成 PDF。你不用自己打，跟 AI 說「跑一次 build」就好。最後一行是 <code>BUILD OK</code> 就是成功，<code>BUILD FAILED</code> 就是停在某一步，它會說哪裡要改。</dd>
+      <dt>代號</dt><dd>給一個數字取的英文名字。例如 <code>DKASIntTOneMean</code> 代表「介入組（Int）第 12 週（TOne）DKAS 的平均（Mean）」。論文裡寫代號，排版時換成數字；資料一改，數字跟著改。</dd>
+      <dt>CSV</dt><dd>Excel 打得開的表格檔，一列一筆、用逗號分欄。</dd>
+      <dt>LaTeX</dt><dd>學術論文常用的排版工具。你只要看它排出來的 PDF。</dd>
+      <dt>gnuplot</dt><dd>畫圖的程式，照一支小腳本（<code>.gp</code> 檔）把小表畫成圖。</dd>
+      <dt>DKAS／ADQ／SCIDS</dt><dd>範例研究的三個量表：失智症知識（DKAS，0–50 分）、失智症態度（ADQ，19–95 分）、失智照護能力感（SCIDS，17–68 分）。</dd>
+      <dt>p 值</dt><dd>假如兩組其實沒有差別，還會看到這麼大差距的機率。越小，越不像碰巧。</dd>
+      <dt>效果量（Cohen's d）</dt><dd>兩組差多少，用「差了幾個標準差」來表示。大約 0.2 算小、0.5 算中、0.8 以上算大。</dd>
+      <dt>DOI</dt><dd>DOI 是每篇論文的固定編號（像身分證號碼）。在瀏覽器網址列打 <code>https://doi.org/</code>，後面接上 DOI，按 Enter，就會開到那篇論文的頁面。例如 <code>https://doi.org/10.1186/s12877-021-02075-3</code>。</dd>
+      <dt>存一版（commit）／推上去（push）</dt><dd>存一版＝在自己電腦記下資料夾這一刻的樣子，之後能回到這裡；推上去＝把存好的版本放到 GitHub。</dd>
+      <dt>Private（私人）</dt><dd>GitHub 上只有你和你邀請的人看得到。<b>Private 不代表研究資料可以放上去</b>（看主頁第 07 段的四個條件）。</dd>
+    </dl>
+  </details>
+  <div class="tools">
+    <a class="mycards" href="#bring">我的技能卡 <span class="cnt" id="cardCount">0 / 5</span></a>
+    <button class="chip" id="projBtn" aria-pressed="false" type="button">字放大</button>
   </div>
 </header>
-<div class="wrap toolbar">
-  <span class="small">零基礎操作指南 · 可隨時回來查</span>
-  <div class="row"><button class="btn" id="theme-toggle" type="button" aria-pressed="false">深色閱讀</button><button class="btn" id="projection-toggle" type="button" aria-pressed="false">投影大字</button><button class="btn" id="print-guide" type="button">列印目前頁面</button></div>
 </div>
-<div class="wrap layout">
-  <aside class="toc" aria-label="本頁目錄">
-    <strong>跟著這個順序走</strong>
-    <ol>
-      <li><a href="#start">00　先知道要完成什麼</a></li>
-      <li><a href="#compare">01　Word 與 LaTeX 怎麼選</a></li>
-      <li><a href="#zotero">02　Zotero 從零開始</a></li>
-      <li><a href="#word">03　在 Word 插入引用</a></li>
-      <li><a href="#latex">04　看懂 LaTeX 在做什麼</a></li>
-      <li><a href="#install">05　安裝論文工具</a></li>
-      <li><a href="#kit">06　跟 AI 跑完範本</a></li>
-      <li><a href="#refs">07　把自己的文獻接進來</a></li>
-      <li><a href="#lab">08　改資料，重算一次</a></li>
-      <li><a href="#review">09　驗收與排除錯誤</a></li>
-      <li><a href="#resources">10　官方說明與下一步</a></li>
-    </ol>
-    <div class="progress-area"><p class="small">Word 路線先完成第 02、03 段；下方計數含 LaTeX 選做，不必全部勾滿。</p><strong id="progress-text">全頁記錄 0 / 14</strong><div class="progress-track" role="progressbar" aria-label="自行勾選的學習進度" aria-valuemin="0" aria-valuemax="14" aria-valuenow="0" id="progress"><span id="progress-fill"></span></div><p class="small" id="storage-note">只記在這個瀏覽器；由你勾選，沒有連到成績或軟體檢測。</p></div>
-  </aside>
-  <main class="lesson">
-    <section class="module" id="start">
-      <div class="section-kicker">00 · 先看全程</div><h2>同一篇論文，有兩種做法</h2>
-      <p class="intro">今天先用一篇公開文獻練習引用，再用範本練習資料、圖表與文字一起更新。你不必先學會寫程式，但要知道每一步用哪個工具、做完怎麼檢查。</p>
-      <div class="flow" aria-label="寫作流程"><div><span>步驟 1</span><b>找文獻</b><small>打開期刊原文</small></div><div class="arrow" aria-hidden="true">→</div><div><span>步驟 2</span><b>收進 Zotero</b><small>核對書目、做筆記</small></div><div class="arrow" aria-hidden="true">→</div><div><span>步驟 3</span><b>寫與引用</b><small>Word 或 LaTeX</small></div><div class="arrow" aria-hidden="true">→</div><div><span>步驟 4</span><b>算與畫</b><small>依分析計畫處理資料</small></div><div class="arrow" aria-hidden="true">→</div><div><span>步驟 5</span><b>人來驗收</b><small>內容、數字、版面</small></div></div>
-      <div class="grid2"><div class="panel"><h3>共同必學：Zotero ＋引用</h3><p>先完成第 02、03 段。學會加入一篇文獻、核對資訊、在 Word 插入引用與文末書目。這些做法也能用在課堂報告。</p><a href="#zotero">走共同入門路線 →</a></div><div class="panel"><h3>接著體驗：AI ＋ LaTeX 管線</h3><p>第 04～08 段用現成範本操作。AI 修改原稿、執行分析與排版；你確認結果。工具還沒裝好，可先玩本頁示範，再依安裝段落準備。</p><a href="#latex">看懂排版與重算 →</a></div></div>
-      <details><summary>六個會一直遇到的詞</summary><dl><dt><b>書目管理（reference management）</b></dt><dd>保存作者、題名、期刊、年份等資料，寫作時再帶入引用。Zotero 是做這件事的軟體。</dd><dt><b>引用（citation）／參考文獻表（bibliography）</b></dt><dd>前者放在正文，指出這句話依據哪篇；後者在文末列完整出處。</dd><dt><b>DOI（Digital Object Identifier）</b></dt><dd>出版品的持久識別碼，例如本課練習的 <code>10.1186/s12877-021-02075-3</code>。不是每份出版品都有。</dd><dt><b>LaTeX</b></dt><dd>在純文字裡標示標題、引用與圖表，再交給排版程式產生 PDF 的寫作方式。</dd><dt><b>建置（build）</b></dt><dd>在本課範本中，一次執行分析、畫圖、檢查引用與排版的流程。不是 AI 宣布完成就算成功。</dd><dt><b>引用代號（citation key／cite key）</b></dt><dd>LaTeX 原稿用來指向某一筆書目的短名字，例如 <code>Su2021</code>；它不等於 DOI。</dd></dl></details>
-      <label class="check"><input type="checkbox" data-check="scope"><span>我知道：先練習一篇文獻與一個引用，再操作論文範本。</span></label>
-    </section>
 
-    <section class="module" id="compare">
-      <div class="section-kicker">01 · 先選適合的路線</div><h2>Word 與 LaTeX，都能寫出有引用的論文</h2>
-      <p>指導老師需要直接改 Word、期刊收 <code>.docx</code>，就先用 Word ＋ Zotero。資料常重算、想把數字與圖表連到分析程式，則可以試本課的 AI ＋ LaTeX 範本。LaTeX 的價值在可描述、可重建的原稿；它不會替你判斷研究是否正確。</p>
-      <p class="small">本頁表格在窄螢幕可左右滑動；看不到右側欄位時，請在表格內滑動。</p>
-      <div class="table-wrap"><table><caption class="visually-hidden">Word 搭配 Zotero 與本課 AI LaTeX 範本比較</caption><thead><tr><th>你要做的事</th><th>Word ＋ Zotero</th><th>本課 AI ＋ LaTeX 範本</th></tr></thead><tbody>
-        <tr><td>改文字與給老師批註</td><td>直接看版面打字，可用追蹤修訂與註解。</td><td>AI 改 <code>.tex</code> 原稿，重新排 PDF 後看結果；共作者要配合這套流程。</td></tr>
-        <tr><td>插入引用、換引用格式</td><td>Zotero 外掛會更新正文引用與文末書目。</td><td>從 Zotero 匯出 <code>.bib</code>，排版時依範本的書目樣式產生。</td></tr>
-        <tr><td>資料改了，數字與圖表要更新</td><td>手動貼入的數字要逐處檢查；也能另建資料連結或自動化。</td><td>這份範本把數字、表與圖接到分析程式，重跑後產生新輸出。</td></tr>
-        <tr><td>開工前要準備</td><td>Word、Zotero 與瀏覽器 Connector。</td><td>另需 AI 檔案助手、TeX、uv、gnuplot；要 Word 輸出再用 Pandoc。</td></tr>
-        <tr><td>最後交付</td><td>可編輯的 Word，也可另存 PDF。</td><td>主要是 PDF；另轉出的 Word 需要人工檢查，格式不保證逐頁一致。</td></tr>
-      </tbody></table></div>
-      <div class="callout"><b>引用自動更新，兩邊都做得到。</b><p>本課的資料連動是分析程式與範本共同做的，不是所有 LaTeX 文件一開啟就會自動重算。Word 也能做自動化，差別在你採用哪一套工作流程。</p></div>
-      <div class="lab" id="route-lab"><div class="lab-title"><span class="pill">互動選路</span><h3>你這次最需要哪個成果？</h3></div><label for="route-choice">選最接近你的需求</label><select id="route-choice"><option value="word">老師要在 Word 裡直接修改與批註</option><option value="latex">想試資料更新後，圖表與數字一起重建</option><option value="observe">工具還沒備好，先看懂與練習引用</option></select><div id="route-answer" class="feedback" aria-live="polite"></div></div>
-      <p class="source-note">功能依據：<a href="https://www.zotero.org/support/word_processor_plugin_usage" target="_blank" rel="noopener">Zotero Word 外掛說明</a>、<a href="https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes" target="_blank" rel="noopener">LaTeX 入門</a>。資料連動部分以本課 <code>ai-paper-kit</code> 的實作為準。</p>
-    </section>
+<div class="band" id="b1"><div class="wrap"><div class="tag">01・為什麼不用 Word</div><p class="big">看得懂</p><p class="sub">數字、文獻、圖都從源頭自動接上</p></div></div>
+<main>
+<section class="blk wrap" id="why">
+  <div class="ask"><b>Word 最常出事的地方：</b>改了一筆資料，內文、表格、摘要、圖要一處一處改，漏一處就前後不一致；文獻刪了一篇，編號要重排。<br><b>這條流程的做法：</b>數字由分析程式寫出來，文獻由 Zotero 匯出，圖由 gnuplot 照一支小腳本畫出來。改源頭，請 AI 重跑一次，全部一起更新。</div>
+  <div class="tablewrap"><table class="vs">
+    <thead><tr><th></th><th>Word 手動維護</th><th>LaTeX＋AI 流程</th></tr></thead>
+    <tbody>
+      <tr><td>改一筆資料</td><td class="meh">內文、表、圖、摘要逐處改</td><td class="win">重跑一次，數字全部更新</td></tr>
+      <tr><td>引用文獻</td><td class="meh">插入、重排編號，容易漏</td><td class="win">連到 Zotero；引了書目裡沒有的文獻，產生 PDF 時會停下來告訴你是哪篇</td></tr>
+      <tr><td>圖</td><td class="meh">另外畫、貼上，字型跟內文不同</td><td class="win">gnuplot 腳本畫，圖上的字跟內文同一套字型</td></tr>
+      <tr><td>換期刊格式</td><td class="meh">重新排版</td><td class="win">換期刊範本就換好排版；字數、圖表規定再照投稿須知調</td></tr>
+      <tr><td>AI 幫忙</td><td class="meh">複製貼上來回</td><td class="win">純文字，AI 讀得懂、改得動；改完它會告訴你改了哪些檔</td></tr>
+      <tr><td>合作者只會 Word</td><td class="win">直接用</td><td>另外出一份 Word 給他（只收 Word 的期刊也是）</td></tr>
+    </tbody>
+  </table></div>
+  <div class="claim"><button type="button" data-claim="u1" aria-pressed="false">我懂了，收下技能卡 01</button><span>說得出為什麼「改源頭、重跑一次」比逐處改 Word 可靠。</span></div>
+</section>
 
-    <section class="module" id="zotero">
-      <div class="section-kicker">02 · 兩條路線都會用到</div><h2>Zotero：先把一篇文獻收對</h2>
-      <p>PDF 是你閱讀的全文；書目條目是作者、題名、期刊、年份等資訊；閱讀筆記則記錄你從原文看懂了什麼。這三件東西有關係，卻不是同一件事。先展開下面步驟，一次做一項。</p>
-      <details open><summary><span class="step-no">Z1</span>安裝 Zotero 與瀏覽器 Connector<span class="where">在哪裡：瀏覽器 → Zotero 官網 → 你的電腦</span></summary><ol><li>到 <a href="https://www.zotero.org/download/" target="_blank" rel="noopener">Zotero 官方下載頁</a>，下載適合 Windows 或 Mac 的桌面版。它是免費軟體。</li><li>Windows：開啟下載的安裝程式，依畫面完成。Mac：開啟 <code>.dmg</code>，將 Zotero 拖到「應用程式（Applications）」。</li><li>回同一下載頁，為你平常使用的瀏覽器安裝 <b>Zotero Connector</b>。這是瀏覽器的儲存按鈕，不能取代桌面版。</li><li>開啟 Zotero 桌面版；瀏覽器的擴充功能選單裡應找得到 Zotero Connector。介面文字可能隨語言與版本不同。</li></ol><p class="step-result">桌面有 Zotero 視窗，瀏覽器有 Connector。先做本機練習不需要設定雲端同步。</p><p class="source-note"><a href="https://www.zotero.org/support/installation" target="_blank" rel="noopener">官方安裝說明</a>。帳號用於同步等功能；文獻 PDF 是否同步到雲端，另依你的研究規範設定。</p></details>
-      <label class="check"><input type="checkbox" data-check="zinstall"><span>我已能開啟 Zotero，並在瀏覽器找到 Connector。</span></label>
-      <details><summary><span class="step-no">Z2</span>建立本課專用的文獻集<span class="where">在哪裡：Zotero 左欄「我的文獻庫（My Library）」</span></summary><ol><li>在「我的文獻庫」按滑鼠右鍵，選「新增文獻集（New Collection）」。</li><li>命名為 <b>工作坊練習</b>，再點它，讓它成為目前選取的文獻集。</li></ol><p>文獻集像播放清單：同一篇文獻可以放進不同文獻集，不必複製成好幾筆。先不要把整個既有文獻庫匯入範本。</p><p class="step-result">左欄多出「工作坊練習」，目前中央可能還沒有條目。</p></details>
-      <label class="check"><input type="checkbox" data-check="zcollection"><span>我已建立並選取「工作坊練習」。</span></label>
-      <details><summary><span class="step-no">Z3</span>加入本課的第一篇文獻<span class="where">在哪裡：期刊網頁 ＋ Zotero</span></summary><p>本課使用一篇開放取用的居服員失智照護訓練研究作為辨識練習。</p><p><a href="https://doi.org/10.1186/s12877-021-02075-3" target="_blank" rel="noopener">打開 Su 等人 2021 年的期刊原文 →</a></p><ol><li>保持 Zotero 開著，在瀏覽器打開上面的期刊原文。</li><li>按 Connector 的儲存按鈕，確認儲存到「工作坊練習」。按鈕圖案可能依頁面內容不同。</li><li>回 Zotero，中央應有一筆文章條目。如果網頁匯入失敗，可改按 Zotero 工具列「依識別碼新增項目（Add Item by Identifier）」的魔術棒圖示，貼入下面 DOI，再按 Enter。</li></ol><div class="copybox"><span class="copy-label">貼到 Zotero 的識別碼輸入欄</span><pre id="doi-example">10.1186/s12877-021-02075-3</pre><button type="button" data-copy="doi-example">複製 DOI</button></div><p>兩種方法擇一就好，避免重複新增。PDF 沒自動附上，先在期刊原頁的題名附近找 <b>Download PDF</b>。下載後，將檔案拖到 Zotero 中這篇文章的條目上，再展開文章左邊的小箭頭，確認 PDF 縮排在它底下。若下載失敗，先核對書目，下一步可直接讀期刊網頁的全文，不必等 PDF。</p><p class="step-result">文章是一本體條目；PDF 若有附上，會縮排顯示在它下面。</p></details>
-      <details><summary><span class="step-no">Z4</span>核對右欄的書目資訊<span class="where">在哪裡：Zotero 中央選取文章 → 右欄資訊</span></summary><p>逐項對期刊原頁：<b>題名、作者、年份、期刊、卷與文章編號、DOI</b>。本例是 <i>BMC Geriatrics</i>，2021 年，第 21 卷，文章編號 126。作者列表與順序以原頁為準。</p><p>有錯時在 Zotero 的欄位修正，再更新寫作文件。不要因為 AI 或匯入工具列得很整齊，就假定資料正確。</p><p class="step-result">Zotero 與你實際打開的期刊文章對得上；若已附加 PDF，第一頁也應是同一篇；尚無 PDF 時，先對照期刊網頁全文。</p></details>
-      <label class="check"><input type="checkbox" data-check="zmetadata"><span>我已加入一篇文獻並核對書目；若有 PDF，也核對它是同一篇。</span></label>
-      <div class="lab"><div class="lab-title"><span class="pill">可點選的介面示意</span><h3>文章條目與附件，差在哪裡？</h3></div><p class="small">這是教學示意，沒有連接你的 Zotero，也不是官方介面截圖。點中央兩個項目看右欄差別。</p><div class="mock-zotero"><div class="mock-toolbar">Zotero：先選文獻集，再選條目，再看資訊</div><div class="mock-columns"><div><div class="col-title">左欄 · 收到哪裡</div><b>我的文獻庫</b><p class="small">↳ 工作坊練習</p></div><div><div class="col-title">中央 · 你選了什麼</div><button type="button" data-zitem="article" aria-pressed="true">文章條目：Su 等，2021</button><button type="button" class="child" data-zitem="pdf" aria-pressed="false">↳ 期刊全文.pdf</button></div><div><div class="col-title">右欄 · 所選項目的資訊</div><div id="zotero-fields" class="mock-fields" aria-live="polite"></div></div></div></div></div>
-      <details><summary><span class="step-no">Z5</span>讀原文，再留一則可回查的筆記<span class="where">在哪裡：Zotero 的 PDF 閱讀器或筆記</span></summary><ol><li>開啟 PDF 或期刊網頁全文，先找研究目的、方法與限制；不是只讀摘要。</li><li>新增附屬筆記，寫下「這篇回答什麼問題」「我打算引用哪一點」「原文在哪一節或頁」。</li><li>若用 AI 協助摘要，提供你有權使用的原文內容，請它區分原文與推論。自己回原文確認後再採用。</li></ol><div class="copybox"><span class="copy-label">貼到能讀取你提供原文的 AI 對話</span><pre id="prompt-reading">請只根據我提供的這篇文章，整理研究目的、研究設計、主要結果與限制。
-每一點附上原文節名或頁碼，以及可讓我搜尋定位的短句。
-區分作者原本的說法與你的推論；讀不到的內容標「未提供」。
-先不要替我寫文獻探討，也不要新增其他文獻。</pre><button type="button" data-copy="prompt-reading">複製提示詞</button></div><p class="step-result">一則筆記能帶你回原文位置。只有書目資料時，不能當作 AI 已讀過全文。</p></details>
-      <label class="check"><input type="checkbox" data-check="znote"><span>我能說出要引用這篇文章的哪一點，並找回原文位置。</span></label>
-      <p class="source-note">操作依據：<a href="https://www.zotero.org/support/quick_start_guide" target="_blank" rel="noopener">Zotero 基本功能</a>、<a href="https://www.zotero.org/support/adding_items_to_zotero" target="_blank" rel="noopener">加入條目</a>、<a href="https://www.zotero.org/support/collections_and_tags" target="_blank" rel="noopener">文獻集與標籤</a>。本例的書目與研究資訊以<a href="https://doi.org/10.1186/s12877-021-02075-3" target="_blank" rel="noopener">期刊原文</a>為準。</p>
-    </section>
+<div class="band" id="b2"><div class="wrap"><div class="tag">02・誰做什麼</div><p class="big">分得清</p><p class="sub">你說話、AI 動手、程式跑、你看 PDF</p></div></div>
+<section class="blk wrap" id="who">
+  <div class="flow3" aria-label="分工">
+    <div class="box you"><div class="k">你</div><div class="v">跟 AI 說要做什麼</div></div>
+    <div class="to" aria-hidden="true">→</div>
+    <div class="box"><div class="k">AI 助手</div><div class="v">Codex 或 Claude 的 Code：改檔、跑程式</div></div>
+    <div class="to" aria-hidden="true">→</div>
+    <div class="box"><div class="k">程式</div><div class="v">算數字、畫圖、排成 PDF</div></div>
+    <div class="to" aria-hidden="true">→</div>
+    <div class="box you"><div class="k">你</div><div class="v">看 PDF，做決定</div></div>
+  </div>
+  <p>你的論文資料夾分兩半：<b>原料放 <code>source/</code>，成品在 <code>output/</code></b>。要改結果就改原料，再請 AI「跑一次 build」（一次做完算數字、畫圖、檢查文獻、排成 PDF）；成品每次重做，不要手改。每個檔案都標了<b>誰會用到</b>。平常你自己要打開的是：<code>README.md</code>（使用說明；在 GitHub 上打開你的論文資料夾，往下捲就看得到）、你的資料（用 Excel）、Zotero，和 <code>output/main.pdf</code>（論文）。不知道檔案在電腦的哪裡，就問 AI。</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>檔案</th><th>做什麼</th><th>誰會用</th><th>什麼時候</th></tr></thead>
+    <tbody>
+      <tr><td><code>README.md</code></td><td>給你看的使用說明</td><td><span class="runby you">你</span></td><td>第一次打開時</td></tr>
+      <tr><td><code>build.py</code></td><td>一次跑完：分析 → 畫圖 → 檢查文獻 → 排成 PDF</td><td><span class="runby ai">AI 執行</span></td><td>你說「跑一次 build」</td></tr>
+      <tr><td><code>source/data/</code></td><td>研究資料（範例是依所長論文重建的練習資料）</td><td><span class="runby you">你放進來</span></td><td>符合四個條件才放（見第 07 段）</td></tr>
+      <tr><td><code>source/refs/refs.bib</code></td><td>書目</td><td><span class="runby auto">Zotero 自動匯出</span></td><td>用接法 A：你把文獻加進 Zotero 的那個文獻集，它就跟著更新（見第 05 段）</td></tr>
+      <tr><td><code>source/scripts/analyze.py</code></td><td>統計分析：算出論文裡的數字、表、畫圖用的小表</td><td><span class="runby auto">build 自動跑</span> <span class="runby ai">AI 修改</span></td><td>換資料、換統計方法時，AI 改它</td></tr>
+      <tr><td><code>source/gnuplot/*.gp</code></td><td>gnuplot 畫圖腳本，一張圖一個</td><td><span class="runby auto">build 自動跑</span> <span class="runby ai">AI 修改</span></td><td>要加圖、改圖時，AI 改它</td></tr>
+      <tr><td><code>source/tables/</code>（選用）</td><td>你用 Excel 做好的表（另存成 CSV UTF-8），build 自動轉成論文裡的表格</td><td><span class="runby you">你放進來</span></td><td>想放一張自己做的表時</td></tr>
+      <tr><td><code>source/figdata/</code>（選用）</td><td>你用 Excel 做好的畫圖資料（CSV UTF-8），gnuplot 讀它畫圖</td><td><span class="runby you">你放進來</span></td><td>想用自己的資料畫圖時</td></tr>
+      <tr><td><code>source/images/</code>（選用）</td><td>現成的圖片檔：流程圖、照片（PNG、JPG），build 原樣複製，放進論文</td><td><span class="runby you">你放進來</span></td><td>想放一張現成的圖時（練習頁第 03 段有「放哪裡」對照表）</td></tr>
+      <tr><td><code>source/paper/main.tex</code></td><td>論文本文（LaTeX）</td><td><span class="runby ai">AI 寫、改</span></td><td>寫作時；你看的是排出來的 PDF</td></tr>
+      <tr><td><code>source/paper/sn-jnl.cls</code>、<code>sn-vancouver-num.bst</code></td><td>期刊範本檔：Springer Nature 官方的版型和 Vancouver 參考文獻格式（<i>BMC Geriatrics</i> 建議用的）</td><td><span class="runby auto">build 自動帶去排版</span></td><td>不要改；換期刊時，把新期刊的範本檔放進這個資料夾</td></tr>
+      <tr><td><code>output/</code></td><td>成品：內文數字、表（<code>.csv</code> 用 Excel 打得開）、畫圖用的小表、圖、<code>main.pdf</code></td><td><span class="runby auto">build 自動產生</span></td><td>不要手改；刪掉也能重做</td></tr>
+      <tr><td><code>material/</code></td><td>你的材料：計畫書、投稿須知</td><td><span class="runby you">你放</span> <span class="runby ai">AI 只讀</span></td><td>換期刊、寫計畫時</td></tr>
+      <tr><td><code>workspace/</code></td><td>AI 的工作紀錄：紙條、報告、<code>log.md</code></td><td><span class="runby ai">AI 寫</span></td><td>想知道 AI 做了什麼時打開看</td></tr>
+      <tr><td><code>tools/new_paper.py</code></td><td>開一篇新論文：把範例收進 <code>examples/</code>、換上空白的骨架</td><td><span class="runby ai">AI 執行</span></td><td>開始寫自己的論文時（第 04 段第 4 步）</td></tr>
+      <tr><td><code>examples/</code></td><td>收起來的範例論文，隨時能打開參考</td><td><span class="runby you">你看</span></td><td>開了新論文之後才會出現</td></tr>
+      <tr><td><code>tools/make_practice_data.py</code></td><td>重建練習資料</td><td><span class="runby ai">AI 執行</span></td><td>只有練習時；換成真資料就不用</td></tr>
+      <tr><td><code>tools/zotero_export.py</code></td><td>從 Zotero 匯出書目（不裝外掛的接法）</td><td><span class="runby ai">AI 執行</span></td><td>只有用第 05 段的接法 C 時</td></tr>
+      <tr><td><code>AGENTS.md</code>、<code>WORKFLOW.md</code></td><td>給 AI 看的規則和流程說明書</td><td><span class="runby ai">AI 開工先讀</span></td><td>每次；你不用背</td></tr>
+      <tr><td><code>.github/workflows/</code></td><td>推上 GitHub 後，雲端自動排一份 PDF</td><td><span class="runby auto">GitHub 自動跑</span></td><td>每次推上去</td></tr>
+      <tr><td><code>pyproject.toml</code>、<code>uv.lock</code></td><td>統計用的程式清單，uv 照它裝</td><td><span class="runby auto">uv 自動用</span></td><td>你不用動</td></tr>
+    </tbody>
+  </table></div>
+  <p class="why" style="margin-bottom:.3rem"><b>AI 動手前會不會先問你，看行前準備第 7 項設的權限：</b></p>
+  <ul class="why">
+    <li>Codex（要求核准，英文介面 Ask for approval）：在你打開的資料夾裡會直接建檔、改檔、跑程式；動資料夾以外的檔案、上網或裝東西，才會先問你。</li>
+    <li>Claude 的 Code（Manual）：改檔、跑指令前都會先問你；只是讀檔案不會問。</li>
+    <li>跳出要你核准的框：看得懂、是你剛請它做的事（例如跑 build、改 analyze.py、.gp 或 main.tex），就按同意（只同意這一次）。看不懂，就按拒絕，拒絕不會弄壞東西；再問它「這一步要做什麼、為什麼要做」，或截圖問網頁版。</li>
+  </ul>
+  <p class="why">所以你的保護靠的是<b>做完之後看結果</b>：PDF、AI 的報告、它說改了哪些檔。重要的事（裝東西、刪檔、推上 GitHub），可以先跟它說「先告訴我你要做什麼，等我說好再做」。</p>
+  <div class="claim"><button type="button" data-claim="u2" aria-pressed="false">我懂了，收下技能卡 02</button><span>知道自己只要說話、看 PDF；程式由 AI 和 build 去跑。</span></div>
+</section>
 
-    <section class="module" id="word">
-      <div class="section-kicker">03 · 先在熟悉的工具練一次</div><h2>Word ＋ Zotero：插入引用，再產生文末書目</h2>
-      <p>這一段使用 Windows 或 Mac 的 <b>Word 桌面版</b>，保持 Zotero 開著。瀏覽器裡的 Word 網頁版不支援這個引用外掛；若只有網頁版，先完成第 02 段與本頁的引用示範，再請老師協助確認桌面版授權。不需要裝 Better BibTeX，也不需要先學 LaTeX。</p>
-      <ol><li><b>開新文件。</b>在 Word 建立空白文件，另存為「工作坊引用練習.docx」。檢查上方是否有 <b>Zotero</b> 頁籤。</li><li><b>先寫一句自己的筆記。</b>例如寫「這裡要說明該研究採用的訓練方式。」這是寫作位置示意；正式內容要回到原文確認後再寫。</li><li><b>插入引用。</b>把游標放在句尾，選 Zotero → <b>Add/Edit Citation</b>。第一次若問引用格式，先選老師指定的格式；沒有指定時，練習可先選 APA。輸入作者姓氏、題名關鍵字或年份，選剛加入的文章，再按 Enter 完成。</li><li><b>產生文末書目。</b>把游標移到文末空白處，自己加上「參考文獻」標題，再選 <b>Add/Edit Bibliography</b>。</li><li><b>修改與更新。</b>要換引用，回正文的該引用用 Add/Edit Citation 修改；Zotero 書目資訊修正後，回 Word 按 <b>Refresh</b>。改格式則到 <b>Document Preferences</b> 選另一個樣式。</li></ol>
-      <div class="outcome"><b>完成判準：</b>正文有 Zotero 插入的引用，文末有對應條目；在 Document Preferences 換格式後，兩處會跟著更新。</div>
-      <label class="check"><input type="checkbox" data-check="wordcite"><span>我已在 Word 用 Zotero 插入一個引用。</span></label>
-      <label class="check"><input type="checkbox" data-check="wordbib"><span>我已插入文末書目，並試過換格式或 Refresh。</span></label>
-      <details><summary>Word 沒出現 Zotero 頁籤？</summary><p>Zotero 的 Word 外掛通常隨桌面版一起安裝。先關閉 Word，在 Zotero 設定的「引用（Cite）→文書處理外掛（Word Processor Plugins）」檢查或重新安裝 Word 外掛，再重開 Word。名稱依版本與語言略有差異；仍失敗時依<a href="https://www.zotero.org/support/word_processor_plugin_installation" target="_blank" rel="noopener">官方安裝與疑難排解</a>處理。</p></details>
-      <div class="callout warn"><b>不要直接手改 Zotero 產生的書目文字。</b><p>下一次更新可能覆蓋手改內容。請先改 Zotero 條目的資訊，再按 Refresh。<b>Unlink Citations</b> 會解除自動更新的連結；只在期刊要求、且已另存最終副本時考慮使用。</p></div>
-      <div class="lab"><div class="lab-title"><span class="pill">引用格式示範</span><h3>換樣式，變的是外觀</h3></div><div class="tabs" role="tablist" aria-label="引用格式示意"><button type="button" role="tab" id="cite-author" data-citestyle="author" aria-selected="true" aria-controls="citation-preview">作者與年份</button><button type="button" role="tab" id="cite-number" data-citestyle="number" aria-selected="false" aria-controls="citation-preview" tabindex="-1">數字編號</button></div><div class="citation-preview" id="citation-preview" role="tabpanel" aria-labelledby="cite-author"><p id="citation-text"></p><p class="ref" id="citation-reference"></p></div><p class="note">格式已簡化以看出差別，並非完整 APA 或 Vancouver 範本。Word 與 LaTeX 都能產生這兩類樣式；正式輸出依期刊規定。</p><p><b>想一下：換成數字編號後，工具會順便確認你有沒有誤解文章嗎？</b></p><button class="quiz-choice" type="button" data-quiz="meaning" data-answer="yes" aria-pressed="false">會，引用格式正確就代表內容正確。</button><button class="quiz-choice" type="button" data-quiz="meaning" data-answer="no" aria-pressed="false">不會，仍要自己對回原文。</button><div id="quiz-meaning" class="feedback" aria-live="polite" hidden></div></div>
-      <p class="source-note">按鈕與更新行為依據：<a href="https://www.zotero.org/support/word_processor_plugin_usage" target="_blank" rel="noopener">Zotero Word 外掛使用說明</a>。</p>
-    </section>
+<div class="band" id="b3"><div class="wrap"><div class="tag">03・只要裝一次</div><p class="big">裝得好</p><p class="sub">TeX、gnuplot、pandoc、Python 套件，請 AI 幫你裝</p></div></div>
+<section class="blk wrap" id="install">
+  <div class="qa"><h3>TeX Live 是什麼？要裝哪一個？</h3>
+    <p style="margin:0">LaTeX 原稿要變成 PDF，電腦裡要先裝一套排版軟體，統稱 TeX。最完整的一套叫 <b>TeX Live</b>，每年出一版；Mac 版的 TeX Live 叫 <b>MacTeX</b>。Windows 另有一套 <b>MiKTeX</b>，第一次裝比較小，缺什麼再自動補。三套都能用，範本不挑。</p>
+    <p style="margin:.4rem 0 0">論文或文獻有中文（例如引了台灣的中文期刊），跟 AI 說「論文裡有中文，請改用 xelatex」就好（xelatex 是能排中文的那一種排版方式），中文字型已經設好。</p>
+  </div>
+  <div class="osbar" role="group" aria-label="選擇作業系統">你的電腦是：
+    <button class="chip" data-os="win" aria-pressed="true" type="button">Windows</button>
+    <button class="chip" data-os="mac" aria-pressed="false" type="button">Mac</button>
+  </div>
+  <div class="os-win">
+    <div class="tablewrap"><table>
+      <thead><tr><th>工具</th><th>用途</th><th>建議裝</th></tr></thead>
+      <tbody>
+        <tr><td>TeX</td><td>把 LaTeX 原稿排成 PDF</td><td><b>MiKTeX</b>（比較小；要打開「缺套件時自動安裝」）。想一次裝齊也可以裝 TeX Live，但檔案很大</td></tr>
+        <tr><td>gnuplot</td><td>畫圖</td><td>gnuplot 官方安裝檔</td></tr>
+        <tr><td>uv（準備統計用的程式）</td><td>統計分析</td><td><b>uv</b>：一個小工具，會自己把統計要用的 Python 程式和它需要的零件，裝在你的論文資料夾裡，不動電腦原本裝的 Python</td></tr>
+        <tr><td>pandoc</td><td>轉成 Word（期刊只收 Word 時才用得到；下面那句會一起裝）</td><td>pandoc 官方安裝檔</td></tr>
+      </tbody>
+    </table></div>
+    <p>先做第 04 段第 1 步（建好你的論文資料夾 <code>ai-paper-kit</code>、在 AI 助手裡打開它），再回來這裡。在打開 <code>ai-paper-kit</code> 的那個 AI 助手裡貼：</p>
+    <div class="copybox"><pre id="inst-win">請幫我裝寫論文要用的工具。每裝一個之前，先告訴我要裝什麼、從哪裡裝，我同意再裝；要我輸入電腦密碼時先停下來，我自己輸入。
+1. TeX：用 winget 裝 MiKTeX（winget install -e --id MiKTeX.MiKTeX），裝好後把「缺套件時自動安裝」設成「是」（不要選每次問我），你在背景跑的時候才不會卡住。
+2. gnuplot：用 winget 裝（winget install -e --id gnuplot.gnuplot）。裝好後打 gnuplot --version；如果找不到、或沒有印出版本就結束（winget 建的捷徑可能缺檔），請找出 gnuplot.exe 所在的 bin 資料夾，先告訴我你打算把它加進「使用者」的 PATH、會影響什麼，我同意再加；加完請我把 Codex／Claude 關掉重開，再打一次 gnuplot --version。
+3. uv：用 winget 裝（winget install -e --id astral-sh.uv）。裝好後請我把 Codex／Claude 關掉重開，再到範本資料夾執行 uv sync（第一次會下載 Python 和套件，要幾分鐘）。
+4. pandoc：winget install -e --id JohnMacFarlane.Pandoc。
+全部裝完，請一一執行 pdflatex --version、gnuplot --version、uv run python --version、pandoc --version，把版本號列給我看。</pre><button class="copybtn" data-copy="inst-win" type="button">複製</button></div>
+    <p class="why">螢幕如果變暗，跳出 Windows 的「您要允許此 App 變更您的裝置嗎？」，跟行前準備第 8 項一樣：視窗上的名稱是 MiKTeX、gnuplot、uv 或 pandoc 就按「是」；名稱看不懂或對不上，就按「否」，截圖問網頁版（字樣以你的畫面為準）。</p>
+    <p class="why">AI 請你把 Codex／Claude 關掉重開時（可能一到兩次）：整個關掉再打開，照行前準備第 6 項打開 <code>ai-paper-kit</code>，貼這句（10/22 用 Codex 實跑過：四樣都找得到時，它只跑 uv sync、列出四個版本號）：</p>
+    <div class="copybox"><pre id="reopen-win">我剛把 AI 助手關掉重開了。我們在裝寫論文要用的工具，請先檢查 pdflatex、gnuplot、uv、pandoc 哪幾個已經找得到，再接著裝還沒好的；uv 裝好了但範本資料夾還沒執行過 uv sync，也幫我做。規則跟剛才一樣：每裝一個先告訴我，我同意再裝。全部裝完，請一一執行 pdflatex --version、gnuplot --version、uv run python --version、pandoc --version，把版本號列給我看。</pre><button class="copybtn" data-copy="reopen-win" type="button">複製</button></div>
+  </div>
+  <div class="os-mac">
+    <div class="tablewrap"><table>
+      <thead><tr><th>工具</th><th>用途</th><th>建議裝</th></tr></thead>
+      <tbody>
+        <tr><td>TeX</td><td>把 LaTeX 原稿排成 PDF</td><td><b>MacTeX</b>（Mac 版 TeX Live，約 6.4 GB，要 macOS 11 以上）。硬碟不夠就裝 BasicTeX（約 134 MB），缺的套件再補</td></tr>
+        <tr><td>gnuplot、pandoc、uv</td><td>畫圖、轉 Word、準備統計用的程式</td><td>用 Homebrew（Mac 上裝軟體的小工具）裝；uv 會自己裝好統計要用的程式</td></tr>
+      </tbody>
+    </table></div>
+    <p>先做第 04 段第 1 步（建好你的論文資料夾 <code>ai-paper-kit</code>、在 AI 助手裡打開它），再回來這裡。在打開 <code>ai-paper-kit</code> 的那個 AI 助手裡貼：</p>
+    <div class="copybox"><pre id="inst-mac">請幫我裝寫論文要用的工具。每裝一個之前，先告訴我要裝什麼、從哪裡裝，我同意再裝；要我輸入電腦密碼時先停下來，我自己輸入。
+1. TeX：裝 MacTeX（brew install --cask mactex，或到 tug.org/mactex 下載，約 6.4 GB）。我的硬碟空間不夠的話，先問我要不要改裝 BasicTeX。
+2. 用 Homebrew 裝 gnuplot、pandoc 和 uv（brew install gnuplot pandoc uv）；沒有 Homebrew 的話先告訴我。如果 brew 開始從原始碼編（訊息出現 Building from source、或跑超過 10 分鐘），先停下來告訴我，改用：pandoc 到 pandoc.org 下載官方安裝檔；gnuplot 用 micromamba 從 conda-forge 裝（只裝在使用者資料夾，不動系統）。
+3. 到範本資料夾執行 uv sync（第一次會下載 Python 和套件，要幾分鐘）。
+全部裝完，請一一執行 pdflatex --version、gnuplot --version、uv run python --version、pandoc --version，把版本號列給我看。</pre><button class="copybtn" data-copy="inst-mac" type="button">複製</button></div>
+    <p class="why">MacTeX 很大，下載要一段時間，建議前一天晚上裝。也可以自己裝：到 tug.org/mactex 下載 MacTeX.pkg，雙擊，照畫面一步一步按下去，要密碼時輸入開機密碼；裝好後跟 AI 說「TeX 我自己裝好了，請從第 2 項開始」。AI 要你在「終端機」輸入密碼（例如裝 Homebrew 或 MacTeX 時）：請它一步一步告訴你打開哪個程式、貼哪一行；打密碼時畫面不會出現字，打完按 return。</p>
+    <p class="why"><b>Intel 晶片的 Mac</b>（左上角蘋果選單 →「關於這台 Mac」，「處理器」那一行寫 Intel 的就是）：用 Homebrew 裝 gnuplot、pandoc 常會跑好幾個小時（10/22 實測）；上面那句已經請 AI 遇到就停下來、換一種裝法，那次換了以後不到一分鐘就裝好。寫「晶片 Apple M…」的是 Apple 晶片，通常不會這樣（這點還沒實測）。</p>
+  </div>
+  <div class="done">完成判準：AI 列出四個版本號，沒有「找不到」。</div>
+  <p class="why">不想在自己電腦裝 TeX 也可以：把資料夾推上 GitHub，雲端會自動排出 PDF（第 04 段第 10 步），只是每改一次都要推上去、再到 GitHub 下載才看得到。<b>這條路只限練習資料，或資料符合第 07 段的四個條件</b>：推上去，資料就會在 GitHub 的雲端機器上被讀取。下面十步和練習頁都是照「工具裝在你自己電腦」寫的；沒裝的話，在自己電腦跑 build 會停在「找不到 gnuplot」或「找不到 pdflatex」。第一次做，建議還是裝在自己電腦。</p>
+  <div class="claim"><button type="button" data-claim="u3" aria-pressed="false">我懂了，收下技能卡 03</button><span>知道 TeX Live、MacTeX、MiKTeX 是什麼，也知道請 AI 幫忙裝。</span></div>
+</section>
 
-    <section class="module" id="latex">
-      <div class="section-kicker">04 · 不必先背語法</div><h2>LaTeX：原稿寫結構，程式負責排成 PDF</h2>
-      <p>Word 裡，你常在頁面上直接改字型與位置。LaTeX 裡，原稿會寫「這是標題」「這裡引用某篇文章」「這裡放圖」。排版程式把這些標記轉成 PDF。<code>.tex</code> 是原稿；<code>.pdf</code> 是排好之後給人看的成品。</p>
-      <div class="flow"><div><span>AI 修改</span><b>main.tex</b><small>文字與結構</small></div><div><span>Zotero 匯出</span><b>refs.bib</b><small>文獻的書目資料</small></div><div><span>TeX 排版</span><b>套用範本</b><small>圖、表、引用與版面</small></div><div><span>你檢查</span><b>main.pdf</b><small>讀內容、看圖表</small></div></div>
-      <div class="lab"><div class="lab-title"><span class="pill">簡化預覽</span><h3>改一個標題，看原稿與成品的關係</h3></div><label for="tex-title">把小節標題改成你想寫的內容</label><input id="tex-title" type="text" maxlength="40" value="研究目的"><label for="tex-sentence">一行示意文字</label><input id="tex-sentence" type="text" maxlength="100" value="這裡寫自己核對過的研究內容。"><div class="grid2"><div><h4>AI 會修改的原稿片段</h4><pre id="tex-code"></pre></div><div><h4>給人看的版面示意</h4><div class="mini-paper"><h4 id="tex-heading"></h4><p><span id="tex-output"></span> <span>(Su et al., 2021)</span></p></div></div></div><p class="note">這是瀏覽器中的教學預覽，沒有真正編譯 LaTeX，也不代表這句話已獲文獻支持。正式中文原稿要用支援中文的引擎與範本，例如 XeLaTeX。</p></div>
-      <div class="table-wrap"><table><thead><tr><th>你看到的片段</th><th>白話意思</th><th>你需要做什麼</th></tr></thead><tbody><tr><td><code>\section{研究目的}</code></td><td>建立一個小節。</td><td>確認標題與章節順序。</td></tr><tr><td><code>\cite{Su2021}</code></td><td>引用書目檔裡代號是 Su2021 的文獻。</td><td>確認指到對的文章，且文章真的支持這句話。</td></tr><tr><td><code>\input{tables/table1.tex}</code></td><td>把另一個檔案的表格放進本文。</td><td>核對表格數字、標題與內文敘述。</td></tr></tbody></table></div>
-      <details><summary>LaTeX、TeX、MiKTeX、MacTeX、Overleaf 是同一個東西嗎？</summary><p><b>LaTeX</b> 是原稿的寫法與文件系統；<b>TeX 引擎</b>執行排版。<b>MiKTeX、TeX Live、MacTeX</b> 是把引擎、套件與管理工具裝在電腦上的發行版；MacTeX 是 Mac 上常用的一套。<b>Overleaf</b> 則提供瀏覽器中的 LaTeX 編輯與編譯服務，可作為不在本機裝 TeX 的入門選項。</p><p>本課範本還會呼叫 Python 分析與 gnuplot 畫圖，<b>只把 main.tex 上傳到 Overleaf，不等於整個 build 都能跑</b>。本頁主線使用本機 AI 助手與完整資料夾；雲端工具涉及的資料傳送要另外確認。</p></details>
-      <p class="source-note">概念依據：<a href="https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes" target="_blank" rel="noopener">LaTeX 基本原稿與排版方式</a>、<a href="https://www.latex-project.org/get/" target="_blank" rel="noopener">LaTeX Project 發行版介紹</a>。</p>
-    </section>
+<div class="band" id="b4"><div class="wrap"><div class="tag">04・一篇論文怎麼走</div><p class="big">照著做</p><p class="sub">十步，每一步：你做什麼、跟 AI 說什麼、你要看什麼</p></div></div>
+<section class="blk wrap" id="steps">
+  <p>點下面的步驟。每一步有四種標籤：<b>「你自己做」</b>是你動手的，<b>「跟 AI 說」</b>是要貼給 AI 的那句話（按複製），<b>「AI 會做什麼」</b>讓你知道它在忙什麼，<b>「你要檢查」</b>是你要看的地方。第 1～3 步今天由講師示範，回家照著走。</p>
+  <div class="pipe" role="tablist" aria-label="論文步驟" id="pipe"></div>
+  <div class="stepcard" id="stepcard" role="tabpanel" aria-live="polite"></div>
+  <div class="stepnav"><button class="chip" type="button" id="prevStep">← 上一步</button><button class="chip" type="button" id="nextStep">下一步 →</button></div>
+  <p style="margin-top:1rem"><b>第 3 步跑出來的範例論文</b>（點圖看大圖；想看懂這些數字和圖怎麼來，去練習頁做一次）。版型用的是原論文期刊 <i>BMC Geriatrics</i> 投稿須知建議的 Springer Nature LaTeX 範本，章節照該刊研究論文的規定排，也照投稿須知用雙倍行距、加行號（右邊那排數字），參考文獻是 Vancouver 編號格式：</p>
+  <div class="shots">
+    <figure><a href="img/part3/page1.png" target="_blank" rel="noopener"><img src="img/part3/page1.png" alt="範例論文第 1 頁：標題與結構式摘要" loading="lazy"></a><figcaption>第 1 頁：摘要照該刊規定分成 Background、Methods、Results、Conclusions、Trial registration。裡面的 140、70、70、8 of 8、9 of 9、0.01，都是程式算好填進去的（原稿裡寫的是代號）</figcaption></figure>
+    <figure><a href="img/part3/page5.png" target="_blank" rel="noopener"><img src="img/part3/page5.png" alt="範例論文第 5 頁：表 1，最右邊兩欄是論文印的和程式重算的 p 值" loading="lazy"></a><figcaption>第 5 頁：表 1。最右邊兩欄是 p 值：Published＝原論文印的，Reproduced＝程式重算的，八個都一樣</figcaption></figure>
+    <figure><a href="img/part3/page6.png" target="_blank" rel="noopener"><img src="img/part3/page6.png" alt="範例論文第 6 頁：表 2 與 gnuplot 畫的圖 1" loading="lazy"></a><figcaption>第 6 頁：上面是表 2（三個量表在三個時間點的平均和標準差，p 值原論文印的和重算的並排），下面是 gnuplot 畫的圖 1（三個量表、兩組、三個時間點）</figcaption></figure>
+  </div>
+  <div class="qa"><h3>出錯了怎麼辦？</h3>
+    <p style="margin:0">AI 跑 build 失敗時，它的回覆裡會出現 <code>BUILD FAILED</code> 和原因（例如缺哪個工具、哪篇文獻沒有 DOI、去看哪個檔）。不用自己看懂，直接貼這句給它（在 GitHub 看到紅色叉叉的話，先把紅字那段複製貼上，再貼這句）：</p>
+    <div class="copybox"><pre id="fix">build 失敗了，訊息如上。請照它說的去看，告訴我是什麼問題、你打算怎麼修；我同意之後再修，修好再跑一次 build，把最後一行給我看。</pre><button class="copybtn" data-copy="fix" type="button">複製</button></div>
+  </div>
+</section>
 
-    <section class="module" id="install">
-      <div class="section-kicker">05 · 只走 Word 路線可先跳過</div><h2>取得範本，再準備建置工具</h2>
-      <p>你負責下載官方軟體、看核准視窗與輸入密碼；AI 可以檢查工具、提出安裝步驟、執行你同意的指令。<b>在網頁聊天裡得到一段建議，不代表工具已裝到電腦。</b>要讓 AI 跑本機檔案，須用第一、二部分已設定的檔案助手，並打開正確的論文資料夾。</p>
-      <div class="table-wrap"><table><thead><tr><th>工具</th><th>負責什麼</th><th>何時需要</th></tr></thead><tbody><tr><td>Zotero ＋ Connector</td><td>收文獻、保存書目。</td><td>兩條路線都用。</td></tr><tr><td>Word</td><td>直接編輯文件，使用 Zotero 引用外掛。</td><td>Word 路線；學校授權與可用版本另確認。</td></tr><tr><td>Codex／Claude Code 等檔案助手</td><td>在你指定資料夾改檔、跑程式。</td><td>AI 論文管線；<a href="setup.html">回第一部分設定</a>。</td></tr><tr><td>TeX 發行版</td><td>把 LaTeX 原稿排成 PDF。</td><td>Windows 選 MiKTeX 或 TeX Live；Mac 可選 MacTeX。一次先用一套。</td></tr><tr><td>uv</td><td>在專案的 <code>.venv</code> 準備 Python 與統計套件。</td><td>本課範本的分析步驟。</td></tr><tr><td>gnuplot</td><td>依腳本畫出圖形。</td><td>本課範本的圖表步驟。</td></tr><tr><td>Pandoc</td><td>將原稿轉出 Word。</td><td>本課範本加上 <code>--docx</code> 時使用。</td></tr><tr><td>Better BibTeX</td><td>Zotero 的外掛，匯出可保持更新的書目檔。</td><td>第 07 段的 LaTeX 書目接法；Word 引用不需要它。</td></tr></tbody></table></div>
-      <div class="callout"><b>依序完成三站：取得範本 → 檢查工具 → 核對建置結果。</b><p>本段先做 <a href="#kit-download">K1 下載</a>、<a href="#kit-folder">K2 開啟資料夾</a>，接著往下完成 <a href="#install-tools">工具檢查與安裝</a>；最後進入第 06 段 <a href="#kit-build">K3 建置</a>。已裝好的工具先查版本。</p></div>
-      <details open id="kit-download"><summary><span class="step-no">K1</span>取得範本，解壓縮到自己的電腦<span class="where">在哪裡：瀏覽器 → GitHub 公開範本 → 檔案總管／Finder</span></summary><ol><li>打開 <a href="https://github.com/cwstedctw/ai-paper-kit" target="_blank" rel="noopener">ai-paper-kit 公開範本</a>。</li><li>不熟 Git 時，按 <b>Code → Download ZIP</b>。下載後解壓縮，再打開解壓後的資料夾；不要直接在壓縮檔裡工作。</li><li>找到同一層有 <code>AGENTS.md</code>、<code>README.md</code>、<code>WORKFLOW.md</code>、<code>build.py</code>、<code>source</code> 的那個資料夾。ZIP 版本的資料夾名稱可能是 <code>ai-paper-kit-main</code>。</li></ol><p class="step-result">你能在檔案總管／Finder 找到 build.py 與 source 資料夾。</p><p class="small">公開範本下載不需要 GitHub 帳號；ZIP 不包含 Git 歷史。已熟悉 Git 的學員可另用 git clone，請每人使用自己的複本。</p></details>
-      <details id="kit-folder"><summary><span class="step-no">K2</span>在檔案助手打開正確資料夾<span class="where">在哪裡：Codex 或 Claude Code 的本機工作區</span></summary><ol><li>使用第二部分已設定的本機檔案助手，選取剛解壓縮的範本根目錄。</li><li>如果只在網頁版聊天，AI 可能看不到你的電腦檔案；請回第一、二部分確認使用的工具與工作區。</li><li>貼下方提示詞，先核對它回報的完整路徑與檔名。</li><li>在助手的檔案列表或文字編輯器開啟 <code>AGENTS.md</code>，對照 AI 引用的第一個標題。若它說讀不到、路徑不對，或標題對不上，先停在這一步，回第二部分檢查本機工作區；不要只憑「已讀」就繼續安裝。</li></ol><div class="copybox"><span class="copy-label">貼到本機檔案助手</span><pre id="prompt-open">我們要練習 ai-paper-kit。請先實際讀取 AGENTS.md、README.md、WORKFLOW.md，原樣引用 AGENTS.md 的第一個標題；不要只回答已讀。讀不到就回報，不要猜檔案內容。
-回報目前資料夾的完整路徑，確認 build.py、source/data/README.md、source/paper/main.tex 都存在。
-確認現在是範本的重建練習資料；有 Git 就列出目前變更，沒有 Git 就說明我用的是 ZIP 複本。
-這次先保留原範本資料、分析方法與七筆書目，不開新論文、不推送 GitHub。</pre><button type="button" data-copy="prompt-open">複製開工提示詞</button></div><p class="step-result">回報的路徑與你解壓的位置相同。路徑不對，先重新選資料夾。</p></details>
-      <label class="check"><input type="checkbox" data-check="kitfolder"><span>我能在本機助手確認範本的完整路徑與關鍵檔案。</span></label>
-      <h3 id="install-tools">K1、K2 完成後：檢查與安裝建置工具</h3>
-      <div class="tabs" role="tablist" aria-label="論文工具安裝的作業系統"><button type="button" id="os-win" role="tab" data-os="win" aria-selected="true" aria-controls="install-win">Windows</button><button type="button" id="os-mac" role="tab" data-os="mac" aria-selected="false" aria-controls="install-mac" tabindex="-1">Mac</button></div>
-      <div id="install-win" role="tabpanel" aria-labelledby="os-win">
-        <h3>Windows：MiKTeX、uv、gnuplot、Pandoc</h3>
-        <ol><li><b>請 AI 檢查。</b>在已開啟 ai-paper-kit 的檔案助手貼下方提示詞。AI 會先列出工具是否存在。</li><li><b>逐項同意安裝。</b>可以由 AI 使用 WinGet，也可以到 <a href="https://miktex.org/download" target="_blank" rel="noopener">MiKTeX</a>、<a href="https://docs.astral.sh/uv/getting-started/installation/" target="_blank" rel="noopener">uv</a>、<a href="https://www.gnuplot.info/" target="_blank" rel="noopener">gnuplot</a>、<a href="https://pandoc.org/installing.html" target="_blank" rel="noopener">Pandoc</a> 的官方下載頁。系統核准視窗要核對軟體名稱與來源；密碼由你輸入。</li><li><b>MiKTeX 的缺套件安裝。</b>套件是排版需要的零件。MiKTeX 可以在缺少時安裝；若你同意自動下載，可在 Console 的設定把缺套件時的安裝設為 Yes。需要逐次確認時就保留詢問，編譯時注意彈出的視窗。</li><li><b>重開助手再驗證。</b>新安裝的程式可能還沒被舊視窗找到。請整個關閉、重開檔案助手，再打開同一份 ai-paper-kit。</li></ol>
-        <div class="copybox"><span class="copy-label">貼到已打開 ai-paper-kit 的本機檔案助手</span><pre id="install-prompt-win">請先讀這個 ai-paper-kit 的 AGENTS.md、README.md 與 WORKFLOW.md。
-我用 Windows，要準備範本的 PDF 與 Word 建置。先檢查 pdflatex、bibtex、gnuplot、uv、pandoc 是否可執行，列出實際路徑與版本。
-只安裝缺少的工具。每一項先告訴我名稱、官方來源與會改什麼，等我同意；密碼與系統核准由我處理。
-Windows 可使用 WinGet 的 MiKTeX.MiKTeX、gnuplot.gnuplot、astral-sh.uv、JohnMacFarlane.Pandoc。
-gnuplot 若只找到捷徑卻無法啟動，先查實際 bin 路徑，以本次程序 PATH 驗證；永久改 PATH 先問我。
-到專案內準備 uv 環境。最後列出各工具版本，並跑範本驗證；只找到執行檔不能當作能成功建置。</pre><button type="button" data-copy="install-prompt-win">複製 Windows 提示詞</button></div>
-      </div>
-      <div id="install-mac" role="tabpanel" aria-labelledby="os-mac" hidden>
-        <h3>Mac：MacTeX、uv、gnuplot、Pandoc</h3>
-        <ol><li><b>先查有沒有裝過。</b>MacTeX 是包含完整 TeX 系統的發行版，下載較大；先查磁碟空間與官網需求。已經有可用 TeX，就先測試，不用再裝第二套。</li><li><b>裝 TeX。</b>可從 <a href="https://tug.org/mactex/" target="_blank" rel="noopener">MacTeX 官方入口</a>下載安裝程式，依畫面操作；密碼由你輸入。空間不足時再與老師討論較小的 BasicTeX，缺少的套件要另外補。</li><li><b>請 AI 檢查其餘工具。</b>有 Homebrew 時可用它安裝；沒有就先由 AI 說明安裝方法，等你同意。</li><li><b>留意 Intel Mac。</b>這次工作坊的 Intel Mac 曾遇到 Homebrew 從原始碼大量編譯，耗時很長。出現 Building from source、長時間停滯時，保留訊息並請老師協助，改評估 Pandoc 官方二進位檔與適合該機器的 gnuplot 安裝方式；不要反覆重裝。</li></ol>
-        <div class="copybox"><span class="copy-label">貼到已打開 ai-paper-kit 的本機檔案助手</span><pre id="install-prompt-mac">請先讀這個 ai-paper-kit 的 AGENTS.md、README.md 與 WORKFLOW.md。
-我用 Mac，要準備範本的 PDF 與 Word 建置。先查晶片架構、現有 pdflatex、bibtex、gnuplot、uv、pandoc 的路徑與版本。
-先用已安裝的工具，只補缺少的。TeX 可用 MacTeX；每項安裝先說明官方來源、下載量與變更，等我同意，密碼由我輸入。
-若使用 Homebrew 且開始大量 Building from source，先停下回報，依這台 Mac 評估官方二進位檔或其他可用方法，不要反覆等大型編譯。
-到專案內準備 uv 環境，再跑 PDF／Word 範本。若 uv 在沙箱初始化崩潰，保留錯誤，申請這一次相同建置的沙箱外執行；不要因此重寫統計程式。</pre><button type="button" data-copy="install-prompt-mac">複製 Mac 提示詞</button></div>
-      </div>
-      <div class="outcome"><b>準備完成的判準：</b>AI 能列出工具版本，接著真的跑出 PDF。看到「找得到 pdflatex」還不足以證明權限、套件與建置都正常。</div>
-      <label class="check"><input type="checkbox" data-check="tools"><span>我已檢查所需工具；缺少或出錯的項目有明確紀錄。</span></label>
-      <p class="source-note">安裝依據：<a href="https://www.latex-project.org/get/" target="_blank" rel="noopener">TeX 發行版</a>、<a href="https://docs.miktex.org/manual/installing.html" target="_blank" rel="noopener">MiKTeX 安裝</a>與<a href="https://docs.miktex.org/manual/autoinstall.html" target="_blank" rel="noopener">缺套件處理</a>、<a href="https://docs.astral.sh/uv/getting-started/installation/" target="_blank" rel="noopener">uv</a>、<a href="https://pandoc.org/installing.html" target="_blank" rel="noopener">Pandoc</a>。Intel Mac 與 Windows 沙箱的錯誤是本次工作坊機器的實測，不代表每台電腦都會相同。</p>
-    </section>
+<div class="band" id="b5"><div class="wrap"><div class="tag">05・Zotero</div><p class="big">接得穩</p><p class="sub">文獻放 Zotero，書目檔從它匯出</p></div></div>
+<section class="blk wrap" id="zotero">
+  <p>論文用的書目檔是 <code>source/refs/refs.bib</code>。三種接法，挑一種就好，第一種最穩：</p>
+  <div class="routes">
+    <div class="route best"><h3>A. 自動匯出<span class="tag2">推薦</span></h3>
+      <ol>
+        <li>把 Zotero 更新到最新版。Better BibTeX 是 Zotero 的免費外掛，讓 Zotero 能把書目自動存成論文原稿用的檔案。到 <a href="https://retorque.re/zotero-better-bibtex/installation/" target="_blank" rel="noopener">Better BibTeX 官網的安裝頁</a>，照它的連結下載檔名結尾是 <code>.xpi</code> 的檔（下載頁的樣子以你的畫面為準；用 Firefox 下載要按右鍵另存連結，直接點會被當成 Firefox 自己的外掛）。在 Zotero 選「工具 → 外掛（Tools → Plugins）」→ 齒輪 →「從檔案安裝（Install Plugin From File）」，選剛下載的檔。</li>
+        <li>把這篇論文要用的文獻放進一個文獻集，例如「虛擬病人論文」。</li>
+        <li>對文獻集按右鍵 →「匯出文獻集（Export Collection）」，格式選 <b>Better BibTeX</b>，勾「<b>保持更新</b>（Keep updated）」。存檔視窗裡，一層一層點進你的論文資料夾 → <code>source</code> → <code>refs</code>，檔名改成 <code>refs.bib</code>，存檔；問要不要取代原本的檔，選取代。</li>
+        <li>之後把文獻加進這個文獻集，refs.bib 就自己更新。</li>
+      </ol>
+    </div>
+    <div class="route"><h3>B. 讓 AI 操作 Zotero</h3>
+      <p class="why" style="margin:.2rem 0 0">請 AI 幫你裝 zotero-mcp-server（一個讓 AI 能搜尋、新增你 Zotero 文獻的小工具；另有一個名字很像的 zotero-mcp，是別人做的，不是這個），可以跟它說「請照 WORKFLOW.md 第 2 步接法 B，幫我接上 zotero-mcp-server，每一步先告訴我要做什麼，等我說好再做」。之後 AI 能搜你的文獻庫。要讓它用 DOI 把文獻<b>加進</b> Zotero，Zotero 要開著，而且要照 zotero-mcp-server 的說明另外授權（Zotero 10 會跳出視窗，請你選「Always Allow」）。版本與設定以它的官方說明為準。<b>接法 B 只讓 AI 搜尋、新增 Zotero 裡的文獻；論文用的 refs.bib 還是要用 A 或 C 匯出。</b>適合熟一點之後再試。</p>
+      <p class="why" style="margin:.4rem 0 0">叫它加文獻時，請加一句「<b>不要附 PDF</b>」。它預設會自己到網路找 PDF 附上，10/28 實測附成另一篇論文，而且沒有任何警告；全文請你自己附。另外，授權之後它<b>也能刪除、修改</b>你 Zotero 裡的文獻（刪掉的會先進 Zotero 的垃圾桶，還找得回來）。只叫它搜尋和新增，不要叫它刪或改。</p>
+    </div>
+    <div class="route"><h3>C. 不裝外掛</h3>
+      <p class="why" style="margin:.2rem 0 0">Zotero 開著，跟 AI 說「請用 tools/zotero_export.py 把 Zotero 的『虛擬病人論文』文獻集匯出成 source/refs/refs.bib」。這是匯出一次：之後文獻集有增減，再跟 AI 說一次同一句。</p>
+    </div>
+  </div>
+  <p class="why">B 和 C 都要先在 Zotero：設定 → 進階，勾「允許此電腦上的其他應用程式與 Zotero 通訊（Allow other applications on this computer to communicate with Zotero）」。每篇文獻的引用代號（cite key，原稿裡指某一篇文獻的短名字，例如範例的 Su2021），換了接法<b>可能</b>會變：裝了 Better BibTeX，A 和 C 匯出的代號一樣；沒裝的話，C 的代號是另一種寫法。中途換接法、build 說找不到代號，請 AI 把 main.tex 的引用一起改。（2026-10-27 在 Zotero 10 實測：A、C 都 BUILD OK，B 搜尋得到文獻；10/28 在 Mac 再測一次，B 用 DOI 新增文獻也成功。）</p>
+  <p><b>沒有 DOI 的文獻</b>（例如有些台灣的中文期刊）：在 Zotero 給那一篇加一個標籤 <code>nodoi</code>。refs.bib 更新之後（接法 A 會自己更新；接法 C 請 AI 再匯出一次），跑 build 就會放行，並列出來提醒你自己對一次書目。不要讓 AI 替它編 DOI。</p>
+  <p><b>工具的書目也會錯。</b>這次範例用 Scite（一個付費的文獻搜尋工具）查到 7 篇真文獻，匯出的書目還是有錯：文章種類標成排版程式看不懂的寫法、作者名字裡的連字號（例如 Hsin-Feng）用了排版程式不認得的特殊符號，這兩種在排版時就會出問題；可是還有兩篇作者多了幾個中間名縮寫、一篇少了文章編號，排版完全正常、build 抓不到，是用 DOI 查原始紀錄核對才發現的。所以每篇都要用 DOI 打開原文對一次。</p>
+  <div class="claim"><button type="button" data-claim="u4" aria-pressed="false">我懂了，收下技能卡 04</button><span>知道 refs.bib 從哪裡來，也知道工具匯出的書目要回原文核對。</span></div>
+</section>
 
-    <section class="module" id="kit">
-      <div class="section-kicker">06 · 先讓原範本跑通</div><h2>跟著 AI，做出第一份 PDF 與 Word</h2>
-      <div class="callout warn"><b>本課使用重建的練習資料。</b><p>ai-paper-kit 依已發表論文的彙總表重建假分數，讓你練習流程；這不是原始受試者資料，不能據此做新的研究結論或投稿。第一次操作保持範本資料與書目，先驗證整條流程。</p></div>
-      <p>第 05 段已完成 K1、K2 與工具檢查，就從下面 K3 開始。還沒準備好時，先回<a href="#install">第 05 段依序完成</a>；今天也可以只體驗本頁示範。</p>
-      <details id="kit-build"><summary><span class="step-no">K3</span>執行建置，讀懂驗收結果<span class="where">在哪裡：同一個本機檔案助手</span></summary><p>工具還有缺漏時，回<a href="#install-tools">工具檢查與安裝</a>補齊。若安裝時已跑過同一份範本，先沿用該次實際輸出與 PDF，依下方判準核對即可，不必重跑。沒有完整輸出時，再貼下方提示詞執行：</p><div class="copybox"><span class="copy-label">由 AI 執行建置，你看結果</span><pre id="prompt-build">請依這份 ai-paper-kit 的規範，執行 uv run build.py。
-保留分析與排版的實際輸出，回報退出碼與最後的 BUILD OK 或 BUILD FAILED。
-成功後告訴我 main.pdf 的完整路徑、頁數、文獻筆數、undefined_cites、undefined_refs 與 bib_warnings，並協助我開啟 PDF。
-若是沙箱 Registry、AppData、uv cache 存取被拒，先保留原始錯誤，申請只讓這一次相同 build 在沙箱外執行；不要先改論文內容或把研究資料移到雲端。</pre><button type="button" data-copy="prompt-build">複製建置提示詞</button></div><p class="step-result">真的產生 <code>output/main.pdf</code>，最後有 <code>BUILD OK</code>，且 undefined_cites 與 undefined_refs 都是 0。頁數隨範本版本可能改變。</p></details>
-      <details><summary><span class="step-no">K4</span>開啟 PDF，逐頁看一次<span class="where">在哪裡：output/main.pdf → PDF 閱讀器</span></summary><ol><li>確認這是本次產生的新檔，不是先前開著的舊視窗。</li><li>找摘要、表格、兩張圖與參考文獻。看看是否缺字、表格超邊、圖例蓋到點、引用顯示問號。</li><li>把 AI 回報的文獻數與 PDF 對照；選幾個數字，回到輸出的表格核對。</li></ol><p><b>成功編譯只驗證部分技術條件。</b>研究設計、分析方法、文字解讀與書目正確性，仍要由人檢查。</p></details>
-      <label class="check"><input type="checkbox" data-check="kitpdf"><span>我已看到本次 PDF，並看過摘要、圖、表、引用與頁面邊界。</span></label>
-      <details><summary><span class="step-no">K5</span>轉成 Word，保留交接副本<span class="where">在哪裡：同一個助手 → output/main.docx → Word</span></summary><div class="copybox"><span class="copy-label">請 AI 另外產生 Word</span><pre id="prompt-docx">請執行 uv run build.py --docx，回報實際結果與 output/main.docx 的完整路徑。
-請檢查摘要、作者、章節標題、圖、表與參考文獻是否都有保留。
-告訴我哪些版面仍需在 Word 人工整理，不要把成功產檔說成逐頁排版已驗收。</pre><button type="button" data-copy="prompt-docx">複製 Word 提示詞</button></div><p>用 Word 開啟後，檢查表格欄寬、圖的位置、頁碼與引用格式。Pandoc 的輸出不保證等同 PDF 的期刊排版，也不能直接當成 Zotero Word 外掛的可更新欄位。</p><p><b>要在 Word 繼續改，先另存一個新檔名。</b>例如「論文-給老師修訂.docx」。再次 build 會重做 output 裡的檔案；Word 的手改內容不會自動回寫到 LaTeX 原稿。決定後續以哪一份為主稿。</p></details>
-      <label class="check"><input type="checkbox" data-check="kitdocx"><span>我已產生 Word 檔，知道編輯前要另存副本，且不能假定它與 LaTeX 雙向同步。</span></label>
-      <details><summary><span class="step-no">K6</span>從練習範本走向自己的研究<span class="where">在哪裡：先與老師確認，再請 AI 依 WORKFLOW 建新稿</span></summary><p class="note">先用研究問題與欄位說明規劃。真實受試者資料須先完成<a href="#data-conditions">第 09 段的資料使用確認</a>，才能放進 AI 會讀的資料夾；未核准前只用本課練習資料。</p><p>跑通範本後，先列研究問題、資料來源、可用文獻與分析計畫。<b>不能只換 CSV，就沿用範本的分析方法與結論。</b>要開新稿前，讓 AI 說明 <code>tools/new_paper.py</code> 將把哪些原稿封存、產生哪些檔案，由你確認，再依專案文件執行。</p><ol><li>研究構想、投稿須知與欄位說明放在哪裡，先告訴 AI；真實資料的使用條件看第 09 段。</li><li>先請 AI 提出章節與分析計畫，確認後才動手。每次完成一節，就看原稿、輸出與原文依據。</li><li>第 07 段練習匯出的書目留在獨立位置；切換為新稿時，請 AI 說明書目與正文引用怎麼一起換。不要在被封存搬動的 source 路徑內指定新稿的匯入書目。新稿建立後，依<a href="#bib-auto-target">第 07 段的「重新指定自動匯出目的地」</a>設定持續更新的位置。</li><li>先確定新稿與書目使用的語言。若含中文，依本份範本的 WORKFLOW，請 AI 檢查 <code>xelatex</code> 與中文字型；建立新稿後，確認 <code>source/paper/main.tex</code> 第一行的 <code>% !TEX program = xelatex</code>。目前 build.py 會讀這行選引擎，仍用同一條建置指令；不要只把中文貼進英文範例就當作完成設定。</li><li>分析結果進入圖表與內文後，再寫摘要與討論。研究設計與結論強度由你和老師決定。</li><li>依期刊須知檢查結構、字數、書目樣式、資料與 AI 使用聲明；需要 Word 時依 K5 另存交接副本。</li></ol><div class="copybox"><span class="copy-label">準備自己的研究時，先請 AI 提計畫</span><pre id="prompt-newstudy">這次要規劃我的新論文。請先依 WORKFLOW 問清楚研究問題、研究設計、資料欄位、可用文獻與目標期刊。
-先不要換掉範例、不要動原始資料，也不要讀取尚未獲准交給這個 AI 服務的真實資料。請列出需要我補的材料，以及章節與分析計畫。
-先確認正文與書目是否有中文；有中文時，將 xelatex、中文字型與 main.tex 首行的引擎設定列入計畫，依本份 WORKFLOW 執行；不要先改練習範例。
-要用 new_paper.py 時，先告訴我封存與新建的完整路徑，確認書目來源在封存動作之外，等我確認再執行。
-之後每一節都附可回查的文獻依據；讀不到全文的部分明講，不編引用、不沿用範例結論。</pre><button type="button" data-copy="prompt-newstudy">複製新研究規劃提示詞</button></div><p>先用<a href="practice.html">第三部分練習頁</a>的既有練習；要接自己的文獻，繼續下段。原始研究資料能否交給 AI 或上雲端，要依核准與資料管理規範確認。</p></details>
-      <div class="lab"><div class="lab-title"><span class="pill">點檔案看用途</span><h3>原料改在哪裡？成品看哪一份？</h3></div><div class="grid2"><div class="filetree" role="group" aria-label="論文檔案用途"><button type="button" data-file="data" aria-pressed="true">source/data/　原始資料</button><button type="button" data-file="analysis" aria-pressed="false">source/scripts/analyze.py</button><button type="button" data-file="bib" aria-pressed="false">source/refs/refs.bib</button><button type="button" data-file="tex" aria-pressed="false">source/paper/main.tex</button><button type="button" data-file="pdf" aria-pressed="false">output/main.pdf、main.docx</button></div><div class="panel file-help" id="file-help" aria-live="polite"></div></div></div>
-    </section>
+<div class="band" id="b6"><div class="wrap"><div class="tag">06・數字與圖</div><p class="big">畫得美</p><p class="sub">數字由程式寫，圖由 gnuplot 畫</p></div></div>
+<section class="blk wrap" id="figs">
+  <p><b>論文裡沒有一個結果數字是手打的，圖也不是手畫的。</b>原料放在 <code>source/</code>，程式和 gnuplot 照順序把它變成 <code>output/</code> 裡的成品：</p>
+  <ol class="steps">
+    <li class="step"><h3><span class="sn">1</span>資料 <span class="path">source/data/study_data.csv</span></h3><p>一列一個人，一欄一個項目。例如 <code>dkas_t1</code> 這一欄，是 DKAS（失智症知識量表）在 t1（第 12 週）的分數；t0＝前測、t2＝第 24 週。程式只讀，不改。</p></li>
+    <li class="step"><h3><span class="sn">2</span>分析程式 <span class="path">source/scripts/analyze.py</span></h3><p>算出平均、標準差、p 值、效果量（這幾個詞見頁首小框），每個要放進論文的數字取一個英文名字，叫「代號」；同時把表做成 <code>.tex</code>（給 PDF）和 <code>.csv</code>（給 Excel），把畫圖要的數字做成小表。</p></li>
+    <li class="step"><h3><span class="sn">3</span>成品 <span class="path">output/numbers.tex</span>、<span class="path">tables/</span>、<span class="path">figdata/</span></h3><p><code>output/numbers.tex</code> 裡一行一個數字，例如這一行：<code>\newcommand{\DKASIntTOneMean}{37.04}</code>。只看兩個大括號：前面的 <code>\DKASIntTOneMean</code> 是代號，後面的 37.04 是數字。代號是四段英文拼起來的：DKAS（量表）＋Int（介入組）＋TOne（第 12 週；代號裡不能有阿拉伯數字，所以 T1 寫成 TOne）＋Mean（平均）。</p></li>
+    <li class="step"><h3><span class="sn">4</span>畫圖腳本 <span class="path">source/gnuplot/*.gp</span></h3><p>讀 <code>figdata/</code> 的小表，畫到 <code>output/figures/</code>。</p></li>
+    <li class="step"><h3><span class="sn">5</span>論文 <span class="path">source/paper/main.tex</span> → <span class="path">output/main.pdf</span></h3><p>本文寫代號、放表放圖；排版時代號換成數字。</p></li>
+  </ol>
+  <p style="margin-top:1rem">按下面的按鈕，模擬「事後發現有一位受試者不符合收案條件、要排除」（練習資料裡編號 I048 的那位，在介入組）。下面兩句摘自範例論文的 Results：論文原稿裡寫的是代號，排成 PDF 時才換成數字。排除一個人，原稿一個字都沒改，換上去的數字自己變了。</p>
+  <div class="demo">
+    <div class="actions" role="group" aria-label="選資料">
+      <button class="chip" type="button" data-set="a" aria-pressed="true">全部 140 人</button>
+      <button class="chip" type="button" data-set="b" aria-pressed="false">排除 I048</button>
+    </div>
+    <div class="sentence" id="sentence"></div>
+    <div class="srcbox">原稿 main.tex 裡的寫法（摘錄兩句，「……」是省略的部分；代號後面的 <code>{}</code> 和 <code>$d$</code> 的錢字號是排版符號，可以不用理它）：
+      <span class="ln">3.2 節第一句的前半：At week 12, DKAS scores were \DKASIntTOneMean{} in the intervention group and \DKASCtlTOneMean{} in the control group (\DKASTOnePstat{}); ……</span>
+      <span class="ln">3.3 節最後一句：For DKAS, $d$ was \DKASTOneD{} at week 12 and \DKASTTwoD{} at week 24.</span>
+    </div>
+    <p style="margin:.6rem 0 0">原稿裡的代號換成了哪個數字（按「排除 I048」時，變了的數字會閃一下、加上虛線底）：</p>
+    <div class="tablewrap"><table class="maptab">
+      <thead><tr><th>原稿裡的代號</th><th>意思</th><th data-col="a">全部 140 人</th><th data-col="b">排除 I048</th></tr></thead>
+      <tbody>
+        <tr><td><code>\DKASIntTOneMean</code></td><td>DKAS 平均，介入組，第 12 週</td><td data-col="a">37.04</td><td data-col="b">37.41 <span class="chgtag">變了</span></td></tr>
+        <tr><td><code>\DKASCtlTOneMean</code></td><td>DKAS 平均，對照組，第 12 週</td><td data-col="a">30.43</td><td data-col="b">30.43 <span class="samtag">沒變：I048 在介入組</span></td></tr>
+        <tr><td><code>\DKASTOnePstat</code></td><td>第 12 週兩組 DKAS 比較的 p 值</td><td data-col="a">p &lt; 0.001</td><td data-col="b">p &lt; 0.001 <span class="samtag">沒變：兩種情況都小於 0.001</span></td></tr>
+        <tr><td><code>\DKASTOneD</code></td><td>效果量 d，DKAS，第 12 週</td><td data-col="a">0.92</td><td data-col="b">1.01 <span class="chgtag">變了</span></td></tr>
+        <tr><td><code>\DKASTTwoD</code></td><td>效果量 d，DKAS，第 24 週</td><td data-col="a">0.95</td><td data-col="b">0.96 <span class="chgtag">變了</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="note" style="margin:0">兩種情況（全部 140 人、排除 I048）的數字，都是 10/22 實際跑範本得到的。數字會自動更新，句子的解讀不會：數字變了，用到它的句子要你重讀。也要記得：I048 剛好是介入組裡分數偏低的人，排除後效果看起來變大。排除誰，要在看結果之前，照事先定好的理由決定。</p>
+  </div>
+  <p style="margin-top:1rem"><b>為什麼用 gnuplot？</b>圖放大不會糊，圖上的字交給 LaTeX 排，所以字型、大小跟內文一致。每張圖是一個小腳本，資料改了重跑就重畫；同一張小表，換一支腳本就能從折線圖變長條圖。你不用自己寫腳本，跟 AI 說要什麼圖就好（第 04 段第 7 步）。</p>
+  <p>下面是圖 1 的原料和腳本。腳本讀這張小表 <code>output/figdata/fig1_dkas.csv</code>，畫出第 6 頁圖 1 最左邊的 DKAS 小圖。檔案裡寫的是這樣（括號裡的中文是我們加的說明；用 Excel 打開時，結尾的 0 會被省略，例如 8.140 顯示成 8.14）：</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>time（時間）</th><th>int_mean（介入組平均）</th><th>int_sd（介入組標準差）</th><th>ctl_mean（對照組平均）</th><th>ctl_sd（對照組標準差）</th></tr></thead>
+    <tbody>
+      <tr><td>0（前測）</td><td>26.686</td><td>6.719</td><td>25.543</td><td>8.140</td></tr>
+      <tr><td>1（第 12 週）</td><td>37.043</td><td>7.930</td><td>30.429</td><td>6.439</td></tr>
+      <tr><td>2（第 24 週）</td><td>36.200</td><td>5.550</td><td>29.943</td><td>7.539</td></tr>
+    </tbody>
+  </table></div>
+  <p class="why">小表保留小數三位，論文顯示兩位，所以 37.043 在論文裡是 37.04。腳本節錄如下，# 後面是說明，電腦不執行：</p>
+  <div class="cmd"># 圖 1 的畫圖腳本 source/gnuplot/fig1_outcomes.gp（節錄；AI 寫的、build 會自動跑）
+set terminal cairolatex pdf size 12cm,6cm     # 畫成 12 公分寬、6 公分高；圖上的字交給 LaTeX 排，跟內文同一套字型
+set datafile separator comma                  # 小表是 CSV（逗號分隔）
+set xtics ('0' 0, '12' 1, '24' 2)             # 橫軸：time 欄的 0、1、2 標成 0、12、24 週（前測、介入結束、追蹤）
+plot 'figdata/fig1_dkas.csv' every ::1 using ($1-0.04):2:3 with yerrorlines ls 1, \
+     ''                      every ::1 using ($1+0.04):4:5 with yerrorlines ls 2
+# ↑ 上面兩行是同一個指令（第一行結尾的 \ 表示「接到下一行」），畫兩條線：
+#   讀小表 fig1_dkas.csv；every ::1＝跳過第一列欄名；''＝同一張小表
+#   第一條線：介入組，用第 2、3 欄（平均、標準差），藍色實線（ls 1）
+#   第二條線：對照組，用第 4、5 欄（平均、標準差），橘色虛線（ls 2）
+#   yerrorlines＝折線加上下的誤差線；兩組左右錯開一點點（-0.04、+0.04），誤差線才不會疊在一起
+#   練習頁的練習 5 把圖 1 改成長條圖，改的就是這種畫法</div>
+  <div class="ask"><b>想一步一步做一次？</b>打開<a href="practice.html">練習頁</a>：看原料、跑一次 build、追一個數字、排除一個人看全部一起變、把圖改成長條圖、加一個新表，六個練習加一個收尾，工具裝好之後大約 30 分鐘，用的就是上面這篇範例論文。練習頁也放了一位老師照著貼、AI 真正回了什麼的實跑紀錄。練習頁第 07 段還有研究模擬：只給資料和文獻，AI 十步寫出一篇論文的實跑紀錄。</div>
+</section>
 
-    <section class="module" id="refs">
-      <div class="section-kicker">07 · 有了自己的寫作題目再接</div><h2>Zotero 怎麼把文獻交給 LaTeX？</h2>
-      <p>Word 外掛直接從 Zotero 插引用；LaTeX 則常讀取一個書目文字檔 <code>refs.bib</code>。Better BibTeX 是 Zotero 的免費外掛，可以把選定文獻集匯出成這種檔案，並保持更新。</p>
-      <div class="callout warn"><b>先練習匯出，不要覆蓋範本正在用的七筆書目。</b><p>本課 Zotero 練習文獻集可能只有一篇，範本原稿卻引用七篇。直接拿一篇覆蓋 <code>source/refs/refs.bib</code>，其餘引用就會找不到。先匯出到下方練習位置；開自己的新稿時，再請 AI 確認書目與正文引用如何一起切換。</p></div>
-      <h3>接法 A：Better BibTeX 匯出</h3>
-      <ol><li><b>下載外掛。</b>開 <a href="https://retorque.re/zotero-better-bibtex/installation/" target="_blank" rel="noopener">Better BibTeX 官方安裝頁</a>，循它的連結下載 <code>.xpi</code>。這是 Zotero 外掛，不是瀏覽器外掛；Firefox 使用者依官方說明以另存連結下載。</li><li><b>裝進 Zotero。</b>在 Zotero 選「工具（Tools）→外掛（Plugins）」，齒輪選單選「從檔案安裝外掛（Install Plugin From File）」，選剛下載的 <code>.xpi</code>，依畫面完成安裝與必要的重啟。</li><li><b>先由 AI 建好練習資料夾。</b>在你的 ai-paper-kit 內準備 <code>workspace/zotero-practice/</code>。可說：「請只建立這個練習資料夾，不改 source 的書目與原稿。」</li><li><b>匯出文獻集。</b>在 Zotero 對「工作坊練習」按右鍵 →「匯出文獻集（Export Collection）」。格式選 <b>Better BibTeX</b>，勾選 <b>Keep updated</b>。</li><li><b>選對位置。</b>存到剛才的 <code>workspace/zotero-practice/refs.bib</code>。核對完整路徑，避免存成 <code>refs.bib.txt</code>，也不要選到原範本的書目檔。</li><li><b>請 AI 讀回核對。</b>它應列出每筆的題名、年份、DOI 與 cite key。實際代號由你的匯出結果決定，不要假定一定是範例中的 Su2021。</li></ol>
-      <div class="copybox"><span class="copy-label">在匯出完成後，貼到本機助手</span><pre id="prompt-bib">我已將 Zotero 的「工作坊練習」匯出成 workspace/zotero-practice/refs.bib。
-請唯讀檢查這份檔案，列出條目數、題名、年份、DOI 與實際 cite key。
-請分清楚文章條目與附件；筆數應與文獻集中的文章相符。
-先不要覆蓋 source/refs/refs.bib，也不要修改原範本正文。
-之後要開自己的論文時，請依 WORKFLOW 說明怎麼換書目、同步處理引用，列出變更讓我確認。</pre><button type="button" data-copy="prompt-bib">複製書目核對提示詞</button></div>
-      <p><b>每個 Keep updated 設定，都對應一個文獻集與一個輸出檔案路徑。</b>它會依外掛設定在變更後或閒置時重新匯出；暫停自動匯出時不會立即寫檔。更新文獻後先等匯出完成，再 build。若移動論文資料夾，要回 Better BibTeX 設定檢查匯出路徑。</p>
-      <details id="bib-auto-target"><summary>正式新稿建立後，重新指定自動匯出的目的地</summary><p><b>匯入或複製一次 .bib，不會改掉 Zotero 的自動匯出位置。</b>如果原本設定的是練習檔，之後新增文獻仍只會更新練習檔。</p><ol><li>先完成 K6：確認自己的新稿已建立，AI 已說明正文與書目如何同步切換。仍在原範本練習時不要做這一步。</li><li>在 Zotero 對「你這篇論文的文獻集」重新選「匯出文獻集」，格式選 Better BibTeX，勾 Keep updated。</li><li>這次選擇<b>自己的新稿資料夾</b>裡的 <code>source/refs/refs.bib</code>。覆蓋前再次核對完整路徑，確認不是別篇論文或原範本。</li><li>到 Better BibTeX 設定的 Automatic exports 查看該文獻集對應的輸出路徑。由 AI 讀回新稿的筆數與實際 cite key，確認引用一致後再 build。</li></ol><p>此後在這個文獻集增減文獻，才會更新新稿使用的書目檔。另開下一篇論文時，要為下一篇另設匯出路徑。</p></details>
-      <label class="check"><input type="checkbox" data-check="bibexport"><span>我已把練習書目匯出到獨立位置，並核對實際 cite key；沒有覆蓋範本書目。</span></label>
-      <details><summary>熟悉後再看：不裝外掛匯出，或讓 AI 搜尋 Zotero</summary><p>上面六步就是接法 A；先完成它即可。下面的 B、C 是另外兩種進階接法。</p><h3>一次匯出：接法 C</h3><p>本課另附 <code>tools/zotero_export.py</code>。依目前範本的 <code>WORKFLOW.md</code> 第 2 步設定 Zotero 本機通訊，再請 AI 匯出指定文獻集；文獻變更後需重新匯出。改用不同匯出方式時，cite key 可能變動，正文引用也要一起檢查。</p><h3>AI 工具連線：接法 B</h3><p><code>zotero-mcp-server</code> 可以讓 AI 搜尋或新增 Zotero 條目，但它不能取代 .bib 匯出。安裝、連線與授權依範本 WORKFLOW；初學者先完成手動收文獻與接法 A 即可。</p><p>本次實測曾發生自動附到別篇 PDF。若授權 AI 新增文獻，明講<b>「不要附 PDF」</b>，工具參數用 <code>attach_mode="none"</code>；附件由人從期刊核對後加入。授權可能也提供修改、刪除能力，操作前要看權限範圍。課堂先用專用練習文獻集，只要求搜尋與新增，不要求 AI 刪除或修改條目。</p></details>
-      <details><summary>文獻本來就沒有 DOI，或引用代號找不到？</summary><p>先回出版單位確認。這份範本對部分書目會檢查 DOI；確實沒有 DOI 時，可依範本規定在 Zotero 加 <code>nodoi</code> 標籤，再重新匯出。這是本課範本的規則，不是所有期刊或 Zotero 的通則。引用代號找不到時，請 AI 比對 .tex 裡的 cite key 與 .bib 的實際代號；不要為了讓 build 通過編造文獻或 DOI。</p></details>
-      <p class="source-note">步驟依據：<a href="https://retorque.re/zotero-better-bibtex/installation/" target="_blank" rel="noopener">Better BibTeX 安裝</a>與<a href="https://retorque.re/zotero-better-bibtex/exporting/auto/" target="_blank" rel="noopener">自動匯出設定</a>；進階連線以<a href="https://github.com/cwstedctw/ai-paper-kit/blob/main/WORKFLOW.md" target="_blank" rel="noopener">範本 WORKFLOW</a>為操作入口。</p>
-    </section>
+<div class="band" id="b7"><div class="wrap"><div class="tag">07・研究倫理</div><p class="big">守得住</p><p class="sub">流程再快，這四件事還是你的</p></div></div>
+<section class="blk wrap" id="guard">
+  <div class="lines">
+    <div class="line"><div class="num">一</div><div><h3>研究資料：四個條件都符合才放</h3><ol style="margin:0 0 .5rem;padding-left:1.3rem"><li>去識別化。</li><li>IRB（人體研究倫理審查委員會）核准你用每一家會碰到資料的 AI 工具（例如 Codex 和 Claude 都用，兩家都要核准），而且你實際用的帳號、方案和設定符合核准條件，例如關掉「用我的資料改進模型」；不能只看是不是「學校／企業方案」。</li><li>資料管理計畫允許存放在 GitHub 這種境外（國外）的雲端。</li><li>你的論文資料夾在 GitHub 上是 Private。</li></ol><p><b>Private 不等於可以放受試者資料。</b>推上 GitHub 後，雲端自動產生 PDF 時也會在它的機器上讀資料。有一條不確定，就先不要放。</p></div></div>
+    <div class="line"><div class="num">二</div><div><h3>每篇文獻都用 DOI 回原文</h3><p>build 通過只代表「引用的文獻存在於書目檔」，不代表書目資訊正確，也不代表 AI 對它的描述正確。作者、年份、卷期，還是要用 DOI 回原文對一次；沒有 DOI 的（例如有些中文期刊），用期刊網站或出版單位的網頁對。</p></div></div>
+    <div class="line"><div class="num">三</div><div><h3>結論說到多強，由你決定</h3><p>AI 可以起草，但不能替你決定解讀。相關不寫成因果，效果不誇大，資料裡沒有的不寫。</p></div></div>
+    <div class="line"><div class="num">四</div><div><h3>照期刊規定聲明 AI 使用</h3><p>多數期刊要求寫出用了哪個 AI 工具、用在哪裡、你怎麼把關，作者為內容負責。以你要投的期刊規定為準；位置也看期刊：範例論文照 <i>BMC Geriatrics</i> 的規定寫在 Methods 裡（2.5 節 Use of AI tools），開新論文的骨架則放在論文最後。請 AI 照你真的做過的事改寫。<b>聲明裡每一句都要是你真的做過的事</b>：沒有逐篇對過文獻，就不要寫「每篇都核對過」。</p></div></div>
+  </div>
+  <div class="claim"><button type="button" data-claim="u5" aria-pressed="false">我記住了，收下技能卡 05</button><span>四件事說得出來：資料四條件、DOI 回原文、結論自己定、聲明 AI 使用。</span></div>
+</section>
 
-    <section class="module" id="lab">
-      <div class="section-kicker">08 · 看見資料與文章怎麼連動</div><h2>改一筆資料，重建後一起更新</h2>
-      <p>下面 8 筆分數是另外編的教學示意，與範本論文資料不同。拖曳最後一筆分數，再按「重算並更新」，看看表格、圖示與句子怎麼一起變。</p>
-      <div class="lab"><div class="lab-title"><span class="pill">在本頁試做，不會改你的檔案</span><h3>從資料到內文</h3></div><p class="small">固定 7 筆：30、32、34、36、38、40、42；第 8 筆由你調整。</p><label for="score-slider">第 8 筆分數：<b id="raw-score">44</b></label><input id="score-slider" type="range" min="10" max="50" step="1" value="44"><div class="row"><button type="button" class="btn primary" id="rebuild-demo">重算並更新</button><button type="button" class="btn" id="reset-demo">還原示意資料</button></div><p class="status" id="data-status" aria-live="polite">目前輸出已與資料一致。</p><div class="grid2"><div class="panel"><h4>表格與圖示</h4><p>人數 <span id="demo-n">8</span> · 平均分數 <span class="score-output" id="demo-mean">37.00</span></p><div class="score-bar" aria-hidden="true"><span id="demo-bar"></span></div><p class="small">條長表示平均分數在 0～50 的位置。</p></div><div class="panel"><h4>論文裡的句子</h4><p id="demo-sentence" aria-live="polite">這 8 筆示意資料的平均分數為 37.00 分。</p><code id="demo-macro">\newcommand{\ExampleMean}{37.00}</code></div></div><p class="note">這裡只計算平均。平均改變不代表介入有效，也沒有計算 p 值或進行因果推論。實際範本由分析程式輸出數字代號，再由原稿帶入；改了數字後，解讀的句子仍要重讀。</p></div>
-      <label class="check"><input type="checkbox" data-check="rebuild"><span>我已調整一筆分數、按重算，並理解數字更新後還要重新檢查解讀。</span></label>
-      <div class="callout"><b>下一步到真實範本練習。</b><p>請用<a href="practice.html">第三部分練習頁</a>照提示操作自己的複本。不要在沒有研究理由下，為了得到顯著結果而排除資料、改分析或改圖軸。</p></div>
-    </section>
+<div class="band" id="bring"><div class="wrap"><div class="tag">08・技能卡</div><p class="big">帶得走</p><p class="sub">讀完五個重點段，各收一張，回家隨時打開</p></div></div>
+<section class="blk wrap" id="cards">
+  <div class="progress" aria-live="polite"><span id="progText">已解鎖 0 / 5</span><div class="bar"><span id="progBar"></span></div><button class="chip" id="resetBtn" type="button">全部重來</button></div>
+  <div class="skills" id="skills"></div>
+  <p class="tip">沒解鎖也不擋內容，點卡片就能翻面看重點。</p>
+  <p class="note">解鎖的卡片、看到第幾步、選的作業系統，只存在這台電腦的這個瀏覽器裡，不會傳給任何人；換瀏覽器、無痕視窗或清掉網站資料就不會跟著走。</p>
+</section>
+</main>
 
-    <section class="module" id="review">
-      <div class="section-kicker">09 · 看證據才算完成</div><h2>驗收一份論文，要看四件事</h2>
-      <div class="grid2"><div class="panel"><h3>內容有依據</h3><p>每個文獻主張能對回原文；引用格式與 DOI 都正確，仍不代表這句話沒有誤讀。AI 只讀到摘要時，要明講範圍。</p></div><div class="panel"><h3>數字能回查</h3><p>圖表、摘要與內文數字對得上分析輸出；分析方法要符合你的研究設計。選幾個數字用另一條路徑核對。</p></div><div class="panel"><h3>技術真的跑過</h3><p>看退出碼、實際生成的新檔與 BUILD OK；引用與交叉引用錯誤應為 0。若有書目警告，讀清楚再處理。</p></div><div class="panel"><h3>成品可以閱讀</h3><p>逐頁看 PDF；Word 另檢查表格、圖、標題與參考文獻。範本的作者、AI 使用聲明與待補文字，要換成你真實做過的內容。</p></div></div>
-      <div class="lab"><div class="lab-title"><span class="pill">遇到錯誤先定位</span><h3>這個訊息在說哪一層？</h3></div><label for="error-choice">選你遇到的狀況</label><select id="error-choice"><option value="start">請選擇錯誤或現象</option><option value="path">找不到 gnuplot，或只找到捷徑但啟動失敗</option><option value="access">MiKTeX 顯示 fresh installation，且有 Access denied／Result: 5</option><option value="reviewer">沙箱外核准審查回 403，指出某個 model 沒有權限</option><option value="cite">undefined citation／找不到 cite key</option><option value="lock">PDF、Excel 或 Word 開著，檔案無法寫入</option><option value="word">PDF 成功，但 Word 格式或內容不完整</option><option value="macuv">Mac 的 uv 初始化出現 NULL object</option></select><div id="error-answer" class="feedback" aria-live="polite">保留原始錯誤、失敗步驟與檔案路徑，再處理。</div></div>
-      <div class="callout warn"><b>真實研究資料不要直接放進練習範本。</b><p>去識別化只是其中一項。還要確認 人體研究倫理審查（IRB）與同意範圍、每個會碰資料的 AI 服務、實際帳號設定與資料存放位置；GitHub Private 也不能取代這些確認。沒有核可時，繼續使用本課練習資料。API 金鑰、密碼、學生與受試者個資都不要貼到教材或公開儲存庫。</p></div>
-      <details id="data-conditions"><summary>研究資料使用條件：本機 AI 與 GitHub 要分別確認</summary><ol><li><b>去識別化：</b>姓名、聯絡資訊、病歷號，以及組合後仍能認出人的資訊都要處理。</li><li><b>研究核准與同意範圍：</b>允許每一家實際會處理資料的 AI 服務，並確認使用的帳號、資料分享與保留設定。</li><li><b>存放與雲端處理：</b>若要放到 GitHub，資料管理計畫與機構規範必須允許；GitHub Actions 建置也會讀取上傳的資料。</li><li><b>研究儲存庫 的存取權：</b>若使用 GitHub 保存自己的研究，設為 Private，並控管受邀成員；Private 本身不代表前面三項已符合。</li></ol><p>不需要上雲端時，就保留在核准的本機環境。本課所有操作都可先用練習資料；資料未獲准前，不把真實個案放進 AI 工作資料夾。</p></details>
-      <p>AI 使用聲明依投稿期刊規定、寫你真實使用的工具與把關方式。沒有讀過全文、沒有逐筆核對，就不能寫成已經做過。</p>
-      <label class="check"><input type="checkbox" data-check="review"><span>我知道 BUILD OK 的驗證範圍，也知道交稿前要自己檢查內容、數字、書目與版面。</span></label>
-    </section>
+<footer class="wrap">
+  <p><b>工具和選單名稱會隨改版變動。</b>這頁依 2026-10-22 查到的官方說明與實測寫成；跟你畫面不一樣時，以畫面為準。找不到某個按鈕，先停在這一步，把畫面截圖貼給網頁版的 AI，問它在哪裡。範例論文用的是依所長論文表格重建的練習資料，不是原始資料，數字不能當研究結果引用。</p>
+  <p>出處與工具：</p>
+  <ul>
+    <li>TeX：<a href="https://tug.org/texlive/" target="_blank" rel="noopener">TeX Live</a>、<a href="https://www.tug.org/mactex/" target="_blank" rel="noopener">MacTeX</a>、<a href="https://miktex.org/" target="_blank" rel="noopener">MiKTeX</a>；其他：<a href="http://www.gnuplot.info/" target="_blank" rel="noopener">gnuplot</a>、<a href="https://pandoc.org/installing.html" target="_blank" rel="noopener">pandoc</a></li>
+    <li>Zotero：<a href="https://retorque.re/zotero-better-bibtex/installation/" target="_blank" rel="noopener">Better BibTeX 安裝</a>、<a href="https://retorque.re/zotero-better-bibtex/exporting/auto/" target="_blank" rel="noopener">Better BibTeX 自動匯出</a>、<a href="https://github.com/54yyyu/zotero-mcp" target="_blank" rel="noopener">zotero-mcp</a>、<a href="https://www.zotero.org/support/dev/web_api/v3/local_api" target="_blank" rel="noopener">Zotero 本機介面</a></li>
+    <li>畫圖與排版：<a href="https://gnuplot.sourceforge.net/docs/latex_demo.pdf" target="_blank" rel="noopener">gnuplot 與 LaTeX</a>、<a href="https://www.springernature.com/gp/authors/campaigns/latex-author-support" target="_blank" rel="noopener">Springer Nature LaTeX 範本</a>（範例論文用的版型）、<a href="https://link.springer.com/journal/12877/submission-guidelines/research-article" target="_blank" rel="noopener"><i>BMC Geriatrics</i> 研究論文投稿須知</a>、<a href="https://www.elsevier.com/researcher/author/policies-and-guidelines/latex-instructions" target="_blank" rel="noopener">Elsevier LaTeX 說明</a>（開新論文的骨架用的版型）</li>
+    <li>範例：<a href="https://doi.org/10.1186/s12877-021-02075-3" target="_blank" rel="noopener">Su、Koo、Lee、Sung、Lee、Liu（2021）<i>BMC Geriatrics</i> 21:126</a>（CC BY 4.0；頁面與範本引用的數字取自該文表 1、表 2、表 4）；可重現研究：<a href="https://doi.org/10.1126/science.1213847" target="_blank" rel="noopener">Peng（2011）<i>Science</i></a></li>
+  </ul>
+</footer>
 
-    <section class="module resources" id="resources">
-      <div class="section-kicker">10 · 帶回去繼續做</div><h2>官方說明與課後操作入口</h2>
-      <p>先完成 Zotero ＋ Word 的一篇文獻練習；再依自己的需求走 LaTeX 管線。需要重看操作時，用本頁目錄直接跳到對應段落。</p>
-      <ul><li><a href="https://www.zotero.org/download/" target="_blank" rel="noopener">Zotero 與 Connector 下載</a> · <a href="https://www.zotero.org/support/quick_start_guide" target="_blank" rel="noopener">基本功能</a> · <a href="https://www.zotero.org/support/word_processor_plugin_usage" target="_blank" rel="noopener">Word 引用按鈕</a></li><li><a href="https://retorque.re/zotero-better-bibtex/installation/" target="_blank" rel="noopener">Better BibTeX 安裝</a> · <a href="https://retorque.re/zotero-better-bibtex/exporting/auto/" target="_blank" rel="noopener">Keep updated 設定</a></li><li><a href="https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes" target="_blank" rel="noopener">從零看 LaTeX</a> · <a href="https://www.latex-project.org/get/" target="_blank" rel="noopener">TeX 發行版與線上編輯器</a></li><li><a href="https://github.com/cwstedctw/ai-paper-kit" target="_blank" rel="noopener">ai-paper-kit 範本與 README</a> · <a href="https://github.com/cwstedctw/ai-paper-kit/blob/main/WORKFLOW.md" target="_blank" rel="noopener">給 AI 的 WORKFLOW</a> · <a href="practice.html">本課練習頁</a></li><li><a href="https://learn.chatgpt.com/docs/auth" target="_blank" rel="noopener">OpenAI 官方登入說明</a>：API key 可用於本機 Codex 工作，但依 API 用量計費；不是所有雲端功能都能使用。若老師提供工作坊 key，依<a href="apikey.html">本課 API 金鑰登入頁</a>操作，不要把 key 貼進對話或公開檔。</li></ul>
-      <p class="source-note">本頁安裝與操作說明於 2026-10-28 對照上述官方文件；畫面文字可能隨版本與介面語言不同。本課範本曾在 Windows 與 Intel Mac 建置成功，不能據此保證所有電腦、所有帳號權限與新版本都相同。</p>
-      <p class="source-note">示範文獻：Su HF, Koo M, Lee WL, Sung HC, Lee RP, Liu WI. <i>A dementia care training using mobile e-learning with mentoring support for home care workers: a controlled study.</i> BMC Geriatrics. 2021;21:126. <a href="https://doi.org/10.1186/s12877-021-02075-3" target="_blank" rel="noopener">doi:10.1186/s12877-021-02075-3</a>。原文開放取用（CC BY 4.0）；本頁沒有把重建的個別分數當成原始研究資料。</p>
-      <a class="backtop" href="#start">回到本頁開頭 ↑</a>
-    </section>
-  </main>
-</div>
-<footer class="wrap footer">陳文盛 × AI 協作團隊 · 第三部分 AI 輔助論文實作 · 教材授權 CC BY-NC-SA 4.0。<br>本頁互動只在瀏覽器內運作，不會安裝工具、傳送研究資料或連接你的 Zotero。</footer>
-<noscript><style>[role=tabpanel][hidden]{display:block!important}</style><p class="wrap">瀏覽器未啟用 JavaScript。文字步驟仍可閱讀；互動示範、複製按鈕與進度記錄需要 JavaScript。</p></noscript>
 <script>
 (function(){
-'use strict';
-var stateKey='tcu-paper-intro-20261028-v1';
-var saved={};var storageOK=true;
-try{saved=JSON.parse(localStorage.getItem(stateKey)||'{}')||{};}catch(e){storageOK=false;}
-var $=function(id){return document.getElementById(id);};
-function store(){try{localStorage.setItem(stateKey,JSON.stringify(saved));}catch(e){storageOK=false;$('storage-note').textContent='這個瀏覽器不允許儲存，關頁後進度可能消失；本頁仍可使用。';}}
-if(saved.theme==='dark'||saved.theme==='light'){document.documentElement.dataset.theme=saved.theme;}
-else if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.dataset.theme='dark';}
-if(saved.projection){document.documentElement.dataset.projection='on';}
-function toolbar(){var dark=document.documentElement.dataset.theme==='dark';$('theme-toggle').setAttribute('aria-pressed',String(dark));$('theme-toggle').textContent=dark?'淺色閱讀':'深色閱讀';$('projection-toggle').setAttribute('aria-pressed',String(document.documentElement.dataset.projection==='on'));}
-toolbar();
-$('theme-toggle').addEventListener('click',function(){saved.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=saved.theme;toolbar();store();});
-$('projection-toggle').addEventListener('click',function(){saved.projection=document.documentElement.dataset.projection!=='on';document.documentElement.dataset.projection=saved.projection?'on':'off';toolbar();store();});
-$('print-guide').addEventListener('click',function(){window.print();});
-var checks=Array.from(document.querySelectorAll('[data-check]'));
-function progress(){var count=checks.filter(function(c){return c.checked;}).length;$('progress-text').textContent='全頁記錄 '+count+' / '+checks.length;$('progress-fill').style.width=(count/checks.length*100)+'%';$('progress').setAttribute('aria-valuemax',String(checks.length));$('progress').setAttribute('aria-valuenow',String(count));}
-checks.forEach(function(c){c.checked=!!(saved.checks&&saved.checks[c.dataset.check]);c.addEventListener('change',function(){saved.checks=saved.checks||{};saved.checks[c.dataset.check]=c.checked;progress();store();});});progress();
-if(!storageOK){$('storage-note').textContent='這個瀏覽器不允許儲存，關頁後進度可能消失；本頁仍可使用。';}
-document.querySelectorAll('[data-copy]').forEach(function(b){var label=b.textContent;b.addEventListener('click',async function(){var el=$(b.dataset.copy);if(!el)return;try{if(!navigator.clipboard||!navigator.clipboard.writeText)throw new Error('Clipboard unavailable');await navigator.clipboard.writeText(el.textContent);b.textContent='已複製';setTimeout(function(){b.textContent=label;},1600);}catch(e){var range=document.createRange();range.selectNodeContents(el);var selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);b.textContent='已選取，請按 Ctrl+C／⌘C';setTimeout(function(){b.textContent=label;},5000);}});});
-var routes={word:'建議先完成第 02、03 段：Zotero 收對文獻，在 Word 插入引用與書目。LaTeX 可以留到需要資料連動時再學。',latex:'先完成 Zotero 入門，再走第 04～08 段。先讓原範本跑通，確認能重建 PDF，再談自己的研究。',observe:'先做第 02 段，並操作本頁的引用與重算示範。尚未安裝 TeX 也能看懂流程；本頁互動不會替你安裝。'};
-function route(){var v=$('route-choice').value;$('route-answer').textContent=routes[v];}
-$('route-choice').addEventListener('change',route);route();
-var articleFields='<dl><dt>類型</dt><dd>期刊文章（Journal Article）</dd><dt>題名</dt><dd>A dementia care training using mobile e-learning with mentoring support for home care workers: a controlled study</dd><dt>作者／年份</dt><dd>Su 等六位作者 · 2021</dd><dt>期刊與文章編號</dt><dd>BMC Geriatrics · 21 · 126</dd><dt>DOI</dt><dd>10.1186/s12877-021-02075-3</dd></dl>';
-var pdfFields='<dl><dt>類型</dt><dd>PDF 附件</dd><dt>用途</dt><dd>打開閱讀全文，核對第一頁的題名與 DOI。</dd><dt>它與文章條目的關係</dt><dd>附在上層文獻底下。寫引用時用上層文獻的作者、年份等資訊；只有一個檔名，通常不足以建立完整引用。</dd></dl>';
-$('zotero-fields').innerHTML=articleFields;
-document.querySelectorAll('[data-zitem]').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('[data-zitem]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});$('zotero-fields').innerHTML=b.dataset.zitem==='pdf'?pdfFields:articleFields;});});
-function selectTab(buttons,selected){buttons.forEach(function(b){var on=b===selected;b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1;});}
-function addTabKeys(buttons){buttons.forEach(function(b){b.addEventListener('keydown',function(e){var keys=['ArrowLeft','ArrowRight','Home','End'];if(keys.indexOf(e.key)<0)return;e.preventDefault();var i=buttons.indexOf(b);var next=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;buttons[next].focus();buttons[next].click();});});}
-var citeButtons=Array.from(document.querySelectorAll('[data-citestyle]'));
-function cite(style){var author=style==='author';$('citation-text').textContent='這裡放的是你核對過原文後寫的句子 '+(author?'（Su 等，2021）。':'[1]。');$('citation-reference').textContent=(author?'Su 等（2021）。':'[1] Su 等。')+'A dementia care training using mobile e-learning with mentoring support for home care workers: a controlled study. BMC Geriatrics, 21, 126. https://doi.org/10.1186/s12877-021-02075-3';$('citation-preview').setAttribute('aria-labelledby',author?'cite-author':'cite-number');}
-citeButtons.forEach(function(b){b.addEventListener('click',function(){selectTab(citeButtons,b);cite(b.dataset.citestyle);});});addTabKeys(citeButtons);cite('author');
-document.querySelectorAll('[data-quiz="meaning"]').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('[data-quiz="meaning"]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});$('quiz-meaning').hidden=false;$('quiz-meaning').textContent=b.dataset.answer==='no'?'答對了。格式工具處理呈現方式；主張是否符合原文，需要你閱讀與核對。':'再想一下：引用看起來很漂亮，仍可能引錯文獻或誤讀結果。格式工具不能代替原文查核。';});});
-function latexEscape(s){return s.replace(/[\\{}%&#_$^~]/g,function(c){return {'\\':'\\textbackslash{}','{':'\\{','}':'\\}','%':'\\%','&':'\\&','#':'\\#','_':'\\_','$':'\\$','^':'\\textasciicircum{}','~':'\\textasciitilde{}'}[c];});}
-function texPreview(){var title=$('tex-title').value||'小節標題';var sentence=$('tex-sentence').value||'這裡寫正文。';$('tex-heading').textContent=title;$('tex-output').textContent=sentence;$('tex-code').textContent='\\section{'+latexEscape(title)+'}\n'+latexEscape(sentence)+' \\cite{Su2021}';}
-$('tex-title').addEventListener('input',texPreview);$('tex-sentence').addEventListener('input',texPreview);texPreview();
-var osButtons=Array.from(document.querySelectorAll('[data-os]'));
-osButtons.forEach(function(b){b.addEventListener('click',function(){selectTab(osButtons,b);$('install-win').hidden=b.dataset.os!=='win';$('install-mac').hidden=b.dataset.os!=='mac';});});addTabKeys(osButtons);
-var files={data:['原始資料：先讀不改','本課是重建的練習資料。真實研究資料要先確認授權、去識別與存放規範；清理與轉換寫進分析程式，不直接手改原檔。'],analysis:['分析程式：AI 依計畫修改','分析方法先由你與老師決定。程式產出數字、表格與畫圖資料，不能為了顯著結果自行換方法。'],bib:['書目：從 Zotero 匯出','每個 cite key 都要能指到正確的書目條目。改書目資訊先回 Zotero；更換匯出方式時要核對代號。'],tex:['正文原稿：AI 修改，你確認','原稿包含段落、章節、數字代號與引用。PDF 內文來自這裡；數字改了，解讀仍要重讀。'],pdf:['成品：打開看，不當原料手改','每次 build 都重建輸出。PDF 用來驗收；Word 要繼續編輯前另存新檔，修改不會自動回到 .tex。']};
-function fileInfo(key){var box=$('file-help');box.replaceChildren();var h=document.createElement('h4');h.textContent=files[key][0];var p=document.createElement('p');p.textContent=files[key][1];box.append(h,p);}
-document.querySelectorAll('[data-file]').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('[data-file]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});fileInfo(b.dataset.file);});});fileInfo('data');
-var currentRaw=44;var builtRaw=44;
-function raw(){currentRaw=Number($('score-slider').value);$('raw-score').textContent=String(currentRaw);$('data-status').textContent=currentRaw===builtRaw?'目前輸出已與資料一致。':'資料已改，下面仍是前次輸出；按「重算並更新」才同步。';}
-function rebuild(){builtRaw=currentRaw;var mean=(30+32+34+36+38+40+42+builtRaw)/8;var text=mean.toFixed(2);$('demo-mean').textContent=text;$('demo-bar').style.width=(mean/50*100)+'%';$('demo-sentence').textContent='這 8 筆示意資料的平均分數為 '+text+' 分。';$('demo-macro').textContent='\\newcommand{\\ExampleMean}{'+text+'}';$('data-status').textContent='已重算：表格、圖示與句子都使用平均分數 '+text+'。';}
-$('score-slider').addEventListener('input',raw);$('rebuild-demo').addEventListener('click',rebuild);$('reset-demo').addEventListener('click',function(){$('score-slider').value='44';raw();rebuild();});
-var errors={start:'保留原始錯誤、失敗步驟與檔案路徑，再處理。',path:'先請 AI 執行 gnuplot --version，回報實際執行路徑。若 WinGet 捷徑無法啟動，找真正的 bin 目錄，用本次程序 PATH 再驗。改永久 PATH 要先說明；不要先改統計程式。',access:'先看原始 log 是否同時有 RegOpenKeyExW、CreateDirectoryW 與 Result: 5。這次 Windows 沙箱實測是權限阻擋，沙箱外同一 build 成功；fresh installation 這句本身不足以判定要重裝。請申請單次沙箱外建置或由老師在終端機執行。',reviewer:'這表示核准程序還沒放行指令，build 可能根本沒啟動。核對錯誤中指定的 API Project 與 model 存取權限；開放權限後再試。切換目前對話模型不等於已修好審查器；不要把金鑰貼到錯誤回報。',cite:'請 AI 比對 main.tex 裡的引用代號與 refs.bib 的實際條目，確認匯出位置與更新狀態。不要為了過 build 刪引用或編 DOI；只有一篇的練習書目也不能直接覆蓋七篇的範本。',lock:'先關閉會鎖住輸出檔的 Word、Excel 或 PDF 視窗，再重跑。保留你手改的 Word 副本，避免重建時蓋掉它。',word:'Word 轉出與 PDF 排版是兩件事。檢查摘要、作者、標題、圖表、書目內容與欄寬；向 AI 提供具體遺漏或頁面位置。產檔成功不能當成版面已通過。',macuv:'保留 uv 初始化的原始錯誤。本次 Intel Mac 曾在沙箱出現 NULL object，同機原生建置可成功。請申請這一次相同指令的沙箱外執行；不要把初始化問題當成 analyze.py 統計錯誤。'};
-$('error-choice').addEventListener('change',function(){$('error-answer').textContent=errors[$('error-choice').value];});
-if('IntersectionObserver' in window){var observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){document.querySelectorAll('.toc a').forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+entry.target.id);});}});},{rootMargin:'-5% 0px -75% 0px'});document.querySelectorAll('.module').forEach(function(s){observer.observe(s);});}
+  var root=document.documentElement;
+  function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function set(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  var st={};try{st=JSON.parse(get('ltc-p3')||'{}')||{}}catch(e){st={}}
+  function save(){set('ltc-p3',JSON.stringify(st))}
+
+  var os=get('ltc-os')||(/Mac/i.test(navigator.platform||'')?'mac':'win');
+  function setOS(v){root.dataset.os=v;document.querySelectorAll('button[data-os]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.os===v))});set('ltc-os',v)}
+  document.querySelectorAll('button[data-os]').forEach(function(b){b.addEventListener('click',function(){setOS(b.dataset.os)})});setOS(os);
+
+  var pb=document.getElementById('projBtn');
+  function setProj(on){if(on){root.dataset.proj='on'}else{delete root.dataset.proj}pb.setAttribute('aria-pressed',String(on));set('ltc-proj',on?'1':'0')}
+  pb.addEventListener('click',function(){setProj(root.dataset.proj!=='on')});setProj(get('ltc-proj')==='1');
+
+  var isMac=/Mac/i.test(navigator.platform||'');
+  function copyText(text,onok,onfail){
+    function fallback(){var ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}document.body.removeChild(ta);ok?onok():onfail()}
+    try{navigator.clipboard.writeText(text).then(onok,fallback)}catch(e){fallback()}
+  }
+  function wireCopy(btn){btn.addEventListener('click',function(){
+    var el=document.getElementById(btn.dataset.copy);
+    copyText(el.textContent,function(){btn.textContent='已複製';btn.classList.add('ok');setTimeout(function(){btn.textContent='複製';btn.classList.remove('ok')},1600)},
+      function(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent=isMac?'已選取，請按 Command＋C':'已選取，請按 Ctrl＋C';setTimeout(function(){btn.textContent='複製'},4000)});
+  })}
+  document.querySelectorAll('.copybtn').forEach(wireCopy);
+
+  // 十步：你做什麼（y）、跟 AI 說（say：一句是字串；要貼兩句時是陣列，每句可帶 lead 前導、after 你會看到）、AI 會做什麼（a）、你要檢查（c）
+  // y 裡的 {範本頁} 會換成範本的連結。
+  var STEPS=[
+    {t:'建資料夾',y:'先在瀏覽器打開範本頁 {範本頁}，看得到頁面再往下做。打開是「404」（找不到頁面）時，先停下來回信問陳老師，不要讓 AI 自己建一個空的。這一部分是另外建一個新的論文資料夾，不是在第二部分的 my-research-team 裡加東西。第一句要用到 gh（行前準備第 10 項裝好、登入過的 GitHub 小工具）。',
+     say:[{lead:'在 AI 助手裡打開 AI-workshop 資料夾（行前準備第 6 項已經建過：Codex 在「選擇專案」裡直接點它，以你的畫面為準；清單裡沒有，才照第 6 項新建），貼：',text:'請用 gh 從範本 cwstedctw/ai-paper-kit 建一個私人儲存庫，名字叫 ai-paper-kit，並 clone 到目前這個 AI-workshop 資料夾裡。做完告訴我三件事：clone 下來的完整路徑、GitHub 網址、它是不是 Private。',after:'clone＝把 GitHub 上那份資料夾下載到你的電腦。接著照行前準備第 6 項，在 AI 助手裡改打開 ai-paper-kit 這個資料夾，再貼下一句。'},
+         {lead:'在打開 ai-paper-kit 的 AI 助手裡貼：',text:'請先讀 AGENTS.md 和 WORKFLOW.md，再跟我報到。'}],
+     a:'第一句：從範本建一個只有你看得到（Private）的資料夾，下載到 AI-workshop 裡，告訴你三件事。要上網連 GitHub 時會跳出要你核准的框：看得懂、是你剛請它做的事（框裡寫的是建 ai-paper-kit），就按同意（只同意這一次）；看不懂，就按拒絕，再問它「這一步要做什麼、為什麼要做」，或截圖問網頁版。第二句：讀規則，第一行用「領隊 ·」報到，印出資料夾的完整路徑。',
+     c:'① 第一句做完：瀏覽器打開 github.com/你的帳號/ai-paper-kit，名字旁邊寫著 Private。② 報到時：AI 回話第一行顯示的路徑，最後一段要是 ai-paper-kit。不是的話，關掉這個對話，照行前準備第 6 項重開正確的資料夾。③ 權限選單還是「要求核准」（Codex）或 Manual（Claude 的 Code）。'},
+    {t:'裝工具',y:'跳出要你核准的框時：看得懂、是在裝第 03 段那四樣工具，就按同意（只同意這一次）；看不懂，就按拒絕，拒絕不會弄壞東西，再問它「這一步要做什麼、為什麼要做」，或截圖問網頁版。要密碼時自己輸入。',say:'（往上捲到第 03 段，選你的電腦，按那一格的「複製」）',a:'一個一個問你、裝好，再列出四個版本號。',c:'四個版本號都有，沒有「找不到」。'},
+    {t:'先跑範例',y:'沒有要自己做的。',say:'請跑一次 build（執行 uv run build.py），告訴我最後一行，再告訴我 PDF 在哪裡。',a:'跑完整條流程：分析、畫圖、檢查文獻、排成 PDF。',c:'AI 回的最後一行是 BUILD OK pages=10 undefined_cites=0 undefined_refs=0 refs=7 refs_without_doi=0 bib_warnings=0。看三件事：開頭是 BUILD OK；undefined_cites（找不到的引用）、undefined_refs（找不到的圖表編號）、bib_warnings（書目缺欄位）都是 0。其他是資訊：pages＝頁數、refs＝文獻篇數、refs_without_doi＝你標了「沒有 DOI」的篇數，換成你的論文就會不同。AI 會告訴你 PDF 在哪裡：用檔案總管（Mac：Finder）找到 output 資料夾裡的 main.pdf，雙擊打開。有 10 頁、第 5 頁是表 1、第 6 頁是圖 1，跟下面三張預覽差不多，就代表工具都裝好了。'},
+    {t:'放進你的資料',y:'照順序做：① 先貼下面第一句，開一篇新論文（只做一次）。② 確認你的資料符合第 07 段的四個條件。③ 把去識別化的資料用 Excel 另存新檔，存檔類型選「CSV UTF-8（逗號分隔）」，放進 source/data/。④ 欄位說明寫在 source/data/README.md（AI 照規矩不改 source/data/，所以這份由你寫）：在檔案總管對它按右鍵 →「開啟檔案」→「記事本」（Mac：按右鍵 →「打開檔案的應用程式」→「文字編輯」；字樣以你的畫面為準）。先刪掉最上面「練習資料，不是原始資料」那個標題和那一段，再把欄位表換成你的欄位，一欄寫一行就好（例如「age：年齡（歲）」），寫好存檔。找不到這個資料夾，問 AI「source/data 在我電腦的哪裡？」。⑤ 再貼下面第二句。',
+     say:[{lead:'第一句：開一篇新論文（換資料、換書目之前一定要先做；想做練習頁的六個練習，先做完練習頁再做這一步）',text:'我要開始寫自己的論文。請先執行 uv run tools/new_paper.py --name 範例論文，把範例收進 examples/、換上空白的骨架；再跑一次 build，告訴我最後一行。',after:'你會看到：BUILD OK pages=1 undefined_cites=0 undefined_refs=0 refs=0 refs_without_doi=0 bib_warnings=0。PDF 只有 1 頁：標題和各節的標題。範例收在 examples/範例論文/，隨時能打開參考；研究資料留在 source/data/（還是範例的練習資料，下一步才換成你的）。沒做這一步就換書目，build 會停在「內文的引用代號在書目檔 refs.bib 裡找不到」，或 AI 把你的內容寫進範例論文裡。'},
+         {lead:'第二句：資料和欄位說明都放好之後',text:'我把資料放在 source/data/（檔名＿＿），欄位說明寫在 source/data/README.md。請讀過之後，先列出你打算怎麼改 source/scripts/analyze.py：要做哪些統計、為什麼、會產生哪些數字、表和圖。先不要改，等我同意。'}],
+     a:'第一句：把範例收起來、換上空白骨架，跑 build。第二句：讀資料和說明，提出分析計畫；你同意後才改程式，再跑 build。',
+     c:'統計方法是你認可的、跟你的研究設計相符（不確定就先問統計顧問）；計畫裡用到的每一欄，你的資料裡都真的有。沒問題就回：「同意，照這個計畫改，改完跑一次 build，告訴我最後一行。」有問題就直接說哪裡要改，請它重提一次。'},
+    {t:'接 Zotero',y:'照第 05 段接法 A：在 Zotero 建這篇論文的文獻集，用 Better BibTeX 匯出、勾「保持更新」，存成 source/refs/refs.bib（蓋掉原本那份）。之後把文獻加進這個文獻集就好。',say:'我已經把 Zotero 的文獻集匯出成 source/refs/refs.bib。請告訴我裡面有幾筆、每一筆的引用代號（cite key），以及哪幾筆沒有 DOI。',a:'讀 refs.bib，列出清單和缺 DOI 的文獻。',c:'筆數跟你 Zotero 文獻集一樣（文獻集裡單獨存的筆記、PDF 不算）；缺 DOI 的回 Zotero 補，真的沒有 DOI 的加標籤 nodoi：點那一篇，在右邊的「標籤」新增一個 nodoi（字樣以你的畫面為準；見第 05 段）。'},
+    {t:'起草一節',y:'想好這一節要講什麼重點（可以先跟 AI 討論）。',say:'請照 WORKFLOW.md 第 5 步，用 refs.bib 裡的文獻起草 Introduction，大約三段。每一句講到文獻的，只寫該篇摘要真的有寫的內容，並在回報裡列出每句根據哪一篇；數字一律用代號。寫完跑一次 build，把最後一行給我看。',a:'在 main.tex 寫這一節，跑 build，列出每句的根據。',c:'挑兩三句，找 AI 列的那一篇，用 DOI 打開原文（瀏覽器網址列打 https://doi.org/ 再接上 DOI，按 Enter），對一次摘要；再確認 AI 寫的論點是你想講的。回報裡標 ⚠️ 的，是它讀不到摘要、不敢寫的地方，要你補摘要或原文。'},
+    {t:'加一張圖',y:'想好要哪一張圖、要表達什麼。',say:'請照 WORKFLOW.md 第 4 步，加一張圖：＿＿（例如兩組從前測到第 12 週的改變量，三個量表並排）。分析程式要產生它需要的資料表，main.tex 要放進去並加圖說。做完跑一次 build，告訴我最後一行。',a:'改 analyze.py 產生小表（output/figdata/）、寫一個新的 .gp 腳本、在 main.tex 放圖，跑 build。',c:'PDF 裡多了這張圖，數字跟表格對得上，點和誤差線沒有被切掉。'},
+    {t:'交稿前檢查',y:'讀一遍 PDF。',say:'請照 WORKFLOW.md 第 8 步的檢查清單逐條檢查，列出沒過的項目和建議怎麼改，先不要改。',a:'逐條檢查：BUILD OK、書目警告是 0、沒有手打的數字、文獻描述、統計方法跟研究設計相符、AI 使用聲明。',c:'每一條沒過的，逐條決定怎麼處理；資料資格、倫理資訊、不實的聲明、還沒解決的方法問題，處理好之前不能投稿。'},
+    {t:'換期刊或出 Word',y:'到期刊網站的投稿須知（Instructions for Authors）那一頁，全選、複製，貼到記事本（Mac：文字編輯），存成文字檔（例如「投稿須知.txt」），放進論文資料夾裡的 material 資料夾。',say:'我要投的期刊是＿＿，投稿須知在 material/。請列出 main.tex 要改的地方（期刊範本、字數、引用格式、圖表規定），先列給我看。期刊只收 Word 的話，請執行 uv run build.py --docx，告訴我 Word 檔在哪裡、哪裡要人工檢查。',a:'列出要改的地方；你同意後換期刊範本。需要 Word 就另外產生 main.docx。',c:'Word 版的排版、表格、圖、引用格式要人工看一次。在 Word 裡改的字不會回到論文原稿（main.tex），下次產生 Word 也會整份蓋掉：要改內容，跟 AI 說要改什麼，讓它改原稿再產生一次；一定要在 Word 裡改（例如給合作者），先另存到別的資料夾。實際投稿交 PDF 還是 Word，照期刊規定。'},
+    {t:'存一版、推上去',y:'確認 source/data/ 和 material/ 裡沒有不該上傳的檔。',say:'請把今天改的檔案列給我看，特別標出 source/data/ 和 material/ 裡新放的檔。我同意之後，存一版並推上 GitHub，再告訴我去哪裡下載雲端編好的 PDF。',a:'列出檔案，你同意後存一版（commit）、推上 GitHub（push）。推上去之後，GitHub 會在雲端自動跑一次 build。',c:'瀏覽器打開 github.com/你的帳號/ai-paper-kit，名字旁邊寫著 Private 就對了。PDF 這樣拿：點上方的 Actions → 點最上面那一次（綠色勾勾＝成功，要等幾分鐘）→ 往下捲到 Artifacts，點 paper-pdf，會下載一個壓縮檔（.zip），解壓縮就是論文 PDF（按鈕字樣以你的畫面為準）。看到紅色叉叉＝雲端產生 PDF 失敗：點進去，把 BUILD FAILED 那幾行複製給 AI。output/ 不會推上去，雲端會自己重做一份。'}
+  ];
+  var pipe=document.getElementById('pipe'),card=document.getElementById('stepcard');
+  var cur=Math.min(st.step||0,STEPS.length-1);
+  function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  var KIT='<a href="https://github.com/cwstedctw/ai-paper-kit" target="_blank" rel="noopener">github.com/cwstedctw/ai-paper-kit</a>';
+  STEPS.forEach(function(s,i){var b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.innerHTML='<span class="n">'+(i+1)+'</span>'+s.t;b.addEventListener('click',function(){go(i)});pipe.appendChild(b)});
+  function go(i){cur=i;st.step=i;save();renderStep()}
+  function sayList(s){return typeof s.say==='string'?[{text:s.say}]:s.say}
+  function renderStep(){
+    [].forEach.call(pipe.children,function(b,i){b.setAttribute('aria-selected',String(i===cur))});
+    var s=STEPS[cur],says=sayList(s);
+    var sayHtml=says.map(function(x,j){
+      var h=x.lead?'<p class="saylead"><b>'+esc(x.lead)+'</b></p>':'';
+      h+=x.text.charAt(0)==='（'?'<p style="margin:0">'+esc(x.text)+'</p>':'<div class="copybox"><pre id="say-step-'+j+'">'+esc(x.text)+'</pre><button class="copybtn" data-copy="say-step-'+j+'" type="button">複製</button></div>';
+      if(x.after)h+='<p class="why" style="margin:.2rem 0 .7rem">'+esc(x.after)+'</p>';
+      return h;
+    }).join('');
+    var blank=says.some(function(x){return x.text.indexOf('＿＿')>=0});
+    card.innerHTML='<h3>第 '+(cur+1)+' 步：'+esc(s.t)+'</h3>'+
+      '<div class="row"><span class="lab y">你自己做</span>'+esc(s.y).replace('{範本頁}',KIT)+'</div>'+
+      '<div class="row"><span class="lab a">跟 AI 說</span>'+sayHtml+'</div>'+
+      '<div class="row"><span class="lab">AI 會做什麼</span>'+esc(s.a)+'</div>'+
+      '<div class="row"><span class="lab c">你要檢查</span>'+esc(s.c)+'</div>'+
+      (blank?'<p class="why" style="margin:.3rem 0 0">貼上之後，把「＿＿」換成你的情況。</p>':'');
+    card.querySelectorAll('.copybtn').forEach(wireCopy);
+    document.getElementById('prevStep').disabled=cur===0;
+    document.getElementById('nextStep').disabled=cur===STEPS.length-1;
+  }
+  document.getElementById('prevStep').addEventListener('click',function(){if(cur>0)go(cur-1)});
+  document.getElementById('nextStep').addEventListener('click',function(){if(cur<STEPS.length-1)go(cur+1)});
+  renderStep();
+
+  // 數字示範：兩組都是實際跑範本的結果（全部 140 人；排除 I048）
+  var SETS={
+    a:{DKASIntTOneMean:'37.04',DKASCtlTOneMean:'30.43',DKASTOnePstat:'p < 0.001',DKASTOneD:'0.92',DKASTTwoD:'0.95'},
+    b:{DKASIntTOneMean:'37.41',DKASCtlTOneMean:'30.43',DKASTOnePstat:'p < 0.001',DKASTOneD:'1.01',DKASTTwoD:'0.96'}
+  };
+  // 兩句分開排：第一句是 main.tex 3.2 節第一句的前半（後面省略），第二句是 3.3 節最後一句
+  var TPL=['At week 12, DKAS scores were {DKASIntTOneMean} in the intervention group and {DKASCtlTOneMean} in the control group ({DKASTOnePstat}); ……',
+           'For DKAS, <i>d</i> was {DKASTOneD} at week 12 and {DKASTTwoD} at week 24.'];
+  var sent=document.getElementById('sentence'),curSet='a';
+  function renderSet(k,flash){
+    var v=SETS[k],prev=SETS[curSet];curSet=k;
+    // 只有跟上一次不一樣的數字才閃；排除 I048 時，跟全部 140 人不一樣的數字加虛線底
+    sent.innerHTML=TPL.map(function(line){return '<span class="ln">'+line.replace(/\{(\w+)\}/g,function(_,m){
+      var cls='mval'+(flash&&prev[m]!==v[m]?' flash':'')+(v[m]!==SETS.a[m]?' chg':'');
+      return '<span class="'+cls+'" title="\\'+m+'">'+esc(v[m])+'</span>'})+'</span>'}).join('');
+    document.querySelectorAll('[data-set]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.set===k))});
+    document.querySelectorAll('.maptab [data-col]').forEach(function(x){x.classList.toggle('cur',x.dataset.col===k)});
+    if(flash)setTimeout(function(){sent.querySelectorAll('.mval').forEach(function(x){x.classList.remove('flash')})},500);
+  }
+  document.querySelectorAll('[data-set]').forEach(function(b){b.addEventListener('click',function(){renderSet(b.dataset.set,true)})});
+  renderSet('a',false);
+
+  var CARDS=[
+    {u:'u1',n:'01',ttl:'為什麼不用 Word',one:'改源頭、重跑一次，全部一起更新',back:['數字由分析程式寫','文獻由 Zotero 匯出','圖由 gnuplot 腳本畫','要 Word 另外出一份']},
+    {u:'u2',n:'02',ttl:'誰做什麼',one:'你說話、AI 動手、程式跑、你看 PDF',back:['不用打指令、不用學 LaTeX','build.py 由 AI 執行','分析和畫圖由 build 自動跑','refs.bib 從 Zotero 匯出（接法 A 會自動更新）']},
+    {u:'u3',n:'03',ttl:'裝一次就好',one:'TeX、gnuplot、統計用的程式、pandoc',back:['Windows：MiKTeX','Mac：MacTeX（Mac 版 TeX Live）','請 AI 幫你裝（那句話要它每裝一個先問你）','看到四個版本號就好了']},
+    {u:'u4',n:'04',ttl:'Zotero 接得穩',one:'Better BibTeX「保持更新」最穩',back:['文獻集匯出成 source/refs/refs.bib','文獻加進那個文獻集就自動更新','想讓 AI 代勞：zotero-mcp-server','書目也會錯，用 DOI 回原文']},
+    {u:'u5',n:'05',ttl:'守得住',one:'四件事還是你的',back:['資料四條件，Private 不夠','每篇文獻 DOI 回原文','結論說到多強你決定','照期刊規定聲明 AI 使用']}
+  ];
+  var grid=document.getElementById('skills');
+  CARDS.forEach(function(c){
+    var b=document.createElement('button');b.type='button';b.className='skill';b.id='card-'+c.u;b.setAttribute('aria-pressed','false');
+    b.innerHTML='<span class="inner"><span class="face front"><span class="badge">未解鎖</span><span class="no">'+c.n+'</span><span class="ttl">'+c.ttl+'</span><span class="one">'+c.one+'</span><span class="hint">點我翻面</span></span><span class="face back"><span class="ttl">'+c.ttl+'</span><span class="pts">'+c.back.map(function(x){return '<span class="pt">'+x+'</span>'}).join('')+'</span><span class="hint">再點一下翻回來</span></span></span>';
+    b.addEventListener('click',function(){b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'))});
+    grid.appendChild(b);
+  });
+  function updateCards(){
+    var n=0;CARDS.forEach(function(c){var on=!!st[c.u];var el=document.getElementById('card-'+c.u);el.classList.toggle('on',on);el.querySelector('.badge').textContent=on?'已解鎖':'未解鎖';if(on)n++});
+    document.getElementById('progText').textContent='已解鎖 '+n+' / 5';document.getElementById('progBar').style.width=(n/5*100)+'%';
+    document.getElementById('cardCount').textContent=n+' / 5';
+  }
+  function claimLabel(b){var on=b.getAttribute('aria-pressed')==='true';b.textContent=on?'已收下技能卡 '+b.dataset.claim.slice(1).padStart(2,'0')+' ✓':b.dataset.label}
+  document.querySelectorAll('[data-claim]').forEach(function(b){var u=b.dataset.claim;b.dataset.label=b.textContent;b.setAttribute('aria-pressed',String(!!st[u]));claimLabel(b);
+    b.addEventListener('click',function(){st[u]=!st[u];b.setAttribute('aria-pressed',String(st[u]));claimLabel(b);save();updateCards()})});
+  document.getElementById('resetBtn').addEventListener('click',function(){st={};save();document.querySelectorAll('[data-claim]').forEach(function(b){b.setAttribute('aria-pressed','false');claimLabel(b)});go(0);renderSet('a',false);updateCards()});
+  updateCards();
 })();
 </script>
 </body>

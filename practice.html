@@ -348,7 +348,7 @@ footer ul{padding-left:1.1rem;margin:.4rem 0}
       <li><b>p 值</b>：假如兩組其實沒有差別，還會看到這麼大差距的機率。越小，越不像碰巧。</li>
       <li><b>效果量（Cohen's d）</b>：兩組差多少，用「差了幾個標準差」來表示。大約 0.2 算小、0.5 算中、0.8 以上算大。</li>
       <li><b>存一版（commit）／推上去（push）</b>：存一版＝在自己電腦記下資料夾這一刻的樣子，之後能回到這裡；推上去＝把存好的版本放到 GitHub。</li>
-      <li><b>Private（私人）</b>：GitHub 上只有你和你邀請的人看得到。<b>Private 不代表研究資料可以放上去</b>（看主頁第 09 段的資料使用條件）。</li>
+      <li><b>Private（私人）</b>：GitHub 上只有你和你邀請的人看得到。<b>Private 不代表研究資料可以放上去</b>（看主頁第 07 段的四個條件）。</li>
     </ul>
   </details>
   <div class="tools">
@@ -512,22 +512,22 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
   </div>
   <p class="rule">要改結果，改 source；output 不用顧，跟 AI 說「再跑一次 build」就會重新長出來。</p>
   <p class="why">資料夾第一層還有：<code>README.md</code>（給你看的說明）、<code>AGENTS.md</code>／<code>WORKFLOW.md</code>（給 AI 看的規則和流程）、<code>build.py</code>（一個指令跑完整條流程）、<code>material/</code>（你的計畫書、投稿須知，AI 只讀）、<code>workspace/</code>（AI 的工作紀錄，想知道它做了什麼就看這裡）、<code>tools/</code>（小工具，AI 執行）。</p>
-  <p class="why">為什麼要分開：原料是你的研究，要好好保存；成品隨時能重做，被改壞了只要再跑一次 build，所以成品不推上 GitHub。真的研究資料能不能交給 AI、能不能推上 GitHub，先照主頁第 09 段的資料使用條件確認；Private 本身不代表可以上傳。</p>
+  <p class="why">為什麼要分開：原料是你的研究，要好好保存；成品隨時能重做，被改壞了只要再跑一次 build，所以成品不推上 GitHub。真的研究資料能不能交給 AI、能不能推上 GitHub，先照主頁第 07 段〈研究倫理〉的四個條件確認；Private 本身不代表可以上傳。</p>
   <p class="why">核對數字時，用 Excel 打開 <code>output/tables</code> 資料夾裡的 .csv 檔就好；看完關掉時按「不要儲存」。下次跑 build 之前要關掉，Excel 開著，build 會失敗。</p>
 
   <h3 class="app">我手上有這個檔，要放哪裡？</h3>
-  <p>寫自己的論文時，先照主頁第 06 段 K6 與 AI 確認研究計畫，再開自己的新稿（只做一次），再照這張表把檔案放進論文資料夾，跟 AI 說要怎麼用。</p>
+  <p>寫自己的論文時，先照主頁第 04 段第 4 步的第一句開一篇新論文（只做一次），再照這張表把檔案放進論文資料夾，跟 AI 說要怎麼用。</p>
   <div class="tablewrap"><table>
     <thead><tr><th>你手上有</th><th>放哪裡</th><th>誰放</th><th>放好之後跟 AI 說</th></tr></thead>
     <tbody>
-      <tr><td><b>研究資料</b>（已去識別化、符合主頁第 09 段的資料使用條件）</td><td>另存成 CSV UTF-8，檔名用英文，放 <code>source/data/</code>；欄位說明寫在同一夾的 <code>README.md</code></td><td>你自己放</td><td>「請先讀資料與欄位說明，提出分析計畫，等我確認再執行。」</td></tr>
+      <tr><td><b>研究資料</b>（已去識別化、符合主頁第 07 段的四個條件）</td><td>另存成 CSV UTF-8，檔名用英文，放 <code>source/data/</code>；欄位說明寫在同一夾的 <code>README.md</code></td><td>你自己放</td><td>主頁第 04 段第 4 步的第二句（請它提分析計畫）</td></tr>
       <tr><td><b>新一批或更新過的資料</b></td><td><code>source/data/</code>，用新的英文檔名放（例如加日期），舊的先留著</td><td>你自己放</td><td>「我在 source/data/ 放了＿＿（新的資料）。請先告訴我 analyze.py 要改哪裡、哪些表和數字可能會變；先不要改，等我同意再改、再跑 build。」</td></tr>
       <tr><td><b>自己用 Excel 做好的表</b></td><td>另存成 CSV UTF-8，放 <code>source/tables/</code></td><td>你自己放</td><td>下面〈想放一張自己在 Excel 做好的表〉那句</td></tr>
       <tr><td><b>想畫成圖的 Excel 資料</b></td><td>另存成 CSV UTF-8，放 <code>source/figdata/</code></td><td>你自己放</td><td>下面〈想用 Excel 的資料畫一張圖〉那句</td></tr>
       <tr><td><b>流程圖、照片</b>（PNG、JPG）</td><td><code>source/images/</code>，檔名用英文；照片有人臉、姓名的，先遮掉</td><td>你自己放</td><td>下面〈想放一張現成的圖〉那句</td></tr>
-      <tr><td><b>文獻</b></td><td>放進 Zotero 的文獻集，不放進論文資料夾；<code>source/refs/refs.bib</code> 由 Zotero 匯出</td><td>Zotero</td><td>主頁第 07 段的書目核對與切換說明</td></tr>
-      <tr><td><b>計畫書、投稿須知、審查意見</b></td><td><code>material/</code>（網頁上的投稿須知，請 AI 依主頁第 09 段的交稿檢查，保留來源網址與存取日再存成文字檔）</td><td>你自己放</td><td>「material/ 裡的＿＿是＿＿，請先讀，再告訴我論文要改哪裡，先不要改。」</td></tr>
-      <tr><td><b>有姓名、病歷號的原始檔</b></td><td><b>不放進論文資料夾，也不要交給 AI 處理</b>，留在你原本的地方；你自己去識別化、確認符合主頁第 09 段的資料使用條件，才放 <code>source/data/</code></td><td>—</td><td>—</td></tr>
+      <tr><td><b>文獻</b></td><td>放進 Zotero 的文獻集，不放進論文資料夾；<code>source/refs/refs.bib</code> 由 Zotero 匯出</td><td>Zotero</td><td>主頁第 04 段第 5 步那句</td></tr>
+      <tr><td><b>計畫書、投稿須知、審查意見</b></td><td><code>material/</code>（網頁上的投稿須知，照主頁第 04 段第 9 步存成文字檔）</td><td>你自己放</td><td>「material/ 裡的＿＿是＿＿，請先讀，再告訴我論文要改哪裡，先不要改。」</td></tr>
+      <tr><td><b>有姓名、病歷號的原始檔</b></td><td><b>不放進論文資料夾，也不要交給 AI 處理</b>，留在你原本的地方；你自己去識別化、確認符合主頁第 07 段的四個條件，才放 <code>source/data/</code></td><td>—</td><td>—</td></tr>
     </tbody>
   </table></div>
   <p class="why"><code>source/data/</code> 和 <code>material/</code> 要你自己放：範本規定 AI 在這兩個資料夾只讀不寫，研究資料才不會被 AI 改到。用<b>檔案總管</b>（Mac：Finder）複製、貼上放進去就好（用拖的，原本的檔會被搬走）。表上沒有的、不確定放哪裡的，貼這句問 AI：</p>
@@ -564,22 +564,22 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
     <li>你會看到：<code>source/gnuplot/</code> 多一支 <code>.gp</code>，PDF 多一張圖。打開 PDF 看：點和線沒有被切掉，數字跟你的 Excel 一樣。</li>
   </ol>
   <h3 class="app">想放一張現成的圖（流程圖、照片）</h3>
-  <p class="why">照片裡有人臉、病歷、姓名的，先遮掉，並確認符合主頁第 09 段的資料使用條件，才放進來。</p>
+  <p class="why">照片裡有人臉、病歷、姓名的，先遮掉，並確認符合主頁第 07 段的四個條件，才放進來。</p>
   <ol class="why">
     <li>圖存成 <b>PNG 或 JPG</b>（PDF 也可以，但 Word 版放不進去）。檔名只用英文、數字、<code>-</code>、<code>_</code>，例如 <code>flowchart.png</code>；不能有空白或中文。PowerPoint 畫的：選取整張圖，按右鍵「另存成圖片」，存成 PNG；預設檔名是中文，記得改成英文。</li>
     <li>放進 <code>source/images/</code>。</li>
     <li>跟 AI 說（<code>flowchart.png</code> 換成你的檔名）：「我在 source/images/ 放了 flowchart.png，請照 WORKFLOW.md 第 4 步放進論文的 Methods，圖說寫＿＿，內文提到它，跑一次 build。」</li>
     <li>你會看到：AI 回報最後一行 BUILD OK；打開 <code>output/main.pdf</code>，Methods 附近（可能在下一頁）多了這張圖。檔名有空白或中文，build 會停下來請你改名；HEIC（iPhone 照片常見的格式）會略過，提醒你另存成 PNG。要換圖：用同一個檔名蓋過去，再跑一次 build。</li>
   </ol>
-  <p class="note">表的數字是你手打進 Excel 的，不會跟著資料自動更新；程式算的表才會。Word 版要另外用 <code>uv run build.py --docx</code> 產生（主頁第 06 段 K5）；一般的 build 只出 PDF，還會清掉舊的 Word 檔。2026-10-22 實測：照上面做，PDF 和用 <code>--docx</code> 產生的 Word 版都有這張表和這張圖。2026-10-27 實測：一張 PNG 流程圖放進 Methods，PDF 和 Word 版都有。</p>
+  <p class="note">表的數字是你手打進 Excel 的，不會跟著資料自動更新；程式算的表才會。Word 版要另外用 <code>uv run build.py --docx</code> 產生（主頁第 04 段第 9 步）；一般的 build 只出 PDF，還會清掉舊的 Word 檔。2026-10-22 實測：照上面做，PDF 和用 <code>--docx</code> 產生的 Word 版都有這張表和這張圖。2026-10-27 實測：一張 PNG 流程圖放進 Methods，PDF 和 Word 版都有。</p>
 </section>
 
 <div class="band" id="do"><div class="wrap"><div class="tag">04・六個練習</div><p class="big">動手做</p><p class="sub">你主要跟 AI 說話，大約 30 分鐘</p></div></div>
 <section class="blk wrap" id="exercises">
   <div class="prep"><b>開始前（回家自己做也照這張）</b>
     <ol>
-      <li><b>範本資料夾已經在電腦裡</b>（資料夾名稱 <code>ai-paper-kit</code>）。還沒有的話，照<a href="part3.html">第三部分主頁</a>第 05 段 K1、K2，從範本 github.com/cwstedctw/ai-paper-kit 建一份。已經照主頁第 06 段 K6 開了自己的論文的：範例已經收進 examples/，練習的數字會對不上，先停下來回信問陳老師。</li>
-      <li><b>工具裝好了</b>：照主頁第 05 段的作業系統提示詞請 AI 幫你裝，AI 應列出工具版本，並真的跑出 PDF；只找到執行檔還不算。</li>
+      <li><b>範本資料夾已經在電腦裡</b>（資料夾名稱 <code>ai-paper-kit</code>）。還沒有的話，照<a href="part3.html">第三部分主頁</a>第 04 段第 1 步，從範本 github.com/cwstedctw/ai-paper-kit 建一份。已經照主頁第 04 段第 4 步開了自己的論文的：範例已經收進 examples/，練習的數字會對不上，先停下來回信問陳老師。</li>
+      <li><b>工具裝好了</b>：照主頁第 03 段那句話請 AI 幫你裝，AI 列出四個版本號、沒有「找不到」才算。</li>
       <li><b>打開能讀你電腦資料夾的 AI</b>：ChatGPT 桌面版裡的 Codex，或 Claude 桌面版裡的 Code（網頁上的一般對話看不到你電腦裡的資料夾）。照行前準備第 6 項的方法，這次改選 <code>ai-paper-kit</code> 資料夾。權限照行前準備第 7 項：Codex 選「要求核准」（英文介面 Ask for approval），Claude 的 Code 選 Manual。</li>
     </ol>
   </div>
@@ -657,7 +657,7 @@ macros["<span class="hl">DKASIntTOneMean</span>"] = fmt(s.mean(), 2)
     <div class="fact"><div class="n">8 / 8</div><div><b>表 1（基本資料）的 8 個 p 值全部相同。</b>其中年齡、年資兩個，是重建練習資料時就刻意調成跟原論文一樣的。其他 6 個是比兩組的比例：性別、婚姻、工作型態、在職訓練用 Fisher 精確檢定（人數少時比較比例的方法）；教育程度、失智症訓練時數用概似比卡方（卡方檢定的一種算法，就是 SPSS 交叉表「卡方檢定」表裡「概似比」那一列）。原論文只寫「卡方或 Fisher 精確檢定，視情況使用」，沒寫哪一列用哪一種，範例是為了對照已發表的數字才逐一試；自己的研究要像第 07 段那樣，先定好用哪個檢定再看結果。</div></div>
     <div class="fact"><div class="n">9 / 9</div><div><b>表 2（三個量表、三個時間點）的 p 值全部相同。</b>ADQ 第 24 週重算是 0.000566，比 0.001 小，但四捨五入到小數三位是 0.001，所以印成 0.001，不寫 &lt;0.001（原論文也是印 0.001）。</div></div>
     <div class="fact"><div class="n">≤ 0.01</div><div><b>原論文表 4 的效果量 Cohen's d（範例論文把它排成表 3）：6 個裡 3 個完全相同，另外 3 個差 0.01</b>；信賴區間也最多差 0.01。原因是練習資料是用原論文印到小數兩位、已經四捨五入過的平均和標準差重建的，最後一位差一點是正常的。</div></div>
-    <div class="fact"><div class="n no">不重算</div><div><b>原論文表 3 的 GEE。</b>GEE（廣義估計方程式，分析同一個人量了好幾次的統計方法）要用到每個人三次分數之間怎麼變化，論文本來就不會附這種個人資料，所以這個只用論文表格的範例不做。第 07 段的研究模擬會用練習資料跑 GEE，那只是示範操作，結果不能拿來對照原論文。<b>用自己的研究時</b>，資料能放在哪裡、能交給哪個 AI、能不能上雲端，先照主頁第 09 段的資料使用條件確認；確認之前，不要放進 AI 的工作資料夾。</div></div>
+    <div class="fact"><div class="n no">不重算</div><div><b>原論文表 3 的 GEE。</b>GEE（廣義估計方程式，分析同一個人量了好幾次的統計方法）要用到每個人三次分數之間怎麼變化，論文本來就不會附這種個人資料，所以這個只用論文表格的範例不做。第 07 段的研究模擬會用練習資料跑 GEE，那只是示範操作，結果不能拿來對照原論文。<b>用自己的研究時</b>，資料能放在哪裡、能交給哪個 AI、能不能上雲端，先照主頁第 07 段〈研究倫理〉確認；確認之前，不要放進 AI 的工作資料夾。</div></div>
   </div>
   <div class="score">
     <div class="box">
